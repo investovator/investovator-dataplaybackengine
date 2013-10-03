@@ -12,8 +12,8 @@ public class DataPlayer {
 
     Timer timer;
 
-    public DataPlayer(Timer timer) {
-        this.timer = timer;
+    public DataPlayer() {
+        this.timer = new Timer();
     }
 
     public void runPlayback(int resolution, String stock) {
