@@ -1,5 +1,9 @@
 package org.investovator.dataPlayBackEngine.scheduler;
 
+import org.investovator.core.org.investovator.data.HistoryDataAPI;
+import org.investovator.core.org.investovator.data.types.HistoryOrderData;
+import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,6 +21,8 @@ public class EventTask extends TimerTask {
     private String stockId;
     //start time
     private Date currentTime;
+    //Data interface
+    HistoryDataAPI dataApi=new BogusHistoryDataGenerator();
 
 
     public EventTask(String stockId, String startT) {
@@ -29,15 +35,24 @@ public class EventTask extends TimerTask {
             System.out.println("start time: "+currentTime);
 
         } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         ;
     }
 
     @Override
     public void run() {
-        currentTime=incrementDateBySeconds(1);
-        System.out.println("Current time: "+currentTime);
+
+        HistoryOrderData[] data=dataApi.getData(currentTime,incrementTimeBySeconds(1),"goog");
+        //print the data
+        System.out.println("===================================================");
+        for(HistoryOrderData d:data){
+            System.out.println(d.getDate()+"_"+d.getStockId()+"_"+d.getPrice()+"_"+d.getNumOfShares()+"_"+d.isBid());
+        }
+
+        // in order to point to the next time interval
+        currentTime=incrementTimeBySeconds(1);
+        //System.out.println("Current time: "+currentTime);
     }
 
     /**
@@ -45,7 +60,7 @@ public class EventTask extends TimerTask {
      *
      * @param seconds the number of seconds to increase by
      */
-    private Date incrementDateBySeconds(int seconds){
+    private Date incrementTimeBySeconds(int seconds){
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         cal.add(Calendar.SECOND, seconds); //minus number would decrement the days

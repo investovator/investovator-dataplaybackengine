@@ -8,5 +8,13 @@
     <artifactId>dataPlaybackEngine</artifactId>
     <version>0.1</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.investovator</groupId>
+            <artifactId>core</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
+
     
 </project>
