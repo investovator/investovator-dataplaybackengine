@@ -26,6 +26,6 @@ public class BogusHistoryDataGenerator implements HistoryDataAPI {
 
     @Override
     public com.investovator.data.HistoryData getOHLCPData(Date date, String s) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new com.investovator.data.HistoryData();
     }
 }
