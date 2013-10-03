@@ -10,10 +10,22 @@ import java.util.Timer;
  */
 public class DataPlayer {
 
-    public void runPlayback(int resolution){
-        Timer timer =new Timer();
-        EventTask task=new EventTask();
+    Timer timer =new Timer();
+
+    public void runPlayback(int resolution, String stock){
+
+        EventTask task=new EventTask(stock);
         timer.schedule(task,0,resolution*1000);
+        try {
+            Thread.sleep(5000);
+            stopPlayback();
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
     }
 
+    public void stopPlayback(){
+        timer.cancel();
+    }
 }

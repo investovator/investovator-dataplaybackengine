@@ -7,7 +7,7 @@ import org.investovator.dataPlayBackEngine.DataPlayer;
 public class Tester {
     public static void main(String[] args) {
         DataPlayer player=new DataPlayer();
-        player.runPlayback(2);
+        player.runPlayback(1, "GOOG");
     }
 
 }
