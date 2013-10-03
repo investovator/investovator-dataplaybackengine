@@ -43,7 +43,7 @@ public class EventTask extends TimerTask {
     @Override
     public void run() {
 
-        HistoryOrderData[] data=dataApi.getData(currentTime,incrementTimeBySeconds(1),"goog");
+        HistoryOrderData[] data=dataApi.getTradingData(currentTime,incrementTimeBySeconds(1),"goog");
         //print the data
         System.out.println("===================================================");
         for(HistoryOrderData d:data){

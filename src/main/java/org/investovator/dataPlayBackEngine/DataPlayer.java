@@ -32,4 +32,8 @@ public class DataPlayer {
     public void stopPlayback() {
         timer.cancel();
     }
+
+    public void getOHLCPrice(String stock, String date){
+
+    }
 }

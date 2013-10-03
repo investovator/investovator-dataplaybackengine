@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class BogusHistoryDataGenerator implements HistoryDataAPI {
     @Override
-    public HistoryOrderData[] getData(Date startTime, Date endTime, String stockId) {
+    public HistoryOrderData[] getTradingData(Date startTime, Date endTime, String stockId) {
 
         HistoryOrderData arr[] =new HistoryOrderData[4];
         int i=0;
@@ -22,5 +22,10 @@ public class BogusHistoryDataGenerator implements HistoryDataAPI {
         return arr;
 
 
+    }
+
+    @Override
+    public com.investovator.data.HistoryData getOHLCPData(Date date, String s) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
