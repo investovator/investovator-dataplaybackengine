@@ -18,7 +18,7 @@ public class DataPlayer {
 
     public void runPlayback(int resolution, String stock) {
 
-        EventTask task = new EventTask(stock);
+        EventTask task = new EventTask(stock, "2011-12-13-15-55-32");
         timer.schedule(task, 0, resolution * 1000);
         try {
             Thread.sleep(5000);
