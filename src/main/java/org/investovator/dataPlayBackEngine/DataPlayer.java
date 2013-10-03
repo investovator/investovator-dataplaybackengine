@@ -10,12 +10,16 @@ import java.util.Timer;
  */
 public class DataPlayer {
 
-    Timer timer =new Timer();
+    Timer timer;
 
-    public void runPlayback(int resolution, String stock){
+    public DataPlayer(Timer timer) {
+        this.timer = timer;
+    }
 
-        EventTask task=new EventTask(stock);
-        timer.schedule(task,0,resolution*1000);
+    public void runPlayback(int resolution, String stock) {
+
+        EventTask task = new EventTask(stock);
+        timer.schedule(task, 0, resolution * 1000);
         try {
             Thread.sleep(5000);
             stopPlayback();
@@ -25,7 +29,7 @@ public class DataPlayer {
 
     }
 
-    public void stopPlayback(){
+    public void stopPlayback() {
         timer.cancel();
     }
 }
