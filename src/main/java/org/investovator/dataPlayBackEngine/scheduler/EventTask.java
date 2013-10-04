@@ -1,7 +1,7 @@
 package org.investovator.dataPlayBackEngine.scheduler;
 
-import org.investovator.core.org.investovator.data.HistoryDataAPI;
-import org.investovator.core.org.investovator.data.types.HistoryOrderData;
+import org.investovator.controller.data.HistoryDataAPI;
+import org.investovator.controller.data.types.HistoryOrderData;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 
 import java.text.ParseException;

@@ -1,7 +1,9 @@
 package org.investovator.dataPlayBackEngine.data;
 
-import org.investovator.core.org.investovator.data.HistoryDataAPI;
-import org.investovator.core.org.investovator.data.types.HistoryOrderData;
+import org.investovator.controller.data.HistoryDataAPI;
+import org.investovator.controller.data.types.HistoryOrderData;
+import org.investovator.data.excel.HistoryData;
+
 
 import java.util.Date;
 
@@ -25,7 +27,7 @@ public class BogusHistoryDataGenerator implements HistoryDataAPI {
     }
 
     @Override
-    public com.investovator.data.HistoryData getOHLCPData(Date date, String s) {
-        return new com.investovator.data.HistoryData();
+    public HistoryData getOHLCPData(Date date, String s) {
+        return new HistoryData();
     }
 }
