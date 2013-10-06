@@ -15,7 +15,7 @@ public class BogusHistoryDataGenerator implements HistoryDataAPI {
     @Override
     public HistoryOrderData[] getTradingData(Date startTime, Date endTime, String stockId) {
 
-        HistoryOrderData arr[] =new HistoryOrderData[4];
+        HistoryOrderData arr[] =new HistoryOrderData[2];
         int i=0;
         for(int j=0;j<arr.length;j++){
             arr[j]=new HistoryOrderData("2012-10-3-19-45-33",i++,23.04,"Goog",false);

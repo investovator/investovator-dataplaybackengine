@@ -3,12 +3,11 @@ package org.investovator.dataPlayBackEngine.scheduler;
 import org.investovator.controller.data.HistoryDataAPI;
 import org.investovator.controller.data.types.HistoryOrderData;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
+import org.investovator.dataPlayBackEngine.events.EventManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * @author: ishan
@@ -24,15 +23,17 @@ public class EventTask extends TimerTask {
     //Data interface
     HistoryDataAPI dataApi=new BogusHistoryDataGenerator();
 
+    EventManager eventManager;
+
 
     public EventTask(String stockId, String startT) {
         this.stockId = stockId;
+        eventManager=new EventManager();
 
         //String sourceDate=currentTime;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss"); //should be in format year-month-date-24hr-minute-second
         try {
              currentTime =format.parse(startT);
-            System.out.println("start time: "+currentTime);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -45,14 +46,12 @@ public class EventTask extends TimerTask {
 
         HistoryOrderData[] data=dataApi.getTradingData(currentTime,incrementTimeBySeconds(1),"goog");
         //print the data
-        System.out.println("===================================================");
         for(HistoryOrderData d:data){
-            System.out.println(d.getDate()+"_"+d.getStockId()+"_"+d.getPrice()+"_"+d.getNumOfShares()+"_"+d.isBid());
+            eventManager.notifyListners(d);
         }
 
         // in order to point to the next time interval
         currentTime=incrementTimeBySeconds(1);
-        //System.out.println("Current time: "+currentTime);
     }
 
     /**
@@ -66,5 +65,9 @@ public class EventTask extends TimerTask {
         cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
         return cal.getTime();
 
+    }
+
+    public void setObserver(Observer observer){
+        eventManager.addObserver(observer);
     }
 }

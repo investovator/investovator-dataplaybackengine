@@ -2,6 +2,7 @@ package org.investovator.dataPlayBackEngine;
 
 import org.investovator.dataPlayBackEngine.scheduler.EventTask;
 
+import java.util.Observer;
 import java.util.Timer;
 
 /**
@@ -11,22 +12,18 @@ import java.util.Timer;
 public class DataPlayer {
 
     Timer timer;
+    EventTask task;
 
-    public DataPlayer() {
+    public DataPlayer(String stock, Observer observer) {
         this.timer = new Timer();
+        task = new EventTask(stock, "2011-12-13-15-55-32");
+        task.setObserver(observer);
+
     }
 
-    public void runPlayback(int resolution, String stock) {
+    public void runPlayback(int resolution) {
 
-        EventTask task = new EventTask(stock, "2011-12-13-15-55-32");
         timer.schedule(task, 0, resolution * 1000);
-        try {
-            Thread.sleep(5000);
-            stopPlayback();
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
     }
 
     public void stopPlayback() {
