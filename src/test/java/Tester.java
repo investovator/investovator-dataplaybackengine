@@ -1,4 +1,4 @@
-import org.investovator.controller.data.types.HistoryOrderData;
+import org.investovator.core.data.types.HistoryOrderData;
 import org.investovator.dataPlayBackEngine.DataPlayer;
 
 import java.util.Observable;

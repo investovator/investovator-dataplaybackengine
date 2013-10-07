@@ -1,7 +1,7 @@
 package org.investovator.dataPlayBackEngine.scheduler;
 
-import org.investovator.controller.data.HistoryDataAPI;
-import org.investovator.controller.data.types.HistoryOrderData;
+import org.investovator.core.data.HistoryDataAPI;
+import org.investovator.core.data.types.HistoryOrderData;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 

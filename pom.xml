@@ -11,11 +11,6 @@
     <dependencies>
         <dependency>
             <groupId>org.investovator</groupId>
-            <artifactId>controller</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.investovator</groupId>
             <artifactId>investovator-core</artifactId>
             <version>0.1</version>
         </dependency>
