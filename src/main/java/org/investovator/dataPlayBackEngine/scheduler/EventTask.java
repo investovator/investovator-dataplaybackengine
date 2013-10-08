@@ -21,13 +21,14 @@ public class EventTask extends TimerTask {
     //start time
     private Date currentTime;
     //Data interface
-    HistoryDataAPI dataApi=new BogusHistoryDataGenerator();
+    HistoryDataAPI dataApi;
 
     EventManager eventManager;
 
 
-    public EventTask(String stockId, String startT) {
+    public EventTask(String stockId, String startT, HistoryDataAPI api) {
         this.stockId = stockId;
+        this.dataApi=api;
         eventManager=new EventManager();
 
         //String sourceDate=currentTime;
@@ -38,7 +39,7 @@ public class EventTask extends TimerTask {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        ;
+
     }
 
     @Override

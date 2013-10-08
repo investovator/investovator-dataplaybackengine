@@ -28,6 +28,20 @@ public class BogusHistoryDataGenerator implements HistoryDataAPI {
 
     @Override
     public HistoryData getOHLCPData(Date date, String s) {
-        return new HistoryData();
+
+        //create random numbers
+        int min=20;
+        int max=3000;
+        int num=min + (int)(Math.random() * ((max - min) + 1));
+
+
+        HistoryData data=new HistoryData();
+        data.setDate(date.toString());
+        data.setClosingPrice(num+100);
+        data.setHighPrice(num+400);
+        data.setLowPrice(num+1);
+        data.setOpeningPrice(num+50);
+
+        return data;
     }
 }
