@@ -16,7 +16,8 @@ public class Tester {
     }
 
     public static void main(String[] args) {
-        DataPlayer player=new DataPlayer("GOOG",observer);
+        DataPlayer player=new DataPlayer("GOOG");
+        player.setObserver(observer);
         player.runPlayback(1);
     }
 
