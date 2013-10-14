@@ -51,6 +51,12 @@ public class DataPlayer {
         timer.cancel();
     }
 
+    /**
+     *
+     * @param stock stock name
+     * @param date  date for which the price of the stock required
+     * @return the price of the stock on the "date" or negative values if there is no more data
+     */
     public float getOHLCPrice(String stock, String date){
 
         Date currentTime=null;
@@ -72,6 +78,7 @@ public class DataPlayer {
             if(ohlcDataCache.get(stock).containsKey(currentTime)){
                 inCache=true;
                 //just the closing price is enough for now
+                //TODO- remove the used items in the cache
                 price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
 
             }
@@ -91,13 +98,21 @@ public class DataPlayer {
             try {
                 StockTradingData data=dataAPI.getTradingDataOHLC(stock,currentTime,attributes,100);
 
-                //remove the old set of data for this stock and add a new set
-                if(ohlcDataCache.containsKey(stock)){
-                    ohlcDataCache.remove(stock);
+                //if any data was returned
+                if(data!=null){
+
+                    //remove the old set of data for this stock and add a new set
+                    if(ohlcDataCache.containsKey(stock)){
+                        ohlcDataCache.remove(stock);
+                    }
+                    //add the new data
+                    ohlcDataCache.put(stock,data.getTradingData());
+                    price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
                 }
-                //add the new data
-                ohlcDataCache.put(stock,data.getTradingData());
-                price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
+                else{
+                    price=-1;
+                }
+
             } catch (DataAccessException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
