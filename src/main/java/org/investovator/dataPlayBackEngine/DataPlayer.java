@@ -1,11 +1,9 @@
 package org.investovator.dataPlayBackEngine;
 
-import org.investovator.core.data.HistoryDataAPI;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.core.excelimporter.HistoryData;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 import org.investovator.dataPlayBackEngine.scheduler.EventTask;
 
