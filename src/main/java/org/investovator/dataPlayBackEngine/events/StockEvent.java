@@ -19,9 +19,45 @@
 
 package org.investovator.dataPlayBackEngine.events;
 
+import java.util.Date;
+
 /**
  * @author: ishan
  * @version: ${Revision}
  */
 public class StockEvent {
+
+    private String stockId;
+    private float price;
+    private Date time;
+
+    public StockEvent(String stockId, float price, Date time) {
+        this.stockId = stockId;
+        this.price = price;
+        this.time = time;
+    }
+
+    public String getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(String stockId) {
+        this.stockId = stockId;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 }
