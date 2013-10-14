@@ -92,6 +92,12 @@ public class DataPlayer {
             //let's take the next 100 of rows
             try {
                 StockTradingData data=dataAPI.getTradingDataOHLC(stock,currentTime,attributes,100);
+
+                //remove the old set of data for this stock and add a new set
+                if(ohlcDataCache.containsKey(stock)){
+                    ohlcDataCache.remove(stock);
+                }
+                //add the new data
                 ohlcDataCache.put(stock,data.getTradingData());
                 price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
             } catch (DataAccessException e) {
