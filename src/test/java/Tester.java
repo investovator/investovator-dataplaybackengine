@@ -1,5 +1,5 @@
-import org.investovator.core.data.types.HistoryOrderData;
 import org.investovator.dataPlayBackEngine.DataPlayer;
+import org.investovator.dataPlayBackEngine.events.StockEvent;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -16,7 +16,10 @@ public class Tester {
     }
 
     public static void main(String[] args) {
-        DataPlayer player=new DataPlayer("GOOG");
+        String[] stocks=new String[2];
+        stocks[0]="GOOG";
+        stocks[1]="APPL";
+        DataPlayer player=new DataPlayer(stocks);
         player.setObserver(observer);
         player.runPlayback(1);
     }
@@ -26,9 +29,9 @@ public class Tester {
         @Override
         public void update(Observable o, Object arg) {
 
-            HistoryOrderData d= (HistoryOrderData)arg;
+            StockEvent d= (StockEvent)arg;
 
-            System.out.println(d.getDate()+"-"+d.getStockId());
+            System.out.println(d.getStockId()+"-"+d.getPrice());
         }
     }
 
