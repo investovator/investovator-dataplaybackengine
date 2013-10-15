@@ -19,14 +19,17 @@ public class DataPlayerTest {
 
     @Test
     public void testGetOHLCPrice() throws Exception {
-//        DataPlayer player=new DataPlayer("Goog");
-//        HistoryData data=player.getOHLCPrice("G","2012-10-3-19-45-33");
-//
-//        for(int a=0;a<5;a++){
-//
-//            System.out.println(data.getOpeningPrice()+"::"+data.getClosingPrice());
-//            Thread.sleep(2000);
-//        }
+        String[] stocks=new String[2];
+        stocks[0]="GOOG";
+        stocks[1]="APPL";
+        DataPlayer player=new DataPlayer(stocks);
+        float data=player.getOHLCPrice("G","2012-10-3-19-45-33");
+
+        for(int a=0;a<5;a++){
+
+            System.out.println(data);
+            Thread.sleep(2000);
+        }
 
 
 

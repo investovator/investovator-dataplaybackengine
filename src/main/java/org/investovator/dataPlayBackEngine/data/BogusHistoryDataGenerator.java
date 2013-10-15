@@ -18,6 +18,7 @@ import java.util.Random;
  */
 public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 
+    Random rn = new Random(new Date().getTime());
 
 
 
@@ -44,22 +45,26 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
         Date time=date;
         for(int j=0;j<i;j++){
             //increment the time
-            time=incrementTimeBySeconds(1,time);
+            if(j!=0){
+                time=incrementTimeBySeconds(1,time);
+            }
 
             HashMap<TradingDataAttribute, Float> attributesMap= new HashMap<TradingDataAttribute, Float>();
             //add each attribute
             for(TradingDataAttribute attr:tradingDataAttributes){
                 //generate a random value
-                Random rn = new Random();
+
                 int maximum=1000;
                 int minimum=100;
                 int n = maximum - minimum + 1;
                 int k = rn.nextInt() % n;
-                float randomNum =  minimum + i;
+                float randomNum =  minimum + k;
 
 
                 attributesMap.put(attr,randomNum);
             }
+
+            marketData.put(time,attributesMap);
 
         }
 
@@ -77,12 +82,12 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
             time=incrementTimeBySeconds(1,time);
 
             //generate a random value
-            Random rn = new Random();
+
             int maximum=1000;
             int minimum=100;
             int n = maximum - minimum + 1;
             int k = rn.nextInt() % n;
-            float randomNum =  minimum + i;
+            float randomNum =  minimum + k;
 
             data.put(time,randomNum);
         }

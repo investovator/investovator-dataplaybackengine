@@ -8,6 +8,7 @@ import org.investovator.dataPlayBackEngine.events.StockEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: ishan
@@ -22,7 +23,7 @@ public class EventTask extends TimerTask {
     CompanyStockTransactionsData dataApi;
 
     //to cache the stock trading data items
-    HashMap<String,HashMap<Date,Float>> dataCache;
+    ConcurrentHashMap<String,HashMap<Date,Float>> dataCache;
 
     EventManager eventManager;
 
@@ -31,7 +32,7 @@ public class EventTask extends TimerTask {
         this.dataApi=api;
         eventManager=new EventManager();
 
-        dataCache=new HashMap<String,HashMap<Date,Float>>();
+        dataCache=new ConcurrentHashMap<String,HashMap<Date,Float>>();
 
         //add the stocks to the cache
         for(String stock:stocks){

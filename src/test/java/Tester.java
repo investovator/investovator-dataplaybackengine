@@ -21,7 +21,7 @@ public class Tester {
         stocks[1]="APPL";
         DataPlayer player=new DataPlayer(stocks);
         player.setObserver(observer);
-        player.runPlayback(1);
+        player.runPlayback(2);
     }
 
     private static class Obs implements Observer{
