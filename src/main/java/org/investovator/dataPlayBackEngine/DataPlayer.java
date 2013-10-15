@@ -80,6 +80,7 @@ public class DataPlayer {
                 //just the closing price is enough for now
                 //TODO- remove the used items in the cache
                 price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
+                ohlcDataCache.get(stock).remove(currentTime);
 
             }
 

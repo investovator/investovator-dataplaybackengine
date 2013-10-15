@@ -54,14 +54,10 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
             for(TradingDataAttribute attr:tradingDataAttributes){
                 //generate a random value
 
-                int maximum=1000;
-                int minimum=100;
-                int n = maximum - minimum + 1;
-                int k = rn.nextInt() % n;
-                float randomNum =  minimum + k;
 
 
-                attributesMap.put(attr,randomNum);
+
+                attributesMap.put(attr,getRandomNumber());
             }
 
             marketData.put(time,attributesMap);
@@ -81,15 +77,9 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
             //increment the time
             time=incrementTimeBySeconds(1,time);
 
-            //generate a random value
 
-            int maximum=1000;
-            int minimum=100;
-            int n = maximum - minimum + 1;
-            int k = rn.nextInt() % n;
-            float randomNum =  minimum + k;
 
-            data.put(time,randomNum);
+            data.put(time,getRandomNumber());
         }
 
         return data;
@@ -116,6 +106,19 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
         cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
         return cal.getTime();
 
+    }
+
+    private float getRandomNumber(){
+        //generate a random value
+
+        int maximum=1000;
+        int minimum=100;
+        int n = maximum - minimum + 1;
+        int k = rn.nextInt() % n;
+        if(k<0) k=k*-1;
+        float randomNum =  minimum + k;
+
+        return  randomNum;
     }
 
 //    //old

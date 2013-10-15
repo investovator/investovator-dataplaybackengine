@@ -23,9 +23,9 @@ public class DataPlayerTest {
         stocks[0]="GOOG";
         stocks[1]="APPL";
         DataPlayer player=new DataPlayer(stocks);
-        float data=player.getOHLCPrice("G","2012-10-3-19-45-33");
 
         for(int a=0;a<5;a++){
+            float data=player.getOHLCPrice("G","2012-10-3-19-45-3"+Integer.toString(a));
 
             System.out.println(data);
             Thread.sleep(2000);
