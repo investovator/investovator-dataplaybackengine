@@ -31,7 +31,7 @@ public class Tester {
 
             StockEvent d= (StockEvent)arg;
 
-            System.out.println(d.getStockId()+"-"+d.getPrice());
+            System.out.println(d.getTime()+"-"+d.getPrice());
         }
     }
 
