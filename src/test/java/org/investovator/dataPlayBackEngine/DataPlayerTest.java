@@ -43,7 +43,7 @@ public class DataPlayerTest {
             float data=player.getOHLCPrice("G","2012-10-3-19-45-3"+Integer.toString(a));
 
             System.out.println(data);
-            Thread.sleep(2000);
+            Thread.sleep(100);
         }
 
 
