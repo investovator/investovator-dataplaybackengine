@@ -1,9 +1,11 @@
 package org.investovator.dataPlayBackEngine;
 
+import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 import org.investovator.dataPlayBackEngine.scheduler.EventTask;
 
@@ -22,7 +24,8 @@ public class DataPlayer {
 
     Timer timer;
     EventTask task;
-    CompanyStockTransactionsData dataAPI;
+    CompanyStockTransactionsData transactionDataAPI;
+    CompanyData companyDataAPI;
 
 
    //to cache the stock trading data items
@@ -31,8 +34,10 @@ public class DataPlayer {
     public DataPlayer(String[] stocks) {
         this.timer = new Timer();
         //for testing
-        this.dataAPI=new BogusHistoryDataGenerator();
-        task = new EventTask(stocks, "2011-12-13-15-55-32",dataAPI);
+        this.transactionDataAPI =new BogusHistoryDataGenerator();
+        this.companyDataAPI=new BogusCompnayDataGenerator();
+        //testing end
+        task = new EventTask(stocks, "2011-12-13-15-55-32", transactionDataAPI);
 
         ohlcDataCache=new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
 
@@ -97,7 +102,7 @@ public class DataPlayer {
 
             //let's take the next 100 of rows
             try {
-                StockTradingData data=dataAPI.getTradingDataOHLC(stock,currentTime,attributes,100);
+                StockTradingData data= transactionDataAPI.getTradingDataOHLC(stock,currentTime,attributes,100);
 
                 //if any data was returned
                 if(data!=null){
@@ -121,5 +126,17 @@ public class DataPlayer {
         }
 
         return price;
+    }
+
+    /**
+     *
+     * @return Company StockId and Name pairs
+     * @throws DataAccessException
+     */
+    public HashMap<String,String> getStocksList() throws DataAccessException {
+
+        return companyDataAPI.getCompanyIDsNames();
+
+
     }
 }
