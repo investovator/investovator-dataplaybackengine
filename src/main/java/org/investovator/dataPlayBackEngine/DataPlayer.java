@@ -102,7 +102,8 @@ public class DataPlayer {
 
             //let's take the next 100 of rows
             try {
-                StockTradingData data= transactionDataAPI.getTradingDataOHLC(stock,currentTime,attributes,100);
+                StockTradingData data= transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC ,
+                        stock,currentTime,attributes,100);
 
                 //if any data was returned
                 if(data!=null){

@@ -36,64 +36,55 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 //
 //
 //    }
+//
+////    @Override
+//    public StockTradingData getTradingDataOHLC(String s, Date date, TradingDataAttribute[] tradingDataAttributes, int i) throws DataAccessException {
+//
+//        HashMap<Date, HashMap<TradingDataAttribute, Float>> marketData =new HashMap<Date, HashMap<TradingDataAttribute, Float>>();
+//
+//        Date time=date;
+//        for(int j=0;j<i;j++){
+//            //increment the time
+//            if(j!=0){
+//                time=incrementTimeBySeconds(1,time);
+//            }
+//
+//            HashMap<TradingDataAttribute, Float> attributesMap= new HashMap<TradingDataAttribute, Float>();
+//            //add each attribute
+//            for(TradingDataAttribute attr:tradingDataAttributes){
+//                //generate a random value
+//
+//
+//
+//
+//                attributesMap.put(attr,getRandomNumber());
+//            }
+//
+//            marketData.put(time,attributesMap);
+//
+//        }
+//
+//        return new StockTradingDataImpl(s,tradingDataAttributes,marketData);
+//
+//    }
+//
+////    @Override
+//    public HashMap<Date, Float> getTradingData(String s, Date date, int i) throws DataAccessException {
+//        HashMap<Date, Float> data= new HashMap<Date, Float>();
+//
+//        Date time=date;
+//        for(int j=0;j<i;j++){
+//            //increment the time
+//            time=incrementTimeBySeconds(1,time);
+//
+//
+//
+//            data.put(time,getRandomNumber());
+//        }
+//
+//        return data;
+//    }
 
-    @Override
-    public StockTradingData getTradingDataOHLC(String s, Date date, TradingDataAttribute[] tradingDataAttributes, int i) throws DataAccessException {
-
-        HashMap<Date, HashMap<TradingDataAttribute, Float>> marketData =new HashMap<Date, HashMap<TradingDataAttribute, Float>>();
-
-        Date time=date;
-        for(int j=0;j<i;j++){
-            //increment the time
-            if(j!=0){
-                time=incrementTimeBySeconds(1,time);
-            }
-
-            HashMap<TradingDataAttribute, Float> attributesMap= new HashMap<TradingDataAttribute, Float>();
-            //add each attribute
-            for(TradingDataAttribute attr:tradingDataAttributes){
-                //generate a random value
-
-
-
-
-                attributesMap.put(attr,getRandomNumber());
-            }
-
-            marketData.put(time,attributesMap);
-
-        }
-
-        return new StockTradingDataImpl(s,tradingDataAttributes,marketData);
-
-    }
-
-    @Override
-    public HashMap<Date, Float> getTradingData(String s, Date date, int i) throws DataAccessException {
-        HashMap<Date, Float> data= new HashMap<Date, Float>();
-
-        Date time=date;
-        for(int j=0;j<i;j++){
-            //increment the time
-            time=incrementTimeBySeconds(1,time);
-
-
-
-            data.put(time,getRandomNumber());
-        }
-
-        return data;
-    }
-
-    @Override
-    public void importCSV(String s, File file) throws DataAccessException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void clearTradingData(String s) throws DataAccessException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     /**
      * Increases the current time by the given number of seconds
@@ -119,6 +110,60 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
         float randomNum =  minimum + k;
 
         return  randomNum;
+    }
+
+    @Override
+    public StockTradingData getTradingData(DataType dataType, String symbol, Date startingDate, TradingDataAttribute[] tradingDataAttributes, int numOfRows) throws DataAccessException {
+
+
+        HashMap<Date, HashMap<TradingDataAttribute, Float>> marketData = new
+                HashMap<Date, HashMap<TradingDataAttribute, Float>>();
+
+        Date time=startingDate;
+        for(int j=0;j<numOfRows;j++){
+            //increment the time
+            time=incrementTimeBySeconds(1,time);
+            HashMap<TradingDataAttribute, Float> tradingData= new HashMap<TradingDataAttribute, Float>();
+
+            //add attributes
+            for(TradingDataAttribute attr:tradingDataAttributes){
+
+                tradingData.put(attr,getRandomNumber());
+            }
+            marketData.put(time,tradingData);
+
+
+        }
+
+        StockTradingData stockData=new StockTradingDataImpl(symbol,tradingDataAttributes,
+                marketData);
+
+        return stockData;
+    }
+
+    @Override
+    public Date[] getDataDaysRange(DataType dataType, String s) {
+        return new Date[0];  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void importCSV(DataType dataType, String s, File file) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void importXls(DataType dataType, String s, File file) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void clearTradingData(DataType dataType, String s) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void clearAllTradingData(DataType dataType) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 //    //old

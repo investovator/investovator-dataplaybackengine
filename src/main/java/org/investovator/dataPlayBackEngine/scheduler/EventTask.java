@@ -1,6 +1,8 @@
 package org.investovator.dataPlayBackEngine.scheduler;
 
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.utils.StockTradingData;
+import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
@@ -83,11 +85,25 @@ public class EventTask extends TimerTask {
             //for each stock, search for events
             for(String stock:dataCache.keySet()){
                 try {
-                    HashMap<Date, Float> stockData=dataApi.getTradingData(stock,currentTime,100);
+
+                    //define the attributes needed
+                    TradingDataAttribute attributes[]=new TradingDataAttribute[2];
+
+                    //just the closing price is enough for now
+                    attributes[0]=TradingDataAttribute.DAY;
+                    attributes[1]=TradingDataAttribute.PRICE;
+
+                    StockTradingData data=dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
+                            stock,currentTime,attributes,100);
+
+                    HashMap<Date, HashMap<TradingDataAttribute, Float>> stockData= data.getTradingData();
+
                     //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
                     //if there are events matching the current time stamp
                     if(stockData.containsKey(currentTime)){
-                        eventManager.notifyListners(new StockEvent(stock,stockData.get(currentTime),currentTime));
+
+
+                        eventManager.notifyListners(stockData.get(currentTime));
                         //remove the fired event related dataset
                         stockData.remove(currentTime);
                     }
