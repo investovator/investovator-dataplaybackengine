@@ -32,10 +32,7 @@ import org.investovator.dataPlayBackEngine.exceptions.GameFinishedException;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @author: ishan
@@ -237,11 +234,12 @@ public class OHLCDataPLayer {
             //add them to the map
             for(Date date:dates){
                 //if the arraylist has not been initialized
-                if(counter.containsKey(stock)){
+                if(!counter.containsKey(date)){
                     counter.put(date,new ArrayList<String>());
                 }
 
                 ArrayList<String> stockList=counter.get(date);
+                stockList.add(stock);
                 counter.put(date,stockList);
             }
         }
@@ -256,6 +254,30 @@ public class OHLCDataPLayer {
 
 
         return  earliestDate;
+
+    }
+
+    public Date getEarliestDate(String[] stocks){
+
+        Date earliestDate=null;
+
+        //to store all the date
+        List<Date> datesList=new ArrayList<Date>();
+
+        //iterate all the stocks
+        for(String stock:stocks){
+            //get all the dates for that stock
+            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.OHLC,stock);
+
+            //add them to the map
+            datesList.addAll(datesList);
+        }
+
+        //sort in the ascending order
+        Collections.sort(datesList);
+
+        return  earliestDate;
+
 
     }
 
