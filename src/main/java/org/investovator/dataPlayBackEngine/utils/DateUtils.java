@@ -62,11 +62,11 @@ public class DateUtils {
 
     }
 
-    public static Date dateStringToDateObject(String dateString,String dateFromat) throws ParseException {
+    public static Date dateStringToDateObject(String dateString,String dateFormat) throws ParseException {
         Date date;
 
         //should be in format year-month-date-24hr-minute-second
-        SimpleDateFormat format = new SimpleDateFormat(dateFromat);
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
 
         date =format.parse(dateString);
 

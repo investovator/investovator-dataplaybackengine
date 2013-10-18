@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class DataPlayerTest {
 
-    DataPlayer player;
+    OHLCDataPLayer player;
 
     @Before
     public void setUp() throws Exception {
@@ -21,7 +21,7 @@ public class DataPlayerTest {
         stocks[0]="GOOG";
         stocks[1]="APPL";
         String startDate="2011-12-13-15-55-32";
-        player=new DataPlayer(stocks,startDate);
+        player=new OHLCDataPLayer(stocks,startDate);
 
 
     }
@@ -41,9 +41,10 @@ public class DataPlayerTest {
 
 
         for(int a=0;a<5;a++){
+
             float data=player.getOHLCPrice("G","2012-10-3-19-45-3"+Integer.toString(a));
 
-            System.out.println(data);
+            System.out.println("2012-10-3-19-45-3"+Integer.toString(a)+"-->"+data);
             Thread.sleep(100);
         }
 
