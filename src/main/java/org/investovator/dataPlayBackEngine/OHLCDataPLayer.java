@@ -26,13 +26,14 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
-import org.investovator.dataPlayBackEngine.scheduler.EventTask;
+import org.investovator.dataPlayBackEngine.events.StockEvent;
+import org.investovator.dataPlayBackEngine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Timer;
 
 /**
  * @author: ishan
@@ -43,19 +44,87 @@ public class OHLCDataPLayer {
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
 
+    //to keep track of the date
+    Date today;
+    //to keep the game state
+    boolean gameStarted;
+    //to keep track of the attributes needed
+    TradingDataAttribute[] attributes;
+
 
     //to cache the stock trading data items
     HashMap<String,HashMap<Date, HashMap<TradingDataAttribute, Float>>> ohlcDataCache;
 
-    public OHLCDataPLayer(String[] stocks,String startDate) {
+    public OHLCDataPLayer(String[] stocks,String startDate, String dateFormat,TradingDataAttribute[] attributes) throws ParseException {
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
         //testing end
 
-        ohlcDataCache=new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
+        this.ohlcDataCache=new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
+        this.attributes=attributes;
+
+        //initialize the stocks
+        for(String stock:stocks){
+            ohlcDataCache.put(stock,new HashMap<Date, HashMap<TradingDataAttribute, Float>>());
+        }
+
+
+        today=DateUtils.dateStringToDateObject(startDate, dateFormat);
+        gameStarted=false;
 
     }
+
+    public HashMap<TradingDataAttribute, Float> startGame() throws GameAlreadyStartedException {
+
+        ArrayList<StockEvent> events=new ArrayList<StockEvent>();
+        //if the game has not started yet
+        if(!gameStarted){
+            //search all the stocks
+            for(String stock:ohlcDataCache.keySet()){
+
+                try {
+                    StockTradingData data= transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC ,
+                            stock,today,attributes,100);
+
+                    //if any data was returned
+                    if(data!=null){
+
+                        //add the rest of the data to the cache
+                        //add the new data
+                        ohlcDataCache.put(stock,data.getTradingData());
+                        price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
+
+                    }
+
+
+
+                } catch (DataAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+
+            //////////////////////
+
+
+
+                //remove the old set of data for this stock and add a new set
+                if(ohlcDataCache.containsKey(stock)){
+                    ohlcDataCache.remove(stock);
+                }
+
+            }
+            else{
+                price=-1;
+            }
+            //////////////////////////
+
+        }else{
+            throw new GameAlreadyStartedException(this);
+        }
+
+    }
+
 
     /**
      *

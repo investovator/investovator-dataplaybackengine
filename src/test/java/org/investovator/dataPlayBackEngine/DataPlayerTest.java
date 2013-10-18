@@ -1,6 +1,7 @@
 package org.investovator.dataPlayBackEngine;
 
 import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
+import org.investovator.dataPlayBackEngine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class DataPlayerTest {
         stocks[0]="GOOG";
         stocks[1]="APPL";
         String startDate="2011-12-13-15-55-32";
-        player=new OHLCDataPLayer(stocks,startDate);
+        player=new OHLCDataPLayer(stocks,startDate, DateUtils.DATE_FORMAT_1);
 
 
     }
