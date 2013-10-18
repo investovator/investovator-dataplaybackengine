@@ -7,6 +7,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
 import org.investovator.dataPlayBackEngine.events.StockEventComparator;
+import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,23 +65,10 @@ public class EventTask extends TimerTask {
             fireEvents();
         }
         // in order to point to the next time interval
-        currentTime=incrementTimeBySeconds(1);
+        currentTime= DateUtils.incrementTimeBySeconds(1,currentTime);
 
     }
 
-
-    /**
-     * Increases the current time by the given number of seconds
-     *
-     * @param seconds the number of seconds to increase by
-     */
-    private Date incrementTimeBySeconds(int seconds){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(currentTime);
-        cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
-        return cal.getTime();
-
-    }
 
     public void setObserver(Observer observer){
         eventManager.addObserver(observer);

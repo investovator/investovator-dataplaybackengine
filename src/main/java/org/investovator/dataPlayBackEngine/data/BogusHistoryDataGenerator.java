@@ -5,6 +5,7 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.StockTradingDataImpl;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.io.File;
 import java.util.Calendar;
@@ -19,19 +20,6 @@ import java.util.Random;
 public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 
     Random rn = new Random(new Date().getTime());
-
-    /**
-     * Increases the current time by the given number of seconds
-     *
-     * @param seconds the number of seconds to increase by
-     */
-    private Date incrementTimeBySeconds(int seconds, Date currentTime){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(currentTime);
-        cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
-        return cal.getTime();
-
-    }
 
     private float getRandomNumber(){
         //generate a random value
@@ -56,7 +44,7 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
         Date time=startingDate;
         for(int j=0;j<numOfRows;j++){
             //increment the time
-            time=incrementTimeBySeconds(1,time);
+            time= DateUtils.incrementTimeBySeconds(1,time);
             HashMap<TradingDataAttribute, Float> tradingData= new HashMap<TradingDataAttribute, Float>();
 
             //add attributes
