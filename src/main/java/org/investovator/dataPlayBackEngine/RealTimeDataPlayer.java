@@ -74,6 +74,7 @@ public class RealTimeDataPlayer {
      * Stop the data playback
      */
     public void stopPlayback() {
+        task.cancel();
         timer.cancel();
     }
 
