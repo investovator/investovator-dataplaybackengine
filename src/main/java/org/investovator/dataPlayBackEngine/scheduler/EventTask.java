@@ -62,7 +62,10 @@ public class EventTask extends TimerTask {
             try {
                 refreshCache();
             } catch (GameFinishedException e) {
-//                throw e;
+                //notify the player
+                eventManager.notifyListners(EventManager.RealTimePlayerStates.GAME_OVER);
+                //stop the timer
+                this.cancel();
             }
             fireEvents();
         }

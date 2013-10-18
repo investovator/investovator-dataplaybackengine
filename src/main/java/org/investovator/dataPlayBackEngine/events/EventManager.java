@@ -8,7 +8,11 @@ import java.util.Observable;
  */
 public class EventManager extends Observable {
 
-    public void notifyListners(Object obj){
+    public enum RealTimePlayerStates {
+        GAME_OVER
+    }
+
+    public void notifyListners(Object obj) {
         setChanged();
         notifyObservers(obj);
     }
