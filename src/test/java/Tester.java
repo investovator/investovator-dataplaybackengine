@@ -1,3 +1,4 @@
+import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataPlayBackEngine.DataPlayer;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
 
@@ -31,7 +32,11 @@ public class Tester {
 
             StockEvent d= (StockEvent)arg;
 
-            System.out.println(d.getTime()+"-"+d.getPrice());
+            System.out.println(d.getTime()+"-"+d.getStockId());
+            System.out.println("Attributes:");
+            for(TradingDataAttribute attr:d.getData().keySet()){
+                System.out.println(attr+" : "+d.getData().get(attr));
+            }
         }
     }
 

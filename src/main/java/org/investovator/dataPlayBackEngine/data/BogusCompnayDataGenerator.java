@@ -22,6 +22,7 @@ package org.investovator.dataPlayBackEngine.data;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.exeptions.DataAccessException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -56,6 +57,11 @@ public class BogusCompnayDataGenerator implements CompanyData {
 
     @Override
     public Object getInfo(String s, String s2) throws DataAccessException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ArrayList<String> getAvailableStockIds() throws DataAccessException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

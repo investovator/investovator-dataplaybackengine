@@ -19,48 +19,32 @@
 
 package org.investovator.dataPlayBackEngine.events;
 
-import org.investovator.core.data.api.utils.TradingDataAttribute;
-
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Comparator;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class StockEvent {
+public class StockEventComparator implements Comparator {
+    @Override
+    public int compare(Object o1, Object o2) {
+        StockEvent event1=(StockEvent)o1;
+        StockEvent event2=(StockEvent)o2;
 
-    private String stockId;
-    private HashMap<TradingDataAttribute, Float> data;
-    private Date time;
+        int decision;
 
-    public StockEvent(String stockId, HashMap<TradingDataAttribute, Float> data, Date time) {
-        this.stockId = stockId;
-        this.data = data;
-        this.time = time;
-    }
+        if (event1.getTime().compareTo(event2.getTime())<0){
+            decision= -1;
+        }
+        else if(event1.getTime().compareTo(event2.getTime())>0){
+            decision=1;
+        }
+        else{
+            decision=0;
+        }
 
-    public String getStockId() {
-        return stockId;
-    }
+        return decision;
 
-    public void setStockId(String stockId) {
-        this.stockId = stockId;
-    }
 
-    public HashMap<TradingDataAttribute, Float> getData() {
-        return data;
-    }
-
-    public void setData(HashMap<TradingDataAttribute, Float> data) {
-        this.data = data;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 }
