@@ -43,8 +43,7 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 
         Date time=startingDate;
         for(int j=0;j<numOfRows;j++){
-            //increment the time
-            time= DateUtils.incrementTimeBySeconds(1,time);
+
             HashMap<TradingDataAttribute, Float> tradingData= new HashMap<TradingDataAttribute, Float>();
 
             //add attributes
@@ -53,6 +52,9 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
                 tradingData.put(attr,getRandomNumber());
             }
             marketData.put(time,tradingData);
+
+            //increment the time
+            time= DateUtils.incrementTimeBySeconds(1,time);
 
 
         }
