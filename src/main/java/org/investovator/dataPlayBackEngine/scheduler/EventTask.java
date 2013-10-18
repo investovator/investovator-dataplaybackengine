@@ -25,7 +25,7 @@ public class EventTask extends TimerTask {
     CompanyStockTransactionsData dataApi;
 
     //to cache the stock trading data items
-    ConcurrentHashMap<String,HashMap<Date,Float>> dataCache;
+    TreeMap<Date,HashMap<String, HashMap<TradingDataAttribute, Float>>> dataCache;
 
     EventManager eventManager;
 
@@ -34,12 +34,14 @@ public class EventTask extends TimerTask {
         this.dataApi=api;
         eventManager=new EventManager();
 
-        dataCache=new ConcurrentHashMap<String,HashMap<Date,Float>>();
+        dataCache=new TreeMap<Date,HashMap<String, HashMap<TradingDataAttribute, Float>>>();
 
-        //add the stocks to the cache
-        for(String stock:stocks){
-            dataCache.put(stock,new HashMap<Date,Float>());
-        }
+        newDataCache=new PriorityQueue<StockEvent>();
+
+//        //add the stocks to the cache
+//        for(String stock:stocks){
+//            dataCache.put(stock,new HashMap<Date,Float>());
+//        }
 
         //String sourceDate=currentTime;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss"); //should be in format year-month-date-24hr-minute-second
@@ -56,6 +58,15 @@ public class EventTask extends TimerTask {
     public void run() {
 
         boolean inCache=false;
+
+        //get the days that are less than the required time
+        for(Date time:dataCache.keySet()){
+            if()
+
+        }
+
+
+
 
         //iterate all the stocks
         for(String stock:dataCache.keySet()){
@@ -82,6 +93,25 @@ public class EventTask extends TimerTask {
         //if a matching item to the time stamp was not in the cache
         //TODO - this part would get called even if there was actually no stock events in the dataset in that time
         if (!inCache){
+
+
+
+            ////////////////////////////////
+
+            //if entries exist for this date/time
+            if(dataCache.containsKey(currentTime)){
+                HashMap<String, HashMap<TradingDataAttribute, Float>> event= new
+                        HashMap<String, HashMap<TradingDataAttribute, Float>>();
+
+                //iterate all the stocks for events
+                for(String stock:dataCache.get(currentTime).keySet()){
+                    //put the events
+                    event.put(stock,dataCache.get(currentTime).)
+                }
+            }
+
+            ////////////////////////////////
+
             //for each stock, search for events
             for(String stock:dataCache.keySet()){
                 try {
