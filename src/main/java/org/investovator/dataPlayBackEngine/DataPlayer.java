@@ -8,9 +8,9 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 import org.investovator.dataPlayBackEngine.scheduler.EventTask;
+import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Observer;
@@ -67,13 +67,12 @@ public class DataPlayer {
         Date currentTime=null;
         float price=0;
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss"); //should be in format year-month-date-24hr-minute-second
         try {
-            currentTime =format.parse(date);
-
+            currentTime= DateUtils.dateStringToDateObject(date,DateUtils.DATE_FORMAT_1);
         } catch (ParseException e) {
-            e.printStackTrace();
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
 
         boolean inCache=false;
 

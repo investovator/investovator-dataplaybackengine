@@ -10,7 +10,6 @@ import org.investovator.dataPlayBackEngine.events.StockEventComparator;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -44,10 +43,8 @@ public class EventTask extends TimerTask {
         dataCache =new PriorityQueue<StockEvent>(EventTask.CACHE_SIZE,comparator );
         stocks=new ArrayList<String>(Arrays.asList(stocksToWatch));
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss"); //should be in format year-month-date-24hr-minute-second
         try {
-             currentTime =format.parse(startT);
-
+            currentTime=DateUtils.dateStringToDateObject(startT,DateUtils.DATE_FORMAT_1);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -65,7 +62,7 @@ public class EventTask extends TimerTask {
             fireEvents();
         }
         // in order to point to the next time interval
-        currentTime= DateUtils.incrementTimeBySeconds(1,currentTime);
+        currentTime= DateUtils.incrementTimeBySeconds(1, currentTime);
 
     }
 

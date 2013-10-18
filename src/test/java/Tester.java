@@ -13,7 +13,6 @@ public class Tester {
     static Observer observer=new Obs();
 
     public Tester(Observer observer) {
-//        this.observer = new Obs();
     }
 
     public static void main(String[] args) {

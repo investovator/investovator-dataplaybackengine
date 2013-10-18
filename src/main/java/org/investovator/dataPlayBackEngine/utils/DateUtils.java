@@ -19,6 +19,8 @@
 
 package org.investovator.dataPlayBackEngine.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,6 +29,8 @@ import java.util.Date;
  * @version: ${Revision}
  */
 public class DateUtils {
+
+    public static String DATE_FORMAT_1="yyyy-MM-dd-kk-mm-ss";
 
     /**
      * Increments a date by a given number of seconds and returns a new date
@@ -40,6 +44,19 @@ public class DateUtils {
         cal.setTime(currentTime);
         cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
         return cal.getTime();
+
+    }
+
+    public static Date dateStringToDateObject(String dateString,String dateFromat) throws ParseException {
+        Date date;
+
+        //should be in format year-month-date-24hr-minute-second
+        SimpleDateFormat format = new SimpleDateFormat(dateFromat);
+
+        date =format.parse(dateString);
+
+
+        return date;
 
     }
 }
