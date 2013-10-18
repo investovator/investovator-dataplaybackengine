@@ -75,7 +75,15 @@ public class OHLCDataPLayer {
 
     }
 
-    public HashMap<TradingDataAttribute, Float> startGame() throws GameAlreadyStartedException {
+    /**
+     * Starts the game.
+     *
+     * Assumption - Assumes that a suitable start date has been set by the setStartDate() method.
+     *
+     * @return list of events needed to start the game
+     * @throws GameAlreadyStartedException
+     */
+    public StockEvent[] startGame() throws GameAlreadyStartedException {
 
         ArrayList<StockEvent> events=new ArrayList<StockEvent>();
         //if the game has not started yet
@@ -89,11 +97,13 @@ public class OHLCDataPLayer {
 
                     //if any data was returned
                     if(data!=null){
+                        //get the relevant data
+                        StockEvent event=new StockEvent(stock,data.getTradingDataEntry(today),today);
+                        //remove that entry from map
+                        data.getTradingData().remove(today);
 
                         //add the rest of the data to the cache
-                        //add the new data
                         ohlcDataCache.put(stock,data.getTradingData());
-                        price=ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
 
                     }
 
@@ -104,24 +114,16 @@ public class OHLCDataPLayer {
                 }
             }
 
-            //////////////////////
-
-
-
-                //remove the old set of data for this stock and add a new set
-                if(ohlcDataCache.containsKey(stock)){
-                    ohlcDataCache.remove(stock);
-                }
-
-            }
-            else{
-                price=-1;
-            }
-            //////////////////////////
 
         }else{
             throw new GameAlreadyStartedException(this);
         }
+
+    return events.toArray(new StockEvent[events.size()]);
+
+    }
+
+    public void setStartDate(Date date){
 
     }
 
