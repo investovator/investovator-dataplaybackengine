@@ -85,7 +85,7 @@ public class EventTask extends TimerTask {
                 try {
                     //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
                     StockTradingData data=dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
-                            stock,currentTime,attributes,100);
+                            stock,currentTime,attributes,EventTask.CACHE_SIZE);
 
                     HashMap<Date, HashMap<TradingDataAttribute, Float>> stockData= data.getTradingData();
 
