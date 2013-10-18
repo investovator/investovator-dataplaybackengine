@@ -41,6 +41,9 @@ import java.util.HashMap;
  */
 public class OHLCDataPLayer {
 
+    //used to determine the cache size
+    public static int CACHE_SIZE=100;
+
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
 
@@ -92,12 +95,12 @@ public class OHLCDataPLayer {
 
                 try {
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today, attributes, 100);
+                            stock, today, attributes, OHLCDataPLayer.CACHE_SIZE);
 
                     //if any data was returned
                     if (data != null) {
                         //get the relevant data
-                        StockEvent event = new StockEvent(stock, data.getTradingDataEntry(today), today);
+                        events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
                         //remove that entry from map
                         data.getTradingData().remove(today);
 
@@ -134,76 +137,144 @@ public class OHLCDataPLayer {
 
     }
 
+    /**
+     * returns the  stock events in the next day. If a stock does not contain the price information
+     * for the requested day, its <b>data</> map will be null.
+     *
+     * @return An array of StockEvent's if the data is present for at least a single stock. If data is not present
+     * for any stock, returns a null.
+     */
+    public StockEvent[] playNextDay(){
+        ArrayList<StockEvent> events = new ArrayList<StockEvent>();
+
+        //iterate all the stocks
+        for(String stock:ohlcDataCache.keySet()) {
+            //if the date is in the cache
+            if (ohlcDataCache.get(stock).containsKey(today)) {
+                events.add(new StockEvent(stock,ohlcDataCache.get(stock).get(today),today));
+
+                //remove the used items from the cache
+                ohlcDataCache.get(stock).remove(today);
+
+            }
+            else{
+                events.add(new StockEvent(stock,null,today));
+            }
+
+        }
+
+        //if no data has been found in the cache
+        if (events.size()==0) {
+
+            //search all the stocks
+            for (String stock : ohlcDataCache.keySet()) {
+
+                //clear the cache first
+                ohlcDataCache.remove(stock);
+
+                try {
+                    StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
+                            stock, today, attributes, OHLCDataPLayer.CACHE_SIZE);
+
+                    //if any data was returned
+                    if (data != null) {
+                        //get the relevant data
+                        events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
+                        //remove that entry from map
+                        data.getTradingData().remove(today);
+
+                        //add the rest of the data to the cache
+                        ohlcDataCache.put(stock, data.getTradingData());
+
+                    }
+
+                } catch (DataAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+
+        }
+
+        //if no data has been found from the DB query too
+        if(events.size()==0){
+            return null;
+        }
+
+        return events.toArray(new StockEvent[events.size()]);
+
+    }
+
 
     /**
+     * TODO - not complete- need to be rewritten - ex: playNextDay()
      * @param stock stock name
      * @param date  date for which the price of the stock required
      * @return the price of the stock on the "date" or negative values if there is no more data
      */
-    public float getOHLCPrice(String stock, String date) {
-
-        Date currentTime = null;
-        float price = 0;
-
-        try {
-            currentTime = DateUtils.dateStringToDateObject(date, DateUtils.DATE_FORMAT_1);
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-        boolean inCache = false;
-
-        //if the stocks data is already in the cache
-        if (ohlcDataCache.containsKey(stock)) {
-            //if the requested date is in the cache
-            if (ohlcDataCache.get(stock).containsKey(currentTime)) {
-                inCache = true;
-                //just the closing price is enough for now
-                //TODO- remove the used items in the cache
-                price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
-                ohlcDataCache.get(stock).remove(currentTime);
-
-            }
-
-        }
-
-        //if the stock data is not in the cache
-        if (!inCache) {
-            //define the attributes needed
-            TradingDataAttribute attributes[] = new TradingDataAttribute[2];
-
-            //just the closing price is enough for now
-            attributes[0] = TradingDataAttribute.DAY;
-            attributes[1] = TradingDataAttribute.CLOSING_PRICE;
-
-            //let's take the next 100 of rows
-            try {
-                StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                        stock, currentTime, attributes, 100);
-
-                //if any data was returned
-                if (data != null) {
-
-                    //remove the old set of data for this stock and add a new set
-                    if (ohlcDataCache.containsKey(stock)) {
-                        ohlcDataCache.remove(stock);
-                    }
-                    //add the new data
-                    ohlcDataCache.put(stock, data.getTradingData());
-                    price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
-                } else {
-                    price = -1;
-                }
-
-            } catch (DataAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-        }
-
-        return price;
-    }
+//    public float getOHLCPrice(String stock, String date) {
+//
+//        Date currentTime = null;
+//        float price = 0;
+//
+//        try {
+//            currentTime = DateUtils.dateStringToDateObject(date, DateUtils.DATE_FORMAT_1);
+//        } catch (ParseException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
+//
+//
+//        boolean inCache = false;
+//
+//        //if the stocks data is already in the cache
+//        if (ohlcDataCache.containsKey(stock)) {
+//            //if the requested date is in the cache
+//            if (ohlcDataCache.get(stock).containsKey(currentTime)) {
+//                inCache = true;
+//                //just the closing price is enough for now
+//                //TODO- remove the used items in the cache
+//                price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
+//                ohlcDataCache.get(stock).remove(currentTime);
+//
+//            }
+//
+//        } ////
+//
+//        //if the stock data is not in the cache
+//        if (!inCache) {
+//            //define the attributes needed
+//            TradingDataAttribute attributes[] = new TradingDataAttribute[2];
+//
+//            //just the closing price is enough for now
+//            attributes[0] = TradingDataAttribute.DAY;
+//            attributes[1] = TradingDataAttribute.CLOSING_PRICE;
+//
+//            //let's take the next 100 of rows
+//            try {
+//                StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
+//                        stock, currentTime, attributes, 100);
+//
+//                //if any data was returned
+//                if (data != null) {
+//
+//                    //remove the old set of data for this stock and add a new set
+//                    if (ohlcDataCache.containsKey(stock)) {
+//                        ohlcDataCache.remove(stock);
+//                    }
+//                    //add the new data
+//                    ohlcDataCache.put(stock, data.getTradingData());
+//                    price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
+//                } else {
+//                    price = -1;
+//                }
+//
+//            } catch (DataAccessException e) {
+//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//            }
+//
+//        }
+//
+//        return price;
+//    }
 
     /**
      * @return Company StockId and Name pairs
