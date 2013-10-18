@@ -1,5 +1,6 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataPlayBackEngine.DataPlayer;
+import org.investovator.dataPlayBackEngine.RealTimeDataPlayer;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
 
 import java.util.Observable;
@@ -20,9 +21,9 @@ public class Tester {
         stocks[0]="GOOG";
         stocks[1]="APPL";
         String startDate="2011-12-13-15-55-32";
-        DataPlayer player=new DataPlayer(stocks,startDate);
+        RealTimeDataPlayer player=new RealTimeDataPlayer(stocks,startDate);
         player.setObserver(observer);
-        player.runPlayback(2);
+        player.startPlayback(2);
     }
 
     private static class Obs implements Observer{
