@@ -8,6 +8,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.io.File;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,7 +74,36 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 
     @Override
     public Date[] getDataDaysRange(DataType dataType, String s) {
-        return new Date[0];  //To change body of implemented methods use File | Settings | File Templates.
+        int numOfDates=4;
+        Date[] dates=new Date[numOfDates];
+        for(int i=0;i<numOfDates;i++){
+            if(i==0){
+                if(dataType==DataType.OHLC){
+                    try {
+                        dates[i]=DateUtils.dateStringToDateObject("2011-12-13-15-55-32",DateUtils.DATE_FORMAT_1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                } else{
+
+                    try {
+                        dates[i]=DateUtils.dateStringToDateObject("2011-12-13-15-55-35",DateUtils.DATE_FORMAT_1);
+                    } catch (ParseException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }
+            else{
+                if(dataType==DataType.TICKER){
+                    //increase by two seconds than the i-1 th date
+                    dates[i]=DateUtils.decrementTimeBySeconds(2,dates[i-1]);
+                }else{
+                    //increase by one day than the i-1 th date
+                    dates[i]=DateUtils.decrementTimeByDays(1,dates[i-1]);
+                }
+            }
+        }
+        return dates;
     }
 
     @Override

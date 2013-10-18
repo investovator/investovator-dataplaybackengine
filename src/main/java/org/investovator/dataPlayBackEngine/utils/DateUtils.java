@@ -77,6 +77,21 @@ public class DateUtils {
 
     }
 
+    /**
+     * Decrements a time by a given number of seconds and returns a new date
+     *
+     * @param days  number of days to increment the time by
+     * @param currentTime the time value that needs to be incremented
+     * @return incremented time
+     */
+    public static Date decrementTimeBySeconds(int days, Date currentTime){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentTime);
+        cal.add(Calendar.SECOND, -(days)); //minus number would decrement the days
+        return cal.getTime();
+
+    }
+
     public static Date dateStringToDateObject(String dateString,String dateFormat) throws ParseException {
         Date date;
 

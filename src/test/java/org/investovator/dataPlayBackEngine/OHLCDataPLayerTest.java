@@ -96,4 +96,21 @@ public class OHLCDataPLayerTest {
     public void testGetStocksList() throws Exception {
 
     }
+
+    @Test
+    public void testGetEarliestCommonDate() throws Exception{
+
+        String[] stocks=new String[2];
+        stocks[0]="GOOG";
+        stocks[1]="APPL";
+
+        System.out.println(player.getEarliestCommonDate(stocks));
+
+
+    }
+
+    @Test
+    public void testGetEarliestDate() throws Exception{
+
+    }
 }
