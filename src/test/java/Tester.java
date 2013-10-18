@@ -20,7 +20,8 @@ public class Tester {
         String[] stocks=new String[2];
         stocks[0]="GOOG";
         stocks[1]="APPL";
-        DataPlayer player=new DataPlayer(stocks);
+        String startDate="2011-12-13-15-55-32";
+        DataPlayer player=new DataPlayer(stocks,startDate);
         player.setObserver(observer);
         player.runPlayback(2);
     }

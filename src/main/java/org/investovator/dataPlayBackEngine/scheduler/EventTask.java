@@ -11,47 +11,38 @@ import org.investovator.dataPlayBackEngine.events.StockEventComparator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
 public class EventTask extends TimerTask {
-    int i=0;
+
+    //used to determine the cache size
+    public static int CACHE_SIZE=100;
 
     //start time
     private Date currentTime;
     //Data interface
-    CompanyStockTransactionsData dataApi;
-
-//    to cache the stock trading data items
-//    TreeMap<Date,HashMap<String, HashMap<TradingDataAttribute, Float>>> dataCache;
+    private CompanyStockTransactionsData dataApi;
 
     //to cache the stock trading data items. (will allow events to have the duplicate times)
-    PriorityQueue<StockEvent> newDataCache;
+    private PriorityQueue<StockEvent> dataCache;
     //to store the stocks to watch
-    ArrayList<String> stocks;
+    private ArrayList<String> stocks;
 
-    EventManager eventManager;
+    private EventManager eventManager;
 
 
     public EventTask(String[] stocksToWatch, String startT, CompanyStockTransactionsData api) {
         this.dataApi=api;
         eventManager=new EventManager();
 
-//        dataCache=new TreeMap<Date,HashMap<String, HashMap<TradingDataAttribute, Float>>>();
 
         Comparator<StockEvent> comparator=new StockEventComparator();
-        newDataCache=new PriorityQueue<StockEvent>(100,comparator );
+        dataCache =new PriorityQueue<StockEvent>(EventTask.CACHE_SIZE,comparator );
         stocks=new ArrayList<String>(Arrays.asList(stocksToWatch));
 
-//        //add the stocks to the cache
-//        for(String stock:stocks){
-//            dataCache.put(stock,new HashMap<Date,Float>());
-//        }
-
-        //String sourceDate=currentTime;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-kk-mm-ss"); //should be in format year-month-date-24hr-minute-second
         try {
              currentTime =format.parse(startT);
@@ -75,102 +66,6 @@ public class EventTask extends TimerTask {
         // in order to point to the next time interval
         currentTime=incrementTimeBySeconds(1);
 
-//        /////////
-//
-//        //get the days that are less than the required time
-//        for(Date time:dataCache.keySet()){
-//            if()
-//
-//        }
-//
-//        ////////////
-//
-//
-//
-//
-//        //iterate all the stocks
-//        for(String stock:dataCache.keySet()){
-//
-//            //if the cache for a stock is not empty
-//            if(!dataCache.get(stock).isEmpty()){
-//                //if the requested date is in the cache
-//                if(dataCache.get(stock).containsKey(currentTime)){
-//                    inCache=true;
-//
-//                    //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
-//                    //if there are events matching the current time stamp
-//                    eventManager.notifyListners(new StockEvent(stock,dataCache.get(stock).get(currentTime),currentTime));
-//                    //remove the fired event related dataset
-//                    dataCache.get(stock).remove(currentTime);
-//
-//
-//                }
-//
-//            }
-//        }
-//
-//
-//        //if a matching item to the time stamp was not in the cache
-//        //TODO - this part would get called even if there was actually no stock events in the dataset in that time
-//
-//
-//
-//
-//            ////////////////////////////////
-//
-//            //if entries exist for this date/time
-//            if(dataCache.containsKey(currentTime)){
-//                HashMap<String, HashMap<TradingDataAttribute, Float>> event= new
-//                        HashMap<String, HashMap<TradingDataAttribute, Float>>();
-//
-//                //iterate all the stocks for events
-//                for(String stock:dataCache.get(currentTime).keySet()){
-//                    //put the events
-//                    event.put(stock,dataCache.get(currentTime).)
-//                }
-//            }
-//
-//            ////////////////////////////////
-//
-//            //for each stock, search for events
-//            for(String stock:dataCache.keySet()){
-//                try {
-//
-//                    //define the attributes needed
-//                    TradingDataAttribute attributes[]=new TradingDataAttribute[2];
-//
-//                    //just the closing price is enough for now
-//                    attributes[0]=TradingDataAttribute.DAY;
-//                    attributes[1]=TradingDataAttribute.PRICE;
-//
-//                    StockTradingData data=dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
-//                            stock,currentTime,attributes,100);
-//
-//                    HashMap<Date, HashMap<TradingDataAttribute, Float>> stockData= data.getTradingData();
-//
-//                    //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
-//                    //if there are events matching the current time stamp
-//                    if(stockData.containsKey(currentTime)){
-//
-//
-//                        eventManager.notifyListners(stockData.get(currentTime));
-//                        //remove the fired event related dataset
-//                        stockData.remove(currentTime);
-//                    }
-//
-//                    //update the cache
-//                    dataCache.remove(stock);
-//                    dataCache.put(stock,stockData);
-//
-//                } catch (DataAccessException e) {
-//                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//                }
-//            }
-//
-//        }
-
-
-
     }
 
 
@@ -193,8 +88,6 @@ public class EventTask extends TimerTask {
 
     private void refreshCache(){
 
-
-
             //for each stock, search for events
             for(String stock:stocks){
                 //define the attributes needed
@@ -214,11 +107,8 @@ public class EventTask extends TimerTask {
                     //add each event to the cache
                     for(Date time:stockData.keySet()){
                         StockEvent event= new StockEvent(stock,stockData.get(time),time);
-                        newDataCache.add(event);
+                        dataCache.add(event);
                     }
-
-
-
 
                 } catch (DataAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -234,13 +124,13 @@ public class EventTask extends TimerTask {
         boolean inCache=false;
 
         //while there are elements in the cache
-        while (newDataCache.size()>0){
+        while (dataCache.size()>0){
             //non-destructively get the head of the queue
-            StockEvent event=newDataCache.peek();
+            StockEvent event= dataCache.peek();
             //if the event has occurred in the past
             if(event.getTime().before(currentTime)){
                 //remove that item from the queue
-                newDataCache.poll();
+                dataCache.poll();
                 //fire the event
                 eventManager.notifyListners(event);
                 inCache=true;
@@ -255,8 +145,5 @@ public class EventTask extends TimerTask {
 
         return  inCache;
     }
-
-
-
 
 }

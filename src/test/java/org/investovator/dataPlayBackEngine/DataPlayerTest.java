@@ -20,7 +20,8 @@ public class DataPlayerTest {
         String[] stocks=new String[2];
         stocks[0]="GOOG";
         stocks[1]="APPL";
-        player=new DataPlayer(stocks);
+        String startDate="2011-12-13-15-55-32";
+        player=new DataPlayer(stocks,startDate);
 
 
     }

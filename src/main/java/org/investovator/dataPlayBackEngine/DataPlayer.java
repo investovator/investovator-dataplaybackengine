@@ -31,13 +31,13 @@ public class DataPlayer {
    //to cache the stock trading data items
     HashMap<String,HashMap<Date, HashMap<TradingDataAttribute, Float>>> ohlcDataCache;
 
-    public DataPlayer(String[] stocks) {
+    public DataPlayer(String[] stocks,String startDate) {
         this.timer = new Timer();
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
         //testing end
-        task = new EventTask(stocks, "2011-12-13-15-55-32", transactionDataAPI);
+        task = new EventTask(stocks, startDate, transactionDataAPI);
 
         ohlcDataCache=new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
 
