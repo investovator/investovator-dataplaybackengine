@@ -7,6 +7,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
 import org.investovator.dataPlayBackEngine.events.StockEventComparator;
+import org.investovator.dataPlayBackEngine.exceptions.GameFinishedException;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
@@ -58,7 +59,11 @@ public class EventTask extends TimerTask {
         //if no events were fired
         //TODO - this part would get called even if there was actually no stock events in the dataset in that time
         if(!inCache){
-            refreshCache();
+            try {
+                refreshCache();
+            } catch (GameFinishedException e) {
+//                throw e;
+            }
             fireEvents();
         }
         // in order to point to the next time interval
@@ -71,7 +76,10 @@ public class EventTask extends TimerTask {
         eventManager.addObserver(observer);
     }
 
-    private void refreshCache(){
+    private void refreshCache() throws GameFinishedException {
+
+        //to track whether at least a single stock has data in the future
+        boolean hasData=false;
 
             //for each stock, search for events
             for(String stock:stocks){
@@ -95,12 +103,18 @@ public class EventTask extends TimerTask {
                         dataCache.add(event);
                     }
 
+                    hasData=true;
+
                 } catch (DataAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
 
             }
+        //if none of the stocks has data in the future
+        if(!hasData){
+            throw new GameFinishedException("Ticker");
+        }
 
     }
 

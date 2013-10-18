@@ -217,6 +217,7 @@ public class OHLCDataPLayer {
             return null;
         }
 
+        today=DateUtils.incrementTimeByDays(1,today);
         return events.toArray(new StockEvent[events.size()]);
 
     }
@@ -302,5 +303,23 @@ public class OHLCDataPLayer {
         return companyDataAPI.getCompanyIDsNames();
 
 
+    }
+
+    /**
+     * Be cautious enough to call this method before playNextDay() has been called.
+     * Else it will show the next day
+     *
+     * @return next day in the game
+     */
+    public Date getNextDay(){
+        return today;
+    }
+
+    /**
+     *
+     * @return current day in the game
+     */
+    public Date getToday(){
+        return DateUtils.decrementTimeByDays(1,today);
     }
 }
