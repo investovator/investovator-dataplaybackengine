@@ -47,6 +47,21 @@ public class DateUtils {
 
     }
 
+    /**
+     * Increments a date by a given number of days and returns a new date
+     *
+     * @param days  number of days to increment the time by
+     * @param currentTime the time value that needs to be incremented
+     * @return incremented time
+     */
+    public static Date incrementTimeByDays(int days, Date currentTime){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(currentTime);
+        cal.add(Calendar.DAY_OF_YEAR, days); //minus number would decrement the days
+        return cal.getTime();
+
+    }
+
     public static Date dateStringToDateObject(String dateString,String dateFromat) throws ParseException {
         Date date;
 

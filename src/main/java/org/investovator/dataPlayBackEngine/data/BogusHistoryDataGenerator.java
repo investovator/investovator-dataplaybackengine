@@ -54,7 +54,13 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
             marketData.put(time,tradingData);
 
             //increment the time
-            time= DateUtils.incrementTimeBySeconds(1,time);
+            if(dataType==DataType.OHLC){
+                time=DateUtils.incrementTimeByDays(1,time);
+            }
+            else if(dataType==DataType.TICKER){
+
+                time= DateUtils.incrementTimeBySeconds(1,time);
+            }
 
 
         }
