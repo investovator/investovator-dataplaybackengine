@@ -34,10 +34,15 @@ public class EventTask extends TimerTask {
 
     private EventManager eventManager;
 
+    //attributes to fetch
+    TradingDataAttribute[] attributes;
 
-    public EventTask(String[] stocksToWatch, String startT, CompanyStockTransactionsData api) {
+
+    public EventTask(String[] stocksToWatch, String startT, CompanyStockTransactionsData api,
+                     TradingDataAttribute[] attributes) {
         this.dataApi=api;
         eventManager=new EventManager();
+        this.attributes=attributes;
 
 
         Comparator<StockEvent> comparator=new StockEventComparator();
@@ -86,12 +91,6 @@ public class EventTask extends TimerTask {
 
             //for each stock, search for events
             for(String stock:stocks){
-                //define the attributes needed
-                TradingDataAttribute attributes[]=new TradingDataAttribute[2];
-
-                //just the closing price is enough for now
-                attributes[0]=TradingDataAttribute.DAY;
-                attributes[1]=TradingDataAttribute.PRICE;
 
                 try {
                     //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second

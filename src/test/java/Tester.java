@@ -1,5 +1,4 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataPlayBackEngine.DataPlayer;
 import org.investovator.dataPlayBackEngine.RealTimeDataPlayer;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
@@ -23,7 +22,17 @@ public class Tester {
         stocks[0]="GOOG";
         stocks[1]="APPL";
         String startDate="2011-12-13-15-55-32";
-        player=new RealTimeDataPlayer(stocks,startDate);
+
+        //define the attributes needed
+        TradingDataAttribute attributes[]=new TradingDataAttribute[3];
+
+        //just the closing price is enough for now
+        attributes[0]=TradingDataAttribute.DAY;
+        attributes[1]=TradingDataAttribute.PRICE;
+        attributes[2]=TradingDataAttribute.SHARES;
+
+
+        player=new RealTimeDataPlayer(stocks,startDate,attributes);
         player.setObserver(observer);
         player.startPlayback(2);
     }

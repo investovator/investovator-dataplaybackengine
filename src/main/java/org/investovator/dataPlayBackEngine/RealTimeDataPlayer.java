@@ -21,6 +21,7 @@ package org.investovator.dataPlayBackEngine;
 
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
@@ -41,13 +42,13 @@ public class RealTimeDataPlayer {
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
 
-    public RealTimeDataPlayer(String[] stocks,String startDate) {
+    public RealTimeDataPlayer(String[] stocks,String startDate,TradingDataAttribute[] attributes) {
         this.timer = new Timer();
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
         //testing end
-        task = new EventTask(stocks, startDate, transactionDataAPI);
+        task = new EventTask(stocks, startDate, transactionDataAPI,attributes);
     }
 
 
