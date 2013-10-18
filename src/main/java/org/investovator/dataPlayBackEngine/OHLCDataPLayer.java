@@ -28,6 +28,7 @@ import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
 import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
 import org.investovator.dataPlayBackEngine.exceptions.GameAlreadyStartedException;
+import org.investovator.dataPlayBackEngine.exceptions.GameFinishedException;
 import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.text.ParseException;
@@ -144,7 +145,7 @@ public class OHLCDataPLayer {
      * @return An array of StockEvent's if the data is present for at least a single stock. If data is not present
      * for any stock, returns a null.
      */
-    public StockEvent[] playNextDay(){
+    public StockEvent[] playNextDay() throws GameFinishedException {
         ArrayList<StockEvent> events = new ArrayList<StockEvent>();
 
         //iterate all the stocks
@@ -166,13 +167,14 @@ public class OHLCDataPLayer {
         //if no data has been found in the cache
         if (events.size()==0) {
 
+            //to track whether at least a single stock has data in the future
+            boolean hasData=false;
+
             //search all the stocks
             for (String stock : ohlcDataCache.keySet()) {
 
-                //clear the cache first
-                ohlcDataCache.remove(stock);
-
                 try {
+
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
                             stock, today, attributes, OHLCDataPLayer.CACHE_SIZE);
 
@@ -183,14 +185,29 @@ public class OHLCDataPLayer {
                         //remove that entry from map
                         data.getTradingData().remove(today);
 
+                        //clear the cache first
+                        ohlcDataCache.remove(stock);
                         //add the rest of the data to the cache
                         ohlcDataCache.put(stock, data.getTradingData());
+
+                        hasData=true;
 
                     }
 
                 } catch (DataAccessException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    //TODO - change this exception handling code to act on whatever the exception that the
+                    //core module will throw when no data is present for a given stock from the given time
+                    //onwards.
+                    //TODO - catch that exception before the DataAccessException ;)
+
+                    ///////
+                   e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+            }
+
+            //if none of the stocks has future data
+            if(!hasData){
+                throw new GameFinishedException();
             }
 
         }
