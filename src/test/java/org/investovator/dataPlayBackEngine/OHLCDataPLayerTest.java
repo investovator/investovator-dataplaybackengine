@@ -112,5 +112,12 @@ public class OHLCDataPLayerTest {
     @Test
     public void testGetEarliestDate() throws Exception{
 
+
+        String[] stocks=new String[2];
+        stocks[0]="GOOG";
+        stocks[1]="APPL";
+
+        System.out.println(player.getEarliestDate(stocks));
+
     }
 }

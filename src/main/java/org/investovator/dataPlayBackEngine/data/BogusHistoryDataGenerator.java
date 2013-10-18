@@ -74,7 +74,7 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
 
     @Override
     public Date[] getDataDaysRange(DataType dataType, String s) {
-        int numOfDates=4;
+        int numOfDates=20;
         Date[] dates=new Date[numOfDates];
         for(int i=0;i<numOfDates;i++){
             if(i==0){
@@ -95,8 +95,8 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
             }
             else{
                 if(dataType==DataType.TICKER){
-                    //increase by two seconds than the i-1 th date
-                    dates[i]=DateUtils.decrementTimeBySeconds(2,dates[i-1]);
+                    //increase by one second than the i-1 th date
+                    dates[i]=DateUtils.decrementTimeBySeconds(1,dates[i-1]);
                 }else{
                     //increase by one day than the i-1 th date
                     dates[i]=DateUtils.decrementTimeByDays(1,dates[i-1]);

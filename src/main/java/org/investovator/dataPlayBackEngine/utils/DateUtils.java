@@ -84,10 +84,10 @@ public class DateUtils {
      * @param currentTime the time value that needs to be incremented
      * @return incremented time
      */
-    public static Date decrementTimeBySeconds(int days, Date currentTime){
+    public static Date decrementTimeBySeconds(int seconds, Date currentTime){
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
-        cal.add(Calendar.SECOND, -(days)); //minus number would decrement the days
+        cal.add(Calendar.SECOND, -(seconds)); //minus number would decrement the seconds
         return cal.getTime();
 
     }

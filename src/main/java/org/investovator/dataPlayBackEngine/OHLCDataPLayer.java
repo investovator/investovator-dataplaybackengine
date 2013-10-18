@@ -259,24 +259,22 @@ public class OHLCDataPLayer {
 
     public Date getEarliestDate(String[] stocks){
 
-        Date earliestDate=null;
-
         //to store all the date
         List<Date> datesList=new ArrayList<Date>();
 
         //iterate all the stocks
         for(String stock:stocks){
             //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.OHLC,stock);
+            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.TICKER,stock);
 
             //add them to the map
-            datesList.addAll(datesList);
+            datesList.addAll(Arrays.asList(dates));
         }
 
         //sort in the ascending order
         Collections.sort(datesList);
 
-        return  earliestDate;
+        return  datesList.get(0);
 
 
     }
