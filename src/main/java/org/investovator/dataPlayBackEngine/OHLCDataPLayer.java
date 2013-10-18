@@ -207,7 +207,7 @@ public class OHLCDataPLayer {
 
             //if none of the stocks has future data
             if(!hasData){
-                throw new GameFinishedException();
+                throw new GameFinishedException("OHLC");
             }
 
         }

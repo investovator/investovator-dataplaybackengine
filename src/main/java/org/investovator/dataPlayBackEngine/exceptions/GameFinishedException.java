@@ -25,7 +25,7 @@ package org.investovator.dataPlayBackEngine.exceptions;
  */
 public class GameFinishedException extends Exception {
 
-    public GameFinishedException() {
-        super("OHLC Game already finished");
+    public GameFinishedException(String type) {
+        super(type+" Game already finished");
     }
 }
