@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * @author: ishan
@@ -222,13 +223,50 @@ public class OHLCDataPLayer {
 
     }
 
+    public Date getEarliestCommonDate(String[] stocks){
+        Date earliestDate=null;
+
+        //Date(in order) - [stocks]
+        TreeMap<Date,ArrayList<String>> counter=new TreeMap<Date, ArrayList<String>>();
+
+        //iterate all the stocks
+        for(String stock:stocks){
+            //get all the dates for that stock
+            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.OHLC,stock);
+
+            //add them to the map
+            for(Date date:dates){
+                //if the arraylist has not been initialized
+                if(counter.containsKey(stock)){
+                    counter.put(date,new ArrayList<String>());
+                }
+
+                ArrayList<String> stockList=counter.get(date);
+                counter.put(date,stockList);
+            }
+        }
+
+        //iterate the map in the ascending order and determine the date which has all the stocks
+        for(Date date:counter.keySet()){
+            if(counter.get(date).size()==stocks.length){
+                earliestDate=date;
+                break;
+            }
+        }
+
+
+        return  earliestDate;
+
+    }
+
 
     /**
-     * TODO - not complete- need to be rewritten - ex: playNextDay()
+     * TODO - DELETE
      * @param stock stock name
      * @param date  date for which the price of the stock required
      * @return the price of the stock on the "date" or negative values if there is no more data
      */
+
 //    public float getOHLCPrice(String stock, String date) {
 //
 //        Date currentTime = null;
@@ -293,6 +331,7 @@ public class OHLCDataPLayer {
 //
 //        return price;
 //    }
+
 
     /**
      * @return Company StockId and Name pairs
