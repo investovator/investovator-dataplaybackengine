@@ -116,6 +116,17 @@ public class OHLCDataPLayer extends DataPlayer {
      * Used to set the game starting date at the start of the game.
      *
      * @param startDate
+     * @throws ParseException
+     */
+    public void setStartDate(Date startDate) throws ParseException {
+        this.today = startDate;
+
+    }
+
+    /**
+     * Used to set the game starting date at the start of the game.
+     *
+     * @param startDate
      * @param dateFormat
      * @throws ParseException
      */

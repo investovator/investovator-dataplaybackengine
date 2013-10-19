@@ -37,8 +37,7 @@ public class EventTask extends TimerTask {
     //attributes to fetch
     TradingDataAttribute[] attributes;
 
-
-    public EventTask(String[] stocksToWatch, String startT,String dateFormat, CompanyStockTransactionsData api,
+    private EventTask(String[] stocksToWatch, CompanyStockTransactionsData api,
                      TradingDataAttribute[] attributes) {
         this.dataApi=api;
         eventManager=new EventManager();
@@ -49,11 +48,25 @@ public class EventTask extends TimerTask {
         dataCache =new PriorityQueue<StockEvent>(EventTask.CACHE_SIZE,comparator );
         stocks=new ArrayList<String>(Arrays.asList(stocksToWatch));
 
+    }
+
+    public EventTask(String[] stocksToWatch, String startT,String dateFormat, CompanyStockTransactionsData api,
+                     TradingDataAttribute[] attributes) {
+        this(stocksToWatch,api,attributes);
+
         try {
             currentTime=DateUtils.dateStringToDateObject(startT,dateFormat);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public EventTask(String[] stocksToWatch, Date startT, CompanyStockTransactionsData api,
+                     TradingDataAttribute[] attributes) {
+        this(stocksToWatch,api,attributes);
+
+            currentTime=startT;
 
     }
 
