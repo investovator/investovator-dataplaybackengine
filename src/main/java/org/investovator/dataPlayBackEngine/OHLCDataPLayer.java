@@ -38,13 +38,10 @@ import java.util.*;
  * @author: ishan
  * @version: ${Revision}
  */
-public class OHLCDataPLayer {
+public class OHLCDataPLayer extends DataPlayer {
 
     //used to determine the cache size
     public static int CACHE_SIZE=100;
-
-    CompanyStockTransactionsData transactionDataAPI;
-    CompanyData companyDataAPI;
 
     //to keep track of the date
     Date today;
@@ -53,15 +50,10 @@ public class OHLCDataPLayer {
     //to keep track of the attributes needed
     TradingDataAttribute[] attributes;
 
-
     //to cache the stock trading data items
     HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>> ohlcDataCache;
 
-    public OHLCDataPLayer(String[] stocks, String dateFormat, TradingDataAttribute[] attributes) throws ParseException {
-        //for testing
-        this.transactionDataAPI = new BogusHistoryDataGenerator();
-        this.companyDataAPI = new BogusCompnayDataGenerator();
-        //testing end
+    public OHLCDataPLayer(String[] stocks,TradingDataAttribute[] attributes) throws ParseException {
 
         this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
         this.attributes = attributes;
@@ -132,7 +124,6 @@ public class OHLCDataPLayer {
      */
     public void setStartDate(String startDate, String dateFormat ) throws ParseException {
         today = DateUtils.dateStringToDateObject(startDate, dateFormat);
-
 
     }
 
@@ -220,177 +211,6 @@ public class OHLCDataPLayer {
 
     }
 
-    /**
-     * Returns the starting date/time and the ending date/time which has data for all the given set of stocks
-     *
-     * @param stocks
-     * @return First element contains start date, second element contains the ending date,
-     * a null may be returned for any of the dates if no common date is found
-     */
-    public Date[] getCommonStartingAndEndDates(String[] stocks){
-        Date startDate=null;
-        Date endDate=null;
-
-        //Date(in order) - [stocks]
-        TreeMap<Date,ArrayList<String>> counter=new TreeMap<Date, ArrayList<String>>();
-
-        //iterate all the stocks
-        for(String stock:stocks){
-            //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.OHLC,stock);
-
-            //add them to the map
-            for(Date date:dates){
-                //if the arraylist has not been initialized
-                if(!counter.containsKey(date)){
-                    counter.put(date,new ArrayList<String>());
-                }
-
-                ArrayList<String> stockList=counter.get(date);
-                stockList.add(stock);
-                counter.put(date,stockList);
-            }
-        }
-
-        //iterate the map in the ascending order and determine the largest date which has all the stocks
-        for(Date date:counter.keySet()){
-            if(counter.get(date).size()==stocks.length){
-                startDate=date;
-                break;
-            }
-        }
-
-        //reverse order the collection first
-        Comparator cmp = Collections.reverseOrder();
-        TreeMap<Date,ArrayList<String>> reverseOrderedMap=new TreeMap<Date,ArrayList<String>>(cmp);
-        reverseOrderedMap.putAll(counter);
-
-        //iterate the map in the descending order and determine the biggest date which has all the stocks
-        for(Date date:reverseOrderedMap.keySet()){
-            if(reverseOrderedMap.get(date).size()==stocks.length){
-                endDate=date;
-                break;
-            }
-        }
-
-        //return the array
-        return new Date[] {startDate,endDate};
-
-    }
-
-    /**
-     *Returns the starting date/time and the ending date/time for the given set of stocks. Those dates does
-     *not necessarily need to contain values for every stock
-     *
-     * @param stocks
-     * @return First element contains start date, second element contains the ending date
-     */
-    public Date[] getStartingAndEndDates(String[] stocks){
-
-        //to store all the date
-        List<Date> datesList=new ArrayList<Date>();
-
-        //iterate all the stocks
-        for(String stock:stocks){
-            //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.TICKER,stock);
-
-            //add them to the map
-            datesList.addAll(Arrays.asList(dates));
-        }
-
-        //sort in the ascending order
-        Collections.sort(datesList);
-
-        return  new Date[] {datesList.get(0),datesList.get(datesList.size()-1)};
-
-
-    }
-
-
-    /**
-     * TODO - DELETE
-     * @param stock stock name
-     * @param date  date for which the price of the stock required
-     * @return the price of the stock on the "date" or negative values if there is no more data
-     */
-
-//    public float getOHLCPrice(String stock, String date) {
-//
-//        Date currentTime = null;
-//        float price = 0;
-//
-//        try {
-//            currentTime = DateUtils.dateStringToDateObject(date, DateUtils.DATE_FORMAT_1);
-//        } catch (ParseException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//        }
-//
-//
-//        boolean inCache = false;
-//
-//        //if the stocks data is already in the cache
-//        if (ohlcDataCache.containsKey(stock)) {
-//            //if the requested date is in the cache
-//            if (ohlcDataCache.get(stock).containsKey(currentTime)) {
-//                inCache = true;
-//                //just the closing price is enough for now
-//                //TODO- remove the used items in the cache
-//                price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
-//                ohlcDataCache.get(stock).remove(currentTime);
-//
-//            }
-//
-//        } ////
-//
-//        //if the stock data is not in the cache
-//        if (!inCache) {
-//            //define the attributes needed
-//            TradingDataAttribute attributes[] = new TradingDataAttribute[2];
-//
-//            //just the closing price is enough for now
-//            attributes[0] = TradingDataAttribute.DAY;
-//            attributes[1] = TradingDataAttribute.CLOSING_PRICE;
-//
-//            //let's take the next 100 of rows
-//            try {
-//                StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-//                        stock, currentTime, attributes, 100);
-//
-//                //if any data was returned
-//                if (data != null) {
-//
-//                    //remove the old set of data for this stock and add a new set
-//                    if (ohlcDataCache.containsKey(stock)) {
-//                        ohlcDataCache.remove(stock);
-//                    }
-//                    //add the new data
-//                    ohlcDataCache.put(stock, data.getTradingData());
-//                    price = ohlcDataCache.get(stock).get(currentTime).get(TradingDataAttribute.CLOSING_PRICE);
-//                } else {
-//                    price = -1;
-//                }
-//
-//            } catch (DataAccessException e) {
-//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//            }
-//
-//        }
-//
-//        return price;
-//    }
-
-
-    /**
-     * @return Company StockId and Name pairs
-     * @throws DataAccessException
-     */
-    public HashMap<String, String> getStocksList() throws DataAccessException {
-
-        return companyDataAPI.getCompanyIDsNames();
-
-
-    }
 
     /**
      * Be cautious enough to call this method before playNextDay() has been called.

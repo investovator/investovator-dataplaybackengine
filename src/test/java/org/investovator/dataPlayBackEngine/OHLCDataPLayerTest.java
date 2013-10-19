@@ -51,7 +51,7 @@ public class OHLCDataPLayerTest {
         attributes[0]=TradingDataAttribute.DAY;
         attributes[1]=TradingDataAttribute.PRICE;
 
-        player=new OHLCDataPLayer(stocks, DateUtils.DATE_FORMAT_1,attributes);
+        player=new OHLCDataPLayer(stocks,attributes);
 
         //set the date
         player.setStartDate(startDate,DateUtils.DATE_FORMAT_1);

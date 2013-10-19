@@ -35,7 +35,7 @@ import java.util.Timer;
  * @author: ishan
  * @version: ${Revision}
  */
-public class RealTimeDataPlayer {
+public class RealTimeDataPlayer extends DataPlayer {
 
     Timer timer;
     EventTask task;
