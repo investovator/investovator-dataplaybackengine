@@ -221,12 +221,15 @@ public class OHLCDataPLayer {
     }
 
     /**
+     * Returns the starting date/time and the ending date/time which has data for all the given set of stocks
      *
      * @param stocks
-     * @return a null if no common date is found
+     * @return First element contains start date, second element contains the ending date,
+     * a null may be returned for any of the dates if no common date is found
      */
-    public Date getEarliestCommonDate(String[] stocks){
-        Date earliestDate=null;
+    public Date[] getCommonStartingAndEndDates(String[] stocks){
+        Date startDate=null;
+        Date endDate=null;
 
         //Date(in order) - [stocks]
         TreeMap<Date,ArrayList<String>> counter=new TreeMap<Date, ArrayList<String>>();
@@ -249,20 +252,40 @@ public class OHLCDataPLayer {
             }
         }
 
-        //iterate the map in the ascending order and determine the date which has all the stocks
+        //iterate the map in the ascending order and determine the largest date which has all the stocks
         for(Date date:counter.keySet()){
             if(counter.get(date).size()==stocks.length){
-                earliestDate=date;
+                startDate=date;
                 break;
             }
         }
 
+        //reverse order the collection first
+        Comparator cmp = Collections.reverseOrder();
+        TreeMap<Date,ArrayList<String>> reverseOrderedMap=new TreeMap<Date,ArrayList<String>>(cmp);
+        reverseOrderedMap.putAll(counter);
 
-        return  earliestDate;
+        //iterate the map in the descending order and determine the biggest date which has all the stocks
+        for(Date date:reverseOrderedMap.keySet()){
+            if(reverseOrderedMap.get(date).size()==stocks.length){
+                endDate=date;
+                break;
+            }
+        }
+
+        //return the array
+        return new Date[] {startDate,endDate};
 
     }
 
-    public Date getEarliestDate(String[] stocks){
+    /**
+     *Returns the starting date/time and the ending date/time for the given set of stocks. Those dates does
+     *not necessarily need to contain values for every stock
+     *
+     * @param stocks
+     * @return First element contains start date, second element contains the ending date
+     */
+    public Date[] getStartingAndEndDates(String[] stocks){
 
         //to store all the date
         List<Date> datesList=new ArrayList<Date>();
@@ -279,7 +302,7 @@ public class OHLCDataPLayer {
         //sort in the ascending order
         Collections.sort(datesList);
 
-        return  datesList.get(0);
+        return  new Date[] {datesList.get(0),datesList.get(datesList.size()-1)};
 
 
     }
