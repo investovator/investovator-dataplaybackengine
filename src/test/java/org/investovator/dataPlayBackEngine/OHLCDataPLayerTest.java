@@ -25,6 +25,8 @@ import org.investovator.dataPlayBackEngine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
+
 /**
  * @author: ishan
  * @version: ${Revision}
@@ -98,26 +100,31 @@ public class OHLCDataPLayerTest {
     }
 
     @Test
-    public void testGetEarliestCommonDate() throws Exception{
+    public void testGetCommonStartingAndEndDates() throws Exception{
 
         String[] stocks=new String[2];
         stocks[0]="GOOG";
         stocks[1]="APPL";
 
-        System.out.println(player.getEarliestCommonDate(stocks));
+        Date[] dates=player.getCommonStartingAndEndDates(stocks);
+
+
+        System.out.println(dates[0]+"--->"+dates[1]);
 
 
     }
 
     @Test
-    public void testGetEarliestDate() throws Exception{
+    public void testGetStartingAndEndDates() throws Exception{
 
 
         String[] stocks=new String[2];
         stocks[0]="GOOG";
         stocks[1]="APPL";
 
-        System.out.println(player.getEarliestDate(stocks));
+        Date[] dates=player.getStartingAndEndDates(stocks);
+
+        System.out.println(dates[0]+"--->"+dates[1]);
 
     }
 }
