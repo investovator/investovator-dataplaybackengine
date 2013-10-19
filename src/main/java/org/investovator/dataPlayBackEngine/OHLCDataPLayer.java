@@ -220,6 +220,11 @@ public class OHLCDataPLayer {
 
     }
 
+    /**
+     *
+     * @param stocks
+     * @return a null if no common date is found
+     */
     public Date getEarliestCommonDate(String[] stocks){
         Date earliestDate=null;
 
