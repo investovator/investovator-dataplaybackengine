@@ -17,19 +17,16 @@
  */
 
 
-package org.investovator.dataPlayBackEngine;
+package org.investovator.dataplaybackengine;
 
-import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.dataPlayBackEngine.data.BogusCompnayDataGenerator;
-import org.investovator.dataPlayBackEngine.data.BogusHistoryDataGenerator;
-import org.investovator.dataPlayBackEngine.events.StockEvent;
-import org.investovator.dataPlayBackEngine.exceptions.GameAlreadyStartedException;
-import org.investovator.dataPlayBackEngine.exceptions.GameFinishedException;
-import org.investovator.dataPlayBackEngine.utils.DateUtils;
+import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
+import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.text.ParseException;
 import java.util.*;

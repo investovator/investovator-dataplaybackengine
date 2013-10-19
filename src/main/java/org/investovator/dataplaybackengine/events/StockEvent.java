@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.events;
+package org.investovator.dataplaybackengine.events;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 

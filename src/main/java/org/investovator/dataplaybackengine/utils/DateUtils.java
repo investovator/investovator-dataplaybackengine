@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.utils;
+package org.investovator.dataplaybackengine.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

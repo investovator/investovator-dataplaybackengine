@@ -17,15 +17,34 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.exceptions;
+package org.investovator.dataplaybackengine.events;
+
+import java.util.Comparator;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class GameFinishedException extends Exception {
+public class StockEventComparator implements Comparator {
+    @Override
+    public int compare(Object o1, Object o2) {
+        StockEvent event1=(StockEvent)o1;
+        StockEvent event2=(StockEvent)o2;
 
-    public GameFinishedException(String type) {
-        super(type+" Game already finished");
+        int decision;
+
+        if (event1.getTime().compareTo(event2.getTime())<0){
+            decision= -1;
+        }
+        else if(event1.getTime().compareTo(event2.getTime())>0){
+            decision=1;
+        }
+        else{
+            decision=0;
+        }
+
+        return decision;
+
+
     }
 }

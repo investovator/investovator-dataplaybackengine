@@ -1,8 +1,8 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataPlayBackEngine.RealTimeDataPlayer;
-import org.investovator.dataPlayBackEngine.events.EventManager;
-import org.investovator.dataPlayBackEngine.events.StockEvent;
-import org.investovator.dataPlayBackEngine.utils.DateUtils;
+import org.investovator.dataplaybackengine.RealTimeDataPlayer;
+import org.investovator.dataplaybackengine.events.EventManager;
+import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.util.Observable;
 import java.util.Observer;

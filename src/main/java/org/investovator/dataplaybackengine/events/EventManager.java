@@ -1,4 +1,4 @@
-package org.investovator.dataPlayBackEngine.events;
+package org.investovator.dataplaybackengine.events;
 
 import java.util.Observable;
 

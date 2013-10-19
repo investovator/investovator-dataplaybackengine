@@ -17,34 +17,15 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.events;
-
-import java.util.Comparator;
+package org.investovator.dataplaybackengine.exceptions;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class StockEventComparator implements Comparator {
-    @Override
-    public int compare(Object o1, Object o2) {
-        StockEvent event1=(StockEvent)o1;
-        StockEvent event2=(StockEvent)o2;
+public class GameAlreadyStartedException extends Exception {
 
-        int decision;
-
-        if (event1.getTime().compareTo(event2.getTime())<0){
-            decision= -1;
-        }
-        else if(event1.getTime().compareTo(event2.getTime())>0){
-            decision=1;
-        }
-        else{
-            decision=0;
-        }
-
-        return decision;
-
-
+    public GameAlreadyStartedException(Object ob) {
+        super("Game has already started : "+ob.toString());
     }
 }

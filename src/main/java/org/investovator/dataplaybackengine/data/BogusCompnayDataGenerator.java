@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.data;
+package org.investovator.dataplaybackengine.data;
 
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.exeptions.DataAccessException;

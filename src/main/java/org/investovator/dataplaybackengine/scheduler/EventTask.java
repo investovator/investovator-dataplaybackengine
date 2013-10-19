@@ -1,14 +1,14 @@
-package org.investovator.dataPlayBackEngine.scheduler;
+package org.investovator.dataplaybackengine.scheduler;
 
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.dataPlayBackEngine.events.EventManager;
-import org.investovator.dataPlayBackEngine.events.StockEvent;
-import org.investovator.dataPlayBackEngine.events.StockEventComparator;
-import org.investovator.dataPlayBackEngine.exceptions.GameFinishedException;
-import org.investovator.dataPlayBackEngine.utils.DateUtils;
+import org.investovator.dataplaybackengine.events.EventManager;
+import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.events.StockEventComparator;
+import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.text.ParseException;
 import java.util.*;

@@ -17,11 +17,11 @@
  */
 
 
-package org.investovator.dataPlayBackEngine;
+package org.investovator.dataplaybackengine;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataPlayBackEngine.events.StockEvent;
-import org.investovator.dataPlayBackEngine.utils.DateUtils;
+import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 

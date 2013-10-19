@@ -17,15 +17,15 @@
  */
 
 
-package org.investovator.dataPlayBackEngine.exceptions;
+package org.investovator.dataplaybackengine.exceptions;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class GameAlreadyStartedException extends Exception {
+public class GameFinishedException extends Exception {
 
-    public GameAlreadyStartedException(Object ob) {
-        super("Game has already started : "+ob.toString());
+    public GameFinishedException(String type) {
+        super(type+" Game already finished");
     }
 }

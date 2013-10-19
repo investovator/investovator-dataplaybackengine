@@ -1,15 +1,14 @@
-package org.investovator.dataPlayBackEngine.data;
+package org.investovator.dataplaybackengine.data;
 
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.StockTradingDataImpl;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.dataPlayBackEngine.utils.DateUtils;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
