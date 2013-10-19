@@ -2,6 +2,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataPlayBackEngine.RealTimeDataPlayer;
 import org.investovator.dataPlayBackEngine.events.EventManager;
 import org.investovator.dataPlayBackEngine.events.StockEvent;
+import org.investovator.dataPlayBackEngine.utils.DateUtils;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -32,7 +33,7 @@ public class Tester {
         attributes[2]=TradingDataAttribute.SHARES;
 
 
-        player=new RealTimeDataPlayer(stocks,startDate,attributes);
+        player=new RealTimeDataPlayer(stocks,startDate, DateUtils.DATE_FORMAT_1,attributes);
         player.setObserver(observer);
         player.startPlayback(2);
     }

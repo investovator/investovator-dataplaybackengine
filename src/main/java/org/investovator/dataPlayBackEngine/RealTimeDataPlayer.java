@@ -42,13 +42,13 @@ public class RealTimeDataPlayer extends DataPlayer {
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
 
-    public RealTimeDataPlayer(String[] stocks,String startDate,TradingDataAttribute[] attributes) {
+    public RealTimeDataPlayer(String[] stocks,String startDate,String dateFormat,TradingDataAttribute[] attributes) {
         this.timer = new Timer();
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
         //testing end
-        task = new EventTask(stocks, startDate, transactionDataAPI,attributes);
+        task = new EventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
     }
 
 
