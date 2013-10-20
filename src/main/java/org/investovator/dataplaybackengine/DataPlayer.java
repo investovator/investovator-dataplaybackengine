@@ -52,7 +52,7 @@ public class DataPlayer {
      * @return First element contains start date, second element contains the ending date,
      * a null may be returned for any of the dates if no common date is found
      */
-    public Date[] getCommonStartingAndEndDates(String[] stocks){
+    public Date[] getCommonStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type){
         Date startDate=null;
         Date endDate=null;
 
@@ -62,7 +62,7 @@ public class DataPlayer {
         //iterate all the stocks
         for(String stock:stocks){
             //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.OHLC,stock);
+            Date[] dates=transactionDataAPI.getDataDaysRange(type,stock);
 
             //add them to the map
             for(Date date:dates){
@@ -110,7 +110,7 @@ public class DataPlayer {
      * @param stocks
      * @return First element contains start date, second element contains the ending date
      */
-    public Date[] getStartingAndEndDates(String[] stocks){
+    public Date[] getStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type){
 
         //to store all the date
         List<Date> datesList=new ArrayList<Date>();
@@ -118,7 +118,7 @@ public class DataPlayer {
         //iterate all the stocks
         for(String stock:stocks){
             //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(CompanyStockTransactionsData.DataType.TICKER,stock);
+            Date[] dates=transactionDataAPI.getDataDaysRange(type,stock);
 
             //add them to the map
             datesList.addAll(Arrays.asList(dates));

@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.utils.DateUtils;
@@ -106,7 +107,7 @@ public class OHLCDataPLayerTest {
         stocks[0]="GOOG";
         stocks[1]="APPL";
 
-        Date[] dates=player.getCommonStartingAndEndDates(stocks);
+        Date[] dates=player.getCommonStartingAndEndDates(stocks, CompanyStockTransactionsData.DataType.OHLC);
 
 
         System.out.println(dates[0]+"--->"+dates[1]);
@@ -122,7 +123,7 @@ public class OHLCDataPLayerTest {
         stocks[0]="GOOG";
         stocks[1]="APPL";
 
-        Date[] dates=player.getStartingAndEndDates(stocks);
+        Date[] dates=player.getStartingAndEndDates(stocks, CompanyStockTransactionsData.DataType.OHLC);
 
         System.out.println(dates[0]+"--->"+dates[1]);
 
