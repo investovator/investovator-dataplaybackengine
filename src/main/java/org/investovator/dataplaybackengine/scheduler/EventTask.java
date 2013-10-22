@@ -81,7 +81,7 @@ public class EventTask extends TimerTask {
                 refreshCache();
             } catch (GameFinishedException e) {
                 //notify the player
-                eventManager.notifyListners(EventManager.RealTimePlayerStates.GAME_OVER);
+                eventManager.notifyListeners(EventManager.RealTimePlayerStates.GAME_OVER);
                 //stop the timer
                 this.cancel();
             }
@@ -146,7 +146,7 @@ public class EventTask extends TimerTask {
                 //remove that item from the queue
                 dataCache.poll();
                 //fire the event
-                eventManager.notifyListners(event);
+                eventManager.notifyListeners(event);
                 inCache=true;
             }
             //if the rest of the events are events of the future

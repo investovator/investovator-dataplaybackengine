@@ -12,7 +12,7 @@ public class EventManager extends Observable {
         GAME_OVER
     }
 
-    public void notifyListners(Object obj) {
+    public void notifyListeners(Object obj) {
         setChanged();
         notifyObservers(obj);
     }
