@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
@@ -26,7 +27,10 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
+import org.investovator.dataplaybackengine.market.OrderType;
+import org.investovator.dataplaybackengine.market.TradingSystem;
 import org.investovator.dataplaybackengine.scheduler.EventTask;
 
 import java.util.Date;
@@ -43,15 +47,20 @@ public class RealTimeDataPlayer extends DataPlayer {
     //amount of money a person get at the begining
     private static int initialCredit=10000;
 
+    //max amount of stocks that a person can buy/sell
+    private static int maxOrderSize=5000;
+
     Timer timer;
     EventTask task;
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
-    HashMap<String,PortfolioImpl> userPortfolios;
+    HashMap<String,Portfolio> userPortfolios;
+    TradingSystem tradingSystem;
 
-    private RealTimeDataPlayer(String[] stocks,TradingDataAttribute[] attributes) {
+    private RealTimeDataPlayer(String[] stocks,TradingDataAttribute[] attributes,TradingDataAttribute attributeToMatch) {
         this.timer = new Timer();
-        userPortfolios=new HashMap<String, PortfolioImpl>();
+        userPortfolios=new HashMap<String, Portfolio>();
+        tradingSystem=new TradingSystem(attributes,attributeToMatch);
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
@@ -59,14 +68,16 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     }
 
-    public RealTimeDataPlayer(String[] stocks,String startDate,String dateFormat,TradingDataAttribute[] attributes) {
-        this(stocks,attributes);
+    public RealTimeDataPlayer(String[] stocks,String startDate,
+                              String dateFormat,TradingDataAttribute[] attributes,TradingDataAttribute attributeToMatch) {
+        this(stocks,attributes,attributeToMatch);
 
         task = new EventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
     }
 
-    public RealTimeDataPlayer(String[] stocks,Date startDate,TradingDataAttribute[] attributes) {
-        this(stocks,attributes);
+    public RealTimeDataPlayer(String[] stocks,Date startDate,TradingDataAttribute[] attributes,
+                              TradingDataAttribute attributeToMatch) {
+        this(stocks,attributes,attributeToMatch);
 
         task = new EventTask(stocks, startDate, transactionDataAPI,attributes);
     }
@@ -114,10 +125,12 @@ public class RealTimeDataPlayer extends DataPlayer {
     /**
      * Allows a user to join the running game
      *
-     * @param userName
      * @return
      */
-    public boolean joinGame(String userName) throws UserAlreadyJoinedException {
+    public boolean joinGame() throws UserAlreadyJoinedException {
+        //todo -get from Authenticator
+        String userName="test";
+
         boolean joined=false;
 
         //check whether the user has already joined the game
@@ -132,6 +145,29 @@ public class RealTimeDataPlayer extends DataPlayer {
 
 
         return joined;
+
+    }
+
+
+    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException {
+        //todo -get from Authenticator
+        String userName="test";
+
+        //order validity checks
+        if(quantity>RealTimeDataPlayer.maxOrderSize){
+            throw new InvalidOrderException("Cannot place more than "+RealTimeDataPlayer.maxOrderSize+" orders.");
+        }
+        if(!task.getStocks().contains(stockId)){
+            throw new InvalidOrderException("Invalid stock ID : "+stockId);
+        }
+
+
+//        float result= tradingSystem.executeOrder(stockId,quantity,side,userPortfolios.get(userName).getCashBalance());
+
+        //update the cash balance
+//        userPortfolios.get(userName).
+        return false;
+
 
     }
 

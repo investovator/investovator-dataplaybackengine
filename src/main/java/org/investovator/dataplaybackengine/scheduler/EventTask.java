@@ -29,6 +29,7 @@ public class EventTask extends TimerTask {
 
     //to cache the stock trading data items. (will allow events to have the duplicate times)
     private PriorityQueue<StockEvent> dataCache;
+
     //to store the stocks to watch
     private ArrayList<String> stocks;
 
@@ -92,10 +93,10 @@ public class EventTask extends TimerTask {
 
     }
 
-
     public void setObserver(Observer observer){
         eventManager.addObserver(observer);
     }
+
 
     private void refreshCache() throws GameFinishedException {
 
@@ -158,6 +159,10 @@ public class EventTask extends TimerTask {
             }
 
         return  inCache;
+    }
+
+    public ArrayList<String> getStocks() {
+        return stocks;
     }
 
 }
