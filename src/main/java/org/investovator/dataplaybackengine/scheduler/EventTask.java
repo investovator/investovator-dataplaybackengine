@@ -4,6 +4,7 @@ import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.events.EventManager;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.events.StockEventComparator;
@@ -36,10 +37,10 @@ public class EventTask extends TimerTask {
     private EventManager eventManager;
 
     //attributes to fetch
-    TradingDataAttribute[] attributes;
+    ArrayList<TradingDataAttribute> attributes;
 
     private EventTask(String[] stocksToWatch, CompanyStockTransactionsData api,
-                     TradingDataAttribute[] attributes) {
+                      ArrayList<TradingDataAttribute> attributes) {
         this.dataApi=api;
         eventManager=new EventManager();
         this.attributes=attributes;
@@ -52,7 +53,7 @@ public class EventTask extends TimerTask {
     }
 
     public EventTask(String[] stocksToWatch, String startT,String dateFormat, CompanyStockTransactionsData api,
-                     TradingDataAttribute[] attributes) {
+                     ArrayList<TradingDataAttribute> attributes) {
         this(stocksToWatch,api,attributes);
 
         try {
@@ -64,7 +65,7 @@ public class EventTask extends TimerTask {
     }
 
     public EventTask(String[] stocksToWatch, Date startT, CompanyStockTransactionsData api,
-                     TradingDataAttribute[] attributes) {
+                     ArrayList<TradingDataAttribute> attributes) {
         this(stocksToWatch,api,attributes);
 
             currentTime=startT;
@@ -109,9 +110,9 @@ public class EventTask extends TimerTask {
                 try {
                     //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
                     StockTradingData data=dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
-                            stock,currentTime,attributes,EventTask.CACHE_SIZE);
+                            stock,currentTime,null,EventTask.CACHE_SIZE,attributes);
 
-                    HashMap<Date, HashMap<TradingDataAttribute, Float>> stockData= data.getTradingData();
+                    HashMap<Date, HashMap<TradingDataAttribute, String>> stockData= data.getTradingData();
 
                     //add each event to the cache
                     for(Date time:stockData.keySet()){
@@ -121,6 +122,8 @@ public class EventTask extends TimerTask {
 
                     hasData=true;
 
+                } catch (DataNotFoundException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (DataAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }

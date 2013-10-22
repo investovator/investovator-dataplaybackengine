@@ -52,7 +52,7 @@ public class DataPlayer {
      * @return First element contains start date, second element contains the ending date,
      * a null may be returned for any of the dates if no common date is found
      */
-    public Date[] getCommonStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type){
+    public Date[] getCommonStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type) throws DataAccessException {
         Date startDate=null;
         Date endDate=null;
 
@@ -110,7 +110,7 @@ public class DataPlayer {
      * @param stocks
      * @return First element contains start date, second element contains the ending date
      */
-    public Date[] getStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type){
+    public Date[] getStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type) throws DataAccessException {
 
         //to store all the date
         List<Date> datesList=new ArrayList<Date>();

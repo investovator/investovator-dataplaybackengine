@@ -34,11 +34,22 @@ public class StockEvent {
     private HashMap<TradingDataAttribute, Float> data;
     private Date time;
 
-    public StockEvent(String stockId, HashMap<TradingDataAttribute, Float> data, Date time) {
+//    public StockEvent(String stockId, HashMap<TradingDataAttribute, Float> data, Date time) {
+//        this.stockId = stockId;
+//        this.data = data;
+//        this.time = time;
+//    }
+
+    public StockEvent(String stockId, HashMap<TradingDataAttribute, String> data, Date time) {
         this.stockId = stockId;
-        this.data = data;
+
+        for(TradingDataAttribute attr:data.keySet()){
+            this.data.put(attr,Float.parseFloat(data.get(attr)));
+        }
+        //this.data = data;
         this.time = time;
     }
+
 
     public String getStockId() {
         return stockId;
