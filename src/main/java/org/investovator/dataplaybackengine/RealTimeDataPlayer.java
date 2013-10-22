@@ -19,12 +19,14 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.scheduler.EventTask;
 
 import java.util.Date;
@@ -38,13 +40,18 @@ import java.util.Timer;
  */
 public class RealTimeDataPlayer extends DataPlayer {
 
+    //amount of money a person get at the begining
+    private static int initialCredit=10000;
+
     Timer timer;
     EventTask task;
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
+    HashMap<String,PortfolioImpl> userPortfolios;
 
     private RealTimeDataPlayer(String[] stocks,TradingDataAttribute[] attributes) {
         this.timer = new Timer();
+        userPortfolios=new HashMap<String, PortfolioImpl>();
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
@@ -101,6 +108,30 @@ public class RealTimeDataPlayer extends DataPlayer {
 
         return companyDataAPI.getCompanyIDsNames();
 
+
+    }
+
+    /**
+     * Allows a user to join the running game
+     *
+     * @param userName
+     * @return
+     */
+    public boolean joinGame(String userName) throws UserAlreadyJoinedException {
+        boolean joined=false;
+
+        //check whether the user has already joined the game
+        if(!userPortfolios.containsKey(userName)){
+            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,
+                    new HashMap<String, HashMap<String, Float>>()));
+            joined=true;
+        }
+        else{
+            throw new UserAlreadyJoinedException(userName);
+        }
+
+
+        return joined;
 
     }
 
