@@ -27,10 +27,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.events.StockEvent;
-import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
-import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
-import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
-import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
+import org.investovator.dataplaybackengine.exceptions.*;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
 import org.investovator.dataplaybackengine.utils.DateUtils;
@@ -302,7 +299,8 @@ public class OHLCDataPLayer extends DataPlayer {
 
     }
 
-    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException {
+    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException,
+            UserJoinException {
         //todo -get from Authenticator
         String userName="test";
 
@@ -312,6 +310,12 @@ public class OHLCDataPLayer extends DataPlayer {
         }
         if(!ohlcDataCache.containsKey(stockId)){
             throw new InvalidOrderException("Invalid stock ID : "+stockId);
+        }
+
+        //if the user has not joined the game
+        if(!userPortfolios.containsKey(userName)){
+            throw new UserJoinException("User "+userName+ " has not joined the game");
+
         }
 
 

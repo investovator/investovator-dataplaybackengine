@@ -71,6 +71,9 @@ public class RealTimeDataPlayer extends DataPlayer {
         this(stocks,attributes,attributeToMatch);
 
         task = new EventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
+
+        //set the trading system as an observer
+        task.setObserver(this.tradingSystem);
     }
 
     public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
@@ -78,6 +81,9 @@ public class RealTimeDataPlayer extends DataPlayer {
         this(stocks,attributes,attributeToMatch);
 
         task = new EventTask(stocks, startDate, transactionDataAPI,attributes);
+
+        //set the trading system as an observer
+        task.setObserver(this.tradingSystem);
     }
 
 
