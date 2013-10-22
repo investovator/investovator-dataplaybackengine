@@ -159,7 +159,7 @@ public class RealTimeDataPlayer extends DataPlayer {
         }
 
 
-        float executedPrice= tradingSystem.executeOrder(stockId,quantity,side,userPortfolios.get(userName).getCashBalance());
+        float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance());
 
         //update the cash balance
         if(side==OrderType.BUY){

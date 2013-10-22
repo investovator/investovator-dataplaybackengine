@@ -56,7 +56,7 @@ public class TradingSystem implements Observer {
      * @return   the cost of a single stock
      * @throws InvalidOrderException
      */
-    public float executeOrder(String stockId, int quantity, OrderType side, float accountBalance)
+    public float executeOrder(String stockId, int quantity, float accountBalance)
             throws InvalidOrderException {
         if(!priceList.containsKey(stockId)){
             throw new InvalidOrderException("No events have arrived for the stock "+stockId);
@@ -80,6 +80,17 @@ public class TradingSystem implements Observer {
     public float getStockPrice(String stockId){
         return priceList.get(stockId).get(attributeToMatch);
     }
+
+    public void updateStockPrice(String stockId, HashMap<TradingDataAttribute, String> prices){
+        HashMap<TradingDataAttribute, Float> details=new HashMap<TradingDataAttribute, Float>();
+        //convert the details
+        for(TradingDataAttribute attr:prices.keySet()){
+            details.put(attr,Float.parseFloat(prices.get(attributeToMatch)));
+
+        }
+        priceList.put(stockId,details);
+
+        }
 
     //used to listen to events by the EventTask
     @Override

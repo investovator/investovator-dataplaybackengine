@@ -19,6 +19,8 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.commons.utils.Portfolio;
+import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
@@ -27,6 +29,10 @@ import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
+import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
+import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
+import org.investovator.dataplaybackengine.market.OrderType;
+import org.investovator.dataplaybackengine.market.TradingSystem;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.text.ParseException;
@@ -38,6 +44,12 @@ import java.util.*;
  */
 public class OHLCDataPLayer extends DataPlayer {
 
+    //amount of money a person get at the begining
+    private static int initialCredit=10000;
+
+    //max amount of stocks that a person can buy/sell
+    private static int maxOrderSize=5000;
+
     //used to determine the cache size
     public static int CACHE_SIZE=100;
 
@@ -48,13 +60,25 @@ public class OHLCDataPLayer extends DataPlayer {
     //to keep track of the attributes needed
     ArrayList<TradingDataAttribute> attributes;
 
+    HashMap<String,Portfolio> userPortfolios;
+
+    TradingSystem tradingSystem;
+
+
+
+
     //to cache the stock trading data items
     HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
-    public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes) throws ParseException {
+    public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
+                          TradingDataAttribute attributeToMatch) throws ParseException {
 
         this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
+        userPortfolios=new HashMap<String, Portfolio>();
+        tradingSystem=new TradingSystem(attributes,attributeToMatch);
+
+
 
         //initialize the stocks
         for (String stock : stocks) {
@@ -90,6 +114,8 @@ public class OHLCDataPLayer extends DataPlayer {
                     if (data != null) {
                         //get the relevant data
                         events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
+                        //add the data to the Trading system as well
+                        tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
                         //remove that entry from map
                         data.getTradingData().remove(today);
 
@@ -154,6 +180,9 @@ public class OHLCDataPLayer extends DataPlayer {
             if (ohlcDataCache.get(stock).containsKey(today)) {
                 events.add(new StockEvent(stock,ohlcDataCache.get(stock).get(today),today));
 
+                //add the data to the Trading system as well
+                tradingSystem.updateStockPrice(stock,ohlcDataCache.get(stock).get(today));
+
                 //remove the used items from the cache
                 ohlcDataCache.get(stock).remove(today);
 
@@ -182,6 +211,10 @@ public class OHLCDataPLayer extends DataPlayer {
                     if (data != null) {
                         //get the relevant data
                         events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
+
+                        //add the data to the Trading system as well
+                        tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+
                         //remove that entry from map
                         data.getTradingData().remove(today);
 
@@ -241,5 +274,58 @@ public class OHLCDataPLayer extends DataPlayer {
      */
     public Date getToday(){
         return DateUtils.decrementTimeByDays(1,today);
+    }
+
+    /**
+     * Allows a user to join the running game
+     *
+     * @return
+     */
+    public boolean joinGame() throws UserAlreadyJoinedException {
+        //todo -get from Authenticator
+        String userName="test";
+
+        boolean joined=false;
+
+        //check whether the user has already joined the game
+        if(!userPortfolios.containsKey(userName)){
+            userPortfolios.put(userName,new PortfolioImpl(userName,OHLCDataPLayer.initialCredit,
+                    new HashMap<String, HashMap<String, Float>>()));
+            joined=true;
+        }
+        else{
+            throw new UserAlreadyJoinedException(userName);
+        }
+
+
+        return joined;
+
+    }
+
+    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException {
+        //todo -get from Authenticator
+        String userName="test";
+
+        //order validity checks
+        if(quantity>OHLCDataPLayer.maxOrderSize){
+            throw new InvalidOrderException("Cannot place more than "+OHLCDataPLayer.maxOrderSize+" orders.");
+        }
+        if(!ohlcDataCache.containsKey(stockId)){
+            throw new InvalidOrderException("Invalid stock ID : "+stockId);
+        }
+
+
+        float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance());
+
+        //update the cash balance
+        if(side==OrderType.BUY){
+            userPortfolios.get(userName).boughtShares(stockId,quantity,executedPrice);
+        }
+        else if(side==OrderType.SELL){
+            userPortfolios.get(userName).soldShares(stockId,quantity,executedPrice);
+        }
+        return true;
+
+
     }
 }
