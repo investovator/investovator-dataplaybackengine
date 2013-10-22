@@ -29,6 +29,7 @@ import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
+import org.investovator.dataplaybackengine.exceptions.UserJoinException;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
 import org.investovator.dataplaybackengine.scheduler.EventTask;
@@ -146,7 +147,8 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
 
-    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException {
+    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException,
+            UserJoinException {
         //todo -get from Authenticator
         String userName="test";
 
@@ -156,6 +158,12 @@ public class RealTimeDataPlayer extends DataPlayer {
         }
         if(!task.getStocks().contains(stockId)){
             throw new InvalidOrderException("Invalid stock ID : "+stockId);
+        }
+
+        //if the user has not joined the game
+        if(!userPortfolios.containsKey(userName)){
+            throw new UserJoinException("User "+userName+ " has not joined the game");
+
         }
 
 
