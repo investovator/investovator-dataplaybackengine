@@ -43,6 +43,7 @@ public class StockEvent {
     public StockEvent(String stockId, HashMap<TradingDataAttribute, String> data, Date time) {
         this.stockId = stockId;
 
+        this.data=new HashMap<TradingDataAttribute, Float>();
         for(TradingDataAttribute attr:data.keySet()){
             this.data.put(attr,Float.parseFloat(data.get(attr)));
         }

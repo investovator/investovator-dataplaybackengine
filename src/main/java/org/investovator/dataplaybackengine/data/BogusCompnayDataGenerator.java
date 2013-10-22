@@ -41,6 +41,11 @@ public class BogusCompnayDataGenerator implements CompanyData {
     }
 
     @Override
+    public void addCompanyData(String symbol, String companyName, int shares) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public HashMap<String, Integer> getCompanyIDsTotalShares() throws DataAccessException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -58,6 +63,11 @@ public class BogusCompnayDataGenerator implements CompanyData {
     @Override
     public Object getInfo(String s, String s2) throws DataAccessException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void addInfo(String infoType, String symbol, Object object) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

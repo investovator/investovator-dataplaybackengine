@@ -33,10 +33,7 @@ import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
 import org.investovator.dataplaybackengine.scheduler.EventTask;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Observer;
-import java.util.Timer;
+import java.util.*;
 
 /**
  * @author: ishan
@@ -57,7 +54,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     HashMap<String,Portfolio> userPortfolios;
     TradingSystem tradingSystem;
 
-    private RealTimeDataPlayer(String[] stocks,TradingDataAttribute[] attributes,TradingDataAttribute attributeToMatch) {
+    private RealTimeDataPlayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,TradingDataAttribute attributeToMatch) {
         this.timer = new Timer();
         userPortfolios=new HashMap<String, Portfolio>();
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
@@ -69,13 +66,13 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
     public RealTimeDataPlayer(String[] stocks,String startDate,
-                              String dateFormat,TradingDataAttribute[] attributes,TradingDataAttribute attributeToMatch) {
+                              String dateFormat,ArrayList<TradingDataAttribute> attributes,TradingDataAttribute attributeToMatch) {
         this(stocks,attributes,attributeToMatch);
 
         task = new EventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
     }
 
-    public RealTimeDataPlayer(String[] stocks,Date startDate,TradingDataAttribute[] attributes,
+    public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
                               TradingDataAttribute attributeToMatch) {
         this(stocks,attributes,attributeToMatch);
 

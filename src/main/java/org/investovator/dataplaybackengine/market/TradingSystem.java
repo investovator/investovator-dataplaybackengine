@@ -23,6 +23,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,11 +36,11 @@ public class TradingSystem implements Observer {
 
     //stock name-attribute - value
     HashMap<String,HashMap<TradingDataAttribute,Float>> priceList;
-    TradingDataAttribute[] attributes;
+    ArrayList<TradingDataAttribute> attributes;
     //attribute used for matching stocks
     TradingDataAttribute attributeToMatch;
 
-    public TradingSystem(TradingDataAttribute[] attributes, TradingDataAttribute attributeToMatch) {
+    public TradingSystem(ArrayList<TradingDataAttribute> attributes, TradingDataAttribute attributeToMatch) {
         this.priceList = new HashMap<String, HashMap<TradingDataAttribute, Float>>();
         this.attributes = attributes;
         this.attributeToMatch = attributeToMatch;

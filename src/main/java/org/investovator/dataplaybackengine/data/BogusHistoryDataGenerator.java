@@ -9,6 +9,7 @@ import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.io.File;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
@@ -35,21 +36,21 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
     }
 
     @Override
-    public StockTradingData getTradingData(DataType dataType, String symbol, Date startingDate, TradingDataAttribute[] tradingDataAttributes, int numOfRows) throws DataAccessException {
+    public StockTradingData getTradingData(DataType dataType, String symbol, Date startingDate,Date endDate,int numOfRows, ArrayList<TradingDataAttribute> tradingDataAttributes) throws DataAccessException {
 
 
-        HashMap<Date, HashMap<TradingDataAttribute, Float>> marketData = new
-                HashMap<Date, HashMap<TradingDataAttribute, Float>>();
+        HashMap<Date, HashMap<TradingDataAttribute, String>> marketData = new
+                HashMap<Date, HashMap<TradingDataAttribute, String>>();
 
         Date time=startingDate;
         for(int j=0;j<numOfRows;j++){
 
-            HashMap<TradingDataAttribute, Float> tradingData= new HashMap<TradingDataAttribute, Float>();
+            HashMap<TradingDataAttribute, String> tradingData= new HashMap<TradingDataAttribute, String>();
 
             //add attributes
             for(TradingDataAttribute attr:tradingDataAttributes){
 
-                tradingData.put(attr,getRandomNumber());
+                tradingData.put(attr,Float.toString(getRandomNumber()));
             }
             marketData.put(time,tradingData);
 
@@ -106,9 +107,10 @@ public class BogusHistoryDataGenerator implements CompanyStockTransactionsData {
     }
 
     @Override
-    public void importCSV(DataType dataType, String s, File file) throws DataAccessException {
+    public void importCSV(DataType type, String stockId, String dateFormat, File file) throws DataAccessException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
 
     @Override
     public void importXls(DataType dataType, String s, File file) throws DataAccessException {

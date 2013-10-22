@@ -26,6 +26,7 @@ import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -46,11 +47,11 @@ public class OHLCDataPLayerTest {
         String startDate="2011-12-13-15-55-32";
 
         //define the attributes needed
-        TradingDataAttribute attributes[]=new TradingDataAttribute[2];
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
 
         //just the closing price is enough for now
-        attributes[0]=TradingDataAttribute.DAY;
-        attributes[1]=TradingDataAttribute.PRICE;
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
 
         player=new OHLCDataPLayer(stocks,attributes);
 

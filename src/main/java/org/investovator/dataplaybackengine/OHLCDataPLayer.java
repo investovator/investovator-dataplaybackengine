@@ -23,6 +23,7 @@ import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
@@ -45,19 +46,19 @@ public class OHLCDataPLayer extends DataPlayer {
     //to keep the game state
     boolean gameStarted;
     //to keep track of the attributes needed
-    TradingDataAttribute[] attributes;
+    ArrayList<TradingDataAttribute> attributes;
 
     //to cache the stock trading data items
-    HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>> ohlcDataCache;
+    HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
-    public OHLCDataPLayer(String[] stocks,TradingDataAttribute[] attributes) throws ParseException {
+    public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes) throws ParseException {
 
-        this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, Float>>>();
+        this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
 
         //initialize the stocks
         for (String stock : stocks) {
-            ohlcDataCache.put(stock, new HashMap<Date, HashMap<TradingDataAttribute, Float>>());
+            ohlcDataCache.put(stock, new HashMap<Date, HashMap<TradingDataAttribute, String>>());
         }
 
 
@@ -83,7 +84,7 @@ public class OHLCDataPLayer extends DataPlayer {
 
                 try {
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today, attributes, OHLCDataPLayer.CACHE_SIZE);
+                            stock, today,null, OHLCDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null) {
@@ -97,6 +98,8 @@ public class OHLCDataPLayer extends DataPlayer {
 
                     }
 
+                } catch (DataNotFoundException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (DataAccessException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
@@ -173,7 +176,7 @@ public class OHLCDataPLayer extends DataPlayer {
                 try {
 
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today, attributes, OHLCDataPLayer.CACHE_SIZE);
+                            stock, today, null, OHLCDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null) {
@@ -191,7 +194,7 @@ public class OHLCDataPLayer extends DataPlayer {
 
                     }
 
-                } catch (DataAccessException e) {
+                } catch (DataNotFoundException e) {
                     //TODO - change this exception handling code to act on whatever the exception that the
                     //core module will throw when no data is present for a given stock from the given time
                     //onwards.
@@ -199,6 +202,8 @@ public class OHLCDataPLayer extends DataPlayer {
 
                     ///////
                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (DataAccessException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
 
