@@ -53,32 +53,23 @@ public class TradingSystem implements Observer {
      * @param quantity Quantity to be sold/bought
      * @param side  Sell/Buy
      * @param accountBalance Available cash in the users account
-     * @return   a negative expense, a positive income, or a zero for a failed transaction
+     * @return   the cost of a single stock
      * @throws InvalidOrderException
      */
-    public float executeOrder(String stockId, int quantity, OrderType side, int accountBalance)
+    public float executeOrder(String stockId, int quantity, OrderType side, float accountBalance)
             throws InvalidOrderException {
         if(!priceList.containsKey(stockId)){
             throw new InvalidOrderException("No events have arrived for the stock "+stockId);
 
         }
         //if the user does not have enough money
-        float neededMoney=priceList.get(stockId).get(attributeToMatch)*quantity;
+        float price=priceList.get(stockId).get(attributeToMatch);
+        float neededMoney=price*quantity;
         if(accountBalance<neededMoney){
             throw new InvalidOrderException("Not enough money. Need "+neededMoney);
         }
 
-        //if this is a buy
-        if(side==OrderType.BUY){
-            return -(neededMoney);
-        }
-        else if (side==OrderType.SELL){
-            return neededMoney;
-        }
-        else {
-            return 0;
-        }
-
+        return price;
     }
 
     /**
