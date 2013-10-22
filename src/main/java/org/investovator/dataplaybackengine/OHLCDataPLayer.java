@@ -332,4 +332,17 @@ public class OHLCDataPLayer extends DataPlayer {
 
 
     }
+
+    public Portfolio getMyPortfolio() throws UserJoinException {
+        //todo -get from Authenticator
+        String userName="test";
+
+        //if the user has not joined the game
+        if(!userPortfolios.containsKey(userName)){
+            throw new UserJoinException("User "+userName+ " has not joined the game");
+
+        }
+
+        return userPortfolios.get(userName);
+    }
 }
