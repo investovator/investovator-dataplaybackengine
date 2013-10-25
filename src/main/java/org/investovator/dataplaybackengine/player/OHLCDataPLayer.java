@@ -26,7 +26,7 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
-import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.*;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
@@ -95,9 +95,9 @@ public class OHLCDataPLayer extends DataPlayer {
      * @return list of events needed to start the game
      * @throws GameAlreadyStartedException
      */
-    public StockEvent[] startGame() throws GameAlreadyStartedException {
+    public StockUpdateEvent[] startGame() throws GameAlreadyStartedException {
 
-        ArrayList<StockEvent> events = new ArrayList<StockEvent>();
+        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
         //if the game has not started yet
         if (!gameStarted) {
             //search all the stocks
@@ -110,7 +110,7 @@ public class OHLCDataPLayer extends DataPlayer {
                     //if any data was returned
                     if (data != null) {
                         //get the relevant data
-                        events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
+                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
                         //add the data to the Trading system as well
                         tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
                         //remove that entry from map
@@ -134,7 +134,7 @@ public class OHLCDataPLayer extends DataPlayer {
         }
 
         today=DateUtils.incrementTimeByDays(1,today);
-        return events.toArray(new StockEvent[events.size()]);
+        return events.toArray(new StockUpdateEvent[events.size()]);
 
     }
 
@@ -165,17 +165,17 @@ public class OHLCDataPLayer extends DataPlayer {
      * returns the  stock events in the next day. If a stock does not contain the price information
      * for the requested day, its <b>data</> map will be null.
      *
-     * @return An array of StockEvent's if the data is present for at least a single stock. If data is not present
+     * @return An array of StockUpdateEvent's if the data is present for at least a single stock. If data is not present
      * for any stock, returns a null.
      */
-    public StockEvent[] playNextDay() throws GameFinishedException {
-        ArrayList<StockEvent> events = new ArrayList<StockEvent>();
+    public StockUpdateEvent[] playNextDay() throws GameFinishedException {
+        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
 
         //iterate all the stocks
         for(String stock:ohlcDataCache.keySet()) {
             //if the date is in the cache
             if (ohlcDataCache.get(stock).containsKey(today)) {
-                events.add(new StockEvent(stock,ohlcDataCache.get(stock).get(today),today));
+                events.add(new StockUpdateEvent(stock,ohlcDataCache.get(stock).get(today),today));
 
                 //add the data to the Trading system as well
                 tradingSystem.updateStockPrice(stock,ohlcDataCache.get(stock).get(today));
@@ -185,7 +185,7 @@ public class OHLCDataPLayer extends DataPlayer {
 
             }
             else{
-                events.add(new StockEvent(stock,null,today));
+                events.add(new StockUpdateEvent(stock,null,today));
             }
 
         }
@@ -207,7 +207,7 @@ public class OHLCDataPLayer extends DataPlayer {
                     //if any data was returned
                     if (data != null) {
                         //get the relevant data
-                        events.add(new StockEvent(stock, data.getTradingDataEntry(today), today));
+                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
 
                         //add the data to the Trading system as well
                         tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
@@ -250,7 +250,7 @@ public class OHLCDataPLayer extends DataPlayer {
         }
 
         today=DateUtils.incrementTimeByDays(1,today);
-        return events.toArray(new StockEvent[events.size()]);
+        return events.toArray(new StockUpdateEvent[events.size()]);
 
     }
 

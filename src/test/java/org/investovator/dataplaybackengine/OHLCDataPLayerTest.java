@@ -21,7 +21,7 @@ package org.investovator.dataplaybackengine;
 
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.player.OHLCDataPLayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
@@ -70,11 +70,11 @@ public class OHLCDataPLayerTest {
     @Test
     public void testSetStartDate() throws Exception {
 
-        StockEvent[] events=player.startGame();
+        StockUpdateEvent[] events=player.startGame();
 
         for(int i=0;i<5;i++){
 
-            for(StockEvent event:events){
+            for(StockUpdateEvent event:events){
                 assert(player.getToday().equals(event.getTime()));
                 System.out.println(player.getToday()+" --> "+event.getStockId()+" : ");
                 for(TradingDataAttribute attr:event.getData().keySet()){

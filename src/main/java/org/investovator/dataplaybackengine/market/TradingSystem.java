@@ -20,7 +20,9 @@
 package org.investovator.dataplaybackengine.market;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.events.PlaybackEvent;
+import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.Observer;
  * @author: ishan
  * @version: ${Revision}
  */
-public class TradingSystem implements Observer {
+public class TradingSystem implements PlaybackEventListener {
 
     //stock name-attribute - value
     HashMap<String,HashMap<TradingDataAttribute,Float>> priceList;
@@ -51,7 +53,6 @@ public class TradingSystem implements Observer {
      *
      * @param stockId Name of the stock
      * @param quantity Quantity to be sold/bought
-     * @param side  Sell/Buy
      * @param accountBalance Available cash in the users account
      * @return   the cost of a single stock
      * @throws InvalidOrderException
@@ -94,10 +95,10 @@ public class TradingSystem implements Observer {
 
     //used to listen to events by the EventTask
     @Override
-    public void update(Observable o, Object arg) {
+    public void eventOccurred(PlaybackEvent arg) {
         //if this is a stock event
-        if(arg instanceof StockEvent){
-            StockEvent event=(StockEvent)arg;
+        if(arg instanceof StockUpdateEvent){
+            StockUpdateEvent event=(StockUpdateEvent)arg;
 
             HashMap<TradingDataAttribute,Float> values=new HashMap<TradingDataAttribute, Float>();
             //iterate all the attributes

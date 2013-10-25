@@ -1,7 +1,6 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.events.*;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
-import org.investovator.dataplaybackengine.events.EventManager;
-import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.Observer;
  * @version: ${Revision}
  */
 public class Tester {
-    static Observer observer=new Obs();
+    static Obs observer=new Obs();
     static RealTimeDataPlayer player;
 
     public Tester(Observer observer) {
@@ -39,14 +38,14 @@ public class Tester {
         player.startPlayback(2);
     }
 
-    private static class Obs implements Observer{
+    private static class Obs implements PlaybackEventListener{
+
 
         @Override
-        public void update(Observable o, Object arg) {
+        public void eventOccurred(PlaybackEvent arg) {
+            if(arg instanceof StockUpdateEvent){
 
-            if(arg instanceof StockEvent){
-
-                StockEvent d= (StockEvent)arg;
+                StockUpdateEvent d= (StockUpdateEvent)arg;
 
                 System.out.println(d.getTime()+"-"+d.getStockId());
                 System.out.println("Attributes:");
@@ -54,13 +53,12 @@ public class Tester {
                     System.out.println(attr+" : "+d.getData().get(attr));
                 }
             }
-            else if(arg== EventManager.RealTimePlayerStates.GAME_OVER){
+            else if(arg instanceof PlaybackFinishedEvent){
                 System.out.println("Game over");
                 //don't forget to stop the player, else it'll run forever
                 player.stopPlayback();
 
             }
-
         }
     }
 

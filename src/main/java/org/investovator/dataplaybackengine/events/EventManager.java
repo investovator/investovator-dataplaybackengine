@@ -1,19 +1,31 @@
 package org.investovator.dataplaybackengine.events;
 
-import java.util.Observable;
+import java.util.ArrayList;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class EventManager extends Observable {
+public class EventManager {
+
+    private ArrayList<PlaybackEventListener> listeners;
 
     public enum RealTimePlayerStates {
         GAME_OVER
     }
 
-    public void notifyListeners(Object obj) {
-        setChanged();
-        notifyObservers(obj);
+    public EventManager() {
+        this.listeners = new ArrayList<PlaybackEventListener>();
+    }
+
+    public void addObserver(PlaybackEventListener observer){
+        listeners.add(observer);
+        System.out.println(observer.hashCode());
+    }
+
+    public void notifyListeners(PlaybackEvent obj) {
+        for(PlaybackEventListener listener:listeners){
+            listener.eventOccurred(obj);
+        }
     }
 }

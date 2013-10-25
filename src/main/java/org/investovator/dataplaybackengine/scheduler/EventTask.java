@@ -5,9 +5,7 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
-import org.investovator.dataplaybackengine.events.EventManager;
-import org.investovator.dataplaybackengine.events.StockEvent;
-import org.investovator.dataplaybackengine.events.StockEventComparator;
+import org.investovator.dataplaybackengine.events.*;
 import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 
@@ -29,7 +27,7 @@ public class EventTask extends TimerTask {
     private CompanyStockTransactionsData dataApi;
 
     //to cache the stock trading data items. (will allow events to have the duplicate times)
-    private PriorityQueue<StockEvent> dataCache;
+    private PriorityQueue<StockUpdateEvent> dataCache;
 
     //to store the stocks to watch
     private ArrayList<String> stocks;
@@ -46,8 +44,8 @@ public class EventTask extends TimerTask {
         this.attributes=attributes;
 
 
-        Comparator<StockEvent> comparator=new StockEventComparator();
-        dataCache =new PriorityQueue<StockEvent>(EventTask.CACHE_SIZE,comparator );
+        Comparator<StockUpdateEvent> comparator=new StockEventComparator();
+        dataCache =new PriorityQueue<StockUpdateEvent>(EventTask.CACHE_SIZE,comparator );
         stocks=new ArrayList<String>(Arrays.asList(stocksToWatch));
 
     }
@@ -83,7 +81,7 @@ public class EventTask extends TimerTask {
                 refreshCache();
             } catch (GameFinishedException e) {
                 //notify the player
-                eventManager.notifyListeners(EventManager.RealTimePlayerStates.GAME_OVER);
+                eventManager.notifyListeners(new PlaybackFinishedEvent());
                 //stop the timer
                 this.cancel();
             }
@@ -94,7 +92,7 @@ public class EventTask extends TimerTask {
 
     }
 
-    public void setObserver(Observer observer){
+    public void setObserver(PlaybackEventListener observer){
         eventManager.addObserver(observer);
     }
 
@@ -116,7 +114,7 @@ public class EventTask extends TimerTask {
 
                     //add each event to the cache
                     for(Date time:stockData.keySet()){
-                        StockEvent event= new StockEvent(stock,stockData.get(time),time);
+                        StockUpdateEvent event= new StockUpdateEvent(stock,stockData.get(time),time);
                         dataCache.add(event);
                     }
 
@@ -144,7 +142,7 @@ public class EventTask extends TimerTask {
         //while there are elements in the cache
         while (dataCache.size()>0){
             //non-destructively get the head of the queue
-            StockEvent event= dataCache.peek();
+            StockUpdateEvent event= dataCache.peek();
             //if the event has occurred in the past
             if(event.getTime().before(currentTime)){
                 //remove that item from the queue

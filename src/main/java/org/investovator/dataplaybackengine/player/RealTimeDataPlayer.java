@@ -27,6 +27,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
@@ -92,7 +93,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @param observer
      */
-    public void setObserver(Observer observer){
+    public void setObserver(PlaybackEventListener observer){
         task.setObserver(observer);
     }
 
@@ -144,7 +145,7 @@ public class RealTimeDataPlayer extends DataPlayer {
             joined=true;
         }
         else{
-            throw new UserAlreadyJoinedException(userName);
+//            throw new UserAlreadyJoinedException(userName);
         }
 
 

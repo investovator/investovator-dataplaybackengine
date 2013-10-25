@@ -19,32 +19,11 @@
 
 package org.investovator.dataplaybackengine.events;
 
-import java.util.Comparator;
+import java.io.Serializable;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class StockEventComparator implements Comparator {
-    @Override
-    public int compare(Object o1, Object o2) {
-        StockUpdateEvent event1=(StockUpdateEvent)o1;
-        StockUpdateEvent event2=(StockUpdateEvent)o2;
-
-        int decision;
-
-        if (event1.getTime().compareTo(event2.getTime())<0){
-            decision= -1;
-        }
-        else if(event1.getTime().compareTo(event2.getTime())>0){
-            decision=1;
-        }
-        else{
-            decision=0;
-        }
-
-        return decision;
-
-
-    }
+public class PlaybackEvent implements Serializable {
 }
