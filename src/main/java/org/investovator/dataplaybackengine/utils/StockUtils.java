@@ -33,14 +33,14 @@ import java.util.*;
  */
 public class StockUtils {
 
-    private static CompanyStockTransactionsData transactionDataAPI;
-    private static CompanyData companyDataAPI;
+    private static CompanyStockTransactionsData transactionDataAPI= new BogusHistoryDataGenerator();
+    private static CompanyData companyDataAPI=new BogusCompnayDataGenerator();
 
     public StockUtils() {
-        //for testing
-        this.transactionDataAPI = new BogusHistoryDataGenerator();
-        this.companyDataAPI = new BogusCompnayDataGenerator();
-        //testing end
+//        //for testing
+//        this.transactionDataAPI =;
+//        this.companyDataAPI = ;
+//        //testing end
     }
 
     /**
