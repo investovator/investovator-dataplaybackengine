@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
@@ -68,7 +68,7 @@ public class OHLCDataPLayer extends DataPlayer {
     HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
     public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
-                          TradingDataAttribute attributeToMatch) throws ParseException {
+                          TradingDataAttribute attributeToMatch) {
 
         this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
@@ -144,7 +144,7 @@ public class OHLCDataPLayer extends DataPlayer {
      * @param startDate
      * @throws ParseException
      */
-    public void setStartDate(Date startDate) throws ParseException {
+    public void setStartDate(Date startDate) {
         this.today = startDate;
 
     }

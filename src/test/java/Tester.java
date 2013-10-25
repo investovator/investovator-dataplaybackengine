@@ -1,5 +1,5 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.RealTimeDataPlayer;
+import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.events.EventManager;
 import org.investovator.dataplaybackengine.events.StockEvent;
 import org.investovator.dataplaybackengine.utils.DateUtils;

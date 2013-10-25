@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;

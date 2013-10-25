@@ -22,6 +22,7 @@ package org.investovator.dataplaybackengine;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.StockEvent;
+import org.investovator.dataplaybackengine.player.OHLCDataPLayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;

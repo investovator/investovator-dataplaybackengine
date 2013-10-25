@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
