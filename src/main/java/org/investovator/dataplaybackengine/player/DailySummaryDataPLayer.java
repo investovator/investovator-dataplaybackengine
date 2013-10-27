@@ -66,6 +66,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
     private boolean isMultiplayer;
 
     private DailySummaryEventTask task;
+    private Timer timer;
+
 
 
 
@@ -82,6 +84,12 @@ public class DailySummaryDataPLayer extends DataPlayer {
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
 
         this.isMultiplayer=isMultiplayer;
+
+        if(isMultiplayer){
+            task= new DailySummaryEventTask(this);
+            this.timer = new Timer();
+
+        }
 
 
 
@@ -289,7 +297,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame() throws UserAlreadyJoinedException {
+    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
         //todo -get from Authenticator
         String userName="test";
 
@@ -300,6 +308,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
             userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,
                     new HashMap<String, HashMap<String, Float>>()));
             joined=true;
+            setObserver(observer);
         }
         else{
             throw new UserAlreadyJoinedException(userName);
@@ -368,5 +377,27 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     public boolean isGameStarted() {
         return gameStarted;
+    }
+
+    /**
+     * Start playing the data
+     * @param resolution the time gaps between pushing events
+     */
+    public void startMultiplayerGame(int resolution) {
+
+        timer.schedule(task, 0, resolution * 1000);
+    }
+
+    /**
+     * Stop the data playback
+     */
+    public void stopPlayback() {
+        task.cancel();
+        timer.cancel();
+    }
+
+    public void setTransactionDataAPI(CompanyStockTransactionsData api){
+        this.transactionDataAPI=api;
+
     }
 }
