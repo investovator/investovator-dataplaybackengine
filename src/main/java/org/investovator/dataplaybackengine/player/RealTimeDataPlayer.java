@@ -33,7 +33,7 @@ import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
-import org.investovator.dataplaybackengine.scheduler.EventTask;
+import org.investovator.dataplaybackengine.scheduler.RealTimeEventTask;
 
 import java.util.*;
 
@@ -50,7 +50,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     private static int maxOrderSize=5000;
 
     Timer timer;
-    EventTask task;
+    RealTimeEventTask task;
     CompanyStockTransactionsData transactionDataAPI;
     CompanyData companyDataAPI;
     HashMap<String,Portfolio> userPortfolios;
@@ -71,7 +71,7 @@ public class RealTimeDataPlayer extends DataPlayer {
                               String dateFormat,ArrayList<TradingDataAttribute> attributes,TradingDataAttribute attributeToMatch) {
         this(stocks,attributes,attributeToMatch);
 
-        task = new EventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
+        task = new RealTimeEventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
 
         //set the trading system as an observer
         task.setObserver(this.tradingSystem);
@@ -81,7 +81,7 @@ public class RealTimeDataPlayer extends DataPlayer {
                               TradingDataAttribute attributeToMatch) {
         this(stocks,attributes,attributeToMatch);
 
-        task = new EventTask(stocks, startDate, transactionDataAPI,attributes);
+        task = new RealTimeEventTask(stocks, startDate, transactionDataAPI,attributes);
 
         //set the trading system as an observer
         task.setObserver(this.tradingSystem);
@@ -93,7 +93,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @param observer
      */
-    public void setObserver(PlaybackEventListener observer){
+    private void setObserver(PlaybackEventListener observer){
         task.setObserver(observer);
     }
 
@@ -104,7 +104,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     public void startPlayback(int resolution) {
 
         timer.schedule(task, 0, resolution * 1000);
-        //TODO- change the EventTask to check for the resolution when incrementing its time
+        //TODO- change the RealTimeEventTask to check for the resolution when incrementing its time
     }
 
     /**
@@ -132,7 +132,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame() throws UserAlreadyJoinedException {
+    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
         //todo -get from Authenticator
         String userName="test";
 
@@ -143,6 +143,7 @@ public class RealTimeDataPlayer extends DataPlayer {
             userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,
                     new HashMap<String, HashMap<String, Float>>()));
             joined=true;
+            setObserver(observer);
         }
         else{
 //            throw new UserAlreadyJoinedException(userName);
