@@ -1,5 +1,6 @@
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.*;
+import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 
@@ -18,7 +19,7 @@ public class Tester {
     public Tester(Observer observer) {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UserAlreadyJoinedException {
         String[] stocks=new String[2];
         stocks[0]="GOOG";
         stocks[1]="APPL";
@@ -34,7 +35,7 @@ public class Tester {
 
 
         player=new RealTimeDataPlayer(stocks,startDate, DateUtils.DATE_FORMAT_1,attributes,TradingDataAttribute.PRICE);
-        player.setObserver(observer);
+        player.joinGame(observer);
         player.startPlayback(2);
     }
 

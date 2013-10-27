@@ -26,10 +26,12 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
+import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.*;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
+import org.investovator.dataplaybackengine.scheduler.DailySummaryEventTask;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.text.ParseException;
@@ -61,6 +63,10 @@ public class OHLCDataPLayer extends DataPlayer {
 
     TradingSystem tradingSystem;
 
+    private boolean isMultiplayer;
+
+    private DailySummaryEventTask task;
+
 
 
 
@@ -68,12 +74,14 @@ public class OHLCDataPLayer extends DataPlayer {
     HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
     public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
-                          TradingDataAttribute attributeToMatch) {
+                          TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
 
         this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
         userPortfolios=new HashMap<String, Portfolio>();
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
+
+        this.isMultiplayer=isMultiplayer;
 
 
 
@@ -127,6 +135,9 @@ public class OHLCDataPLayer extends DataPlayer {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
+
+            //indicate that the game started
+            gameStarted=true;
 
 
         } else {
@@ -344,5 +355,18 @@ public class OHLCDataPLayer extends DataPlayer {
         }
 
         return userPortfolios.get(userName);
+    }
+
+    /**
+     * To set observers
+     *
+     * @param observer
+     */
+    private void setObserver(PlaybackEventListener observer){
+        task.setObserver(observer);
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 }

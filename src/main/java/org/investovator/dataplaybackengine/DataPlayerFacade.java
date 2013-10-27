@@ -54,10 +54,10 @@ public class DataPlayerFacade {
 
     public void createPlayer(PlayerTypes playerType,String[] stocks,Date startDate,
                                  ArrayList<TradingDataAttribute> attributes,
-                                 TradingDataAttribute attributeToMatch) {
+                                 TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
         //if a daily summary player is needed
         if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-            ohlcDataPLayer=new OHLCDataPLayer(stocks, attributes, attributeToMatch);
+            ohlcDataPLayer=new OHLCDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
             this.ohlcDataPLayer.setStartDate(startDate);
         }
         //if a real time data player is needed

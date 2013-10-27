@@ -93,7 +93,7 @@ public class TradingSystem implements PlaybackEventListener {
 
         }
 
-    //used to listen to events by the EventTask
+    //used to listen to events by the RealTimeEventTask
     @Override
     public void eventOccurred(PlaybackEvent arg) {
         //if this is a stock event

@@ -20,7 +20,6 @@ public class EventManager {
 
     public void addObserver(PlaybackEventListener observer){
         listeners.add(observer);
-        System.out.println(observer.hashCode());
     }
 
     public void notifyListeners(PlaybackEvent obj) {
