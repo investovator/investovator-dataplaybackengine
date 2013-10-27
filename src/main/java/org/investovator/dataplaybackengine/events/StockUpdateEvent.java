@@ -44,10 +44,15 @@ public class StockUpdateEvent extends PlaybackEvent {
     public StockUpdateEvent(String stockId, HashMap<TradingDataAttribute, String> data, Date time) {
         this.stockId = stockId;
 
-        this.data=new HashMap<TradingDataAttribute, Float>();
-        for(TradingDataAttribute attr:data.keySet()){
-            this.data.put(attr,Float.parseFloat(data.get(attr)));
+        //if data is avaialble for this day
+        if(data!=null){
+
+            this.data=new HashMap<TradingDataAttribute, Float>();
+            for(TradingDataAttribute attr:data.keySet()){
+                this.data.put(attr,Float.parseFloat(data.get(attr)));
+            }
         }
+
         //this.data = data;
         this.time = time;
     }
