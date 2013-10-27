@@ -190,9 +190,15 @@ public class DailySummaryDataPLayer extends DataPlayer {
     public StockUpdateEvent[] playNextDay() throws GameFinishedException {
         ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
 
+        //to track data availability
+        boolean dataExists=false;
+
         //iterate all the stocks
         for(String stock:ohlcDataCache.keySet()) {
             //if the date is in the cache
+
+            //to check the data avalability ofr this stock
+            boolean hasDAtaForStock=false;
             if (ohlcDataCache.get(stock).containsKey(today)) {
                 events.add(new StockUpdateEvent(stock,ohlcDataCache.get(stock).get(today),today));
 
@@ -202,15 +208,24 @@ public class DailySummaryDataPLayer extends DataPlayer {
                 //remove the used items from the cache
                 ohlcDataCache.get(stock).remove(today);
 
+                hasDAtaForStock=true;
+
+
             }
             else{
                 events.add(new StockUpdateEvent(stock,null,today));
             }
 
+            //if at least a single stock has data
+            if(hasDAtaForStock){
+                dataExists=true;
+            }
+
         }
 
         //if no data has been found in the cache
-        if (events.size()==0) {
+        if (!dataExists) {
+            events.clear();
 
             //to track whether at least a single stock has data in the future
             boolean hasData=false;
@@ -224,7 +239,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
                             stock, today, null, DailySummaryDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
-                    if (data != null) {
+                    if (data != null && data.getTradingData()!=null) {
                         //get the relevant data
                         events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
 
@@ -252,7 +267,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
                     ///////
                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 } catch (DataAccessException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    hasData=false;
                 }
             }
 
