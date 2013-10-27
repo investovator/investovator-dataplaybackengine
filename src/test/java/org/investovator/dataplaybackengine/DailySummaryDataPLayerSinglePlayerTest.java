@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * @author: ishan
  * @version: ${Revision}
  */
-public class DailySummaryDataPLayerSinglePlayer {
+public class DailySummaryDataPLayerSinglePlayerTest {
 
     DailySummaryDataPLayer player;
     boolean notStarted;
