@@ -21,6 +21,7 @@ import java.util.Random;
 public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsData {
 
     Random rn = new Random(new Date().getTime());
+    boolean gameFinished=false;
 
     private float getRandomNumber(){
         //generate a random value
@@ -42,34 +43,57 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
         HashMap<Date, HashMap<TradingDataAttribute, String>> marketData = new
                 HashMap<Date, HashMap<TradingDataAttribute, String>>();
 
-        Date time=startingDate;
-        for(int j=0;j<numOfRows;j++){
 
+        Date time=startingDate;
+        //generate bogus data
+        if(dataType==DataType.OHLC && !gameFinished){
+
+            int i=0;
             HashMap<TradingDataAttribute, String> tradingData= new HashMap<TradingDataAttribute, String>();
 
-            //add attributes
-            for(TradingDataAttribute attr:tradingDataAttributes){
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeByDays(1,time);
 
-                tradingData.put(attr,Float.toString(getRandomNumber()));
-            }
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeByDays(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeByDays(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
             marketData.put(time,tradingData);
 
-            //increment the time
-            if(dataType==DataType.OHLC){
-                time=DateUtils.incrementTimeByDays(1,time);
-            }
-            else if(dataType==DataType.TICKER){
-
-                time= DateUtils.incrementTimeBySeconds(1,time);
-            }
-
+            gameFinished=true;
+            return new StockTradingDataImpl(symbol,tradingDataAttributes,
+                    marketData);
 
         }
+        else {
+            throw new DataAccessException("Data is over");
+        }
 
-        StockTradingData stockData=new StockTradingDataImpl(symbol,tradingDataAttributes,
-                marketData);
+        //todo - handle the REalTime players data tests
 
-        return stockData;
     }
 
     @Override
