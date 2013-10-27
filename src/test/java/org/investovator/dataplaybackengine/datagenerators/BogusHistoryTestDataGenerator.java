@@ -23,6 +23,8 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
     Random rn = new Random(new Date().getTime());
     boolean googleOHCLReturned =false;
     boolean appleOHCLReturned =false;
+    boolean googTickerReturned =false;
+
 
 
     private float getRandomNumber(){
@@ -129,6 +131,49 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
             marketData.put(time,tradingData);
 
             googleOHCLReturned =true;
+            return new StockTradingDataImpl(symbol,tradingDataAttributes,
+                    marketData);
+
+        }
+
+        else if(dataType==DataType.TICKER && !googTickerReturned && symbol.equals("GOOG")){
+
+            int i=0;
+            HashMap<TradingDataAttribute, String> tradingData= new HashMap<TradingDataAttribute, String>();
+
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeBySeconds(1,time);
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeBySeconds(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeBySeconds(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+
+            googTickerReturned =true;
             return new StockTradingDataImpl(symbol,tradingDataAttributes,
                     marketData);
 

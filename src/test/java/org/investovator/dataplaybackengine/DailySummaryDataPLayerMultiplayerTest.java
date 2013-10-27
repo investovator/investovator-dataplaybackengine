@@ -41,8 +41,6 @@ public class DailySummaryDataPLayerMultiplayerTest {
 
     //to keep track of which item this is
     int counter=0;
-    //to keep track of the index to push in the update method
-    int updateMethodItr=0;
 
     public DailySummaryDataPLayerMultiplayerTest() {
         observer=new GameObserver();

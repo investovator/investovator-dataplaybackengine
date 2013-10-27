@@ -203,4 +203,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
 
+    public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
+        task.setDataApi(api);
+    }
 }
