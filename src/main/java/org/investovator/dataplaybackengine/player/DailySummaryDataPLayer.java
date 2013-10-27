@@ -320,8 +320,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         //check whether the user has already joined the game
         if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,
-                    new HashMap<String, HashMap<String, Float>>()));
+            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
             setObserver(observer);
         }
@@ -347,8 +346,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         //check whether the user has already joined the game
         if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,
-                    new HashMap<String, HashMap<String, Float>>()));
+            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
 
         }

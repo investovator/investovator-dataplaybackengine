@@ -140,8 +140,7 @@ public class RealTimeDataPlayer extends DataPlayer {
 
         //check whether the user has already joined the game
         if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,
-                    new HashMap<String, HashMap<String, Float>>()));
+            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,0));
             joined=true;
             setObserver(observer);
         }

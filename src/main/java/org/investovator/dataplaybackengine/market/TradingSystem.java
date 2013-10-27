@@ -57,7 +57,7 @@ public class TradingSystem implements PlaybackEventListener {
      * @return   the cost of a single stock
      * @throws InvalidOrderException
      */
-    public float executeOrder(String stockId, int quantity, float accountBalance)
+    public float executeOrder(String stockId, int quantity, double accountBalance)
             throws InvalidOrderException {
         if(!priceList.containsKey(stockId)){
             throw new InvalidOrderException("No events have arrived for the stock "+stockId);
