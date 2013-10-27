@@ -312,7 +312,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
+    public boolean joinMultiplayerGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
         //todo -get from Authenticator
         String userName="test";
 
@@ -324,6 +324,33 @@ public class DailySummaryDataPLayer extends DataPlayer {
                     new HashMap<String, HashMap<String, Float>>()));
             joined=true;
             setObserver(observer);
+        }
+        else{
+            throw new UserAlreadyJoinedException(userName);
+        }
+
+
+        return joined;
+
+    }
+
+    /**
+     * Allows a user to join the running game
+     *
+     * @return
+     */
+    public boolean joinSingleplayerGame() throws UserAlreadyJoinedException {
+        //todo -get from Authenticator
+        String userName="test";
+
+        boolean joined=false;
+
+        //check whether the user has already joined the game
+        if(!userPortfolios.containsKey(userName)){
+            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,
+                    new HashMap<String, HashMap<String, Float>>()));
+            joined=true;
+
         }
         else{
             throw new UserAlreadyJoinedException(userName);

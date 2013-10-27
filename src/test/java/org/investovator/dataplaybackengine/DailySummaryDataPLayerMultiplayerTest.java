@@ -75,7 +75,7 @@ public class DailySummaryDataPLayerMultiplayerTest {
         player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
         player.startMultiplayerGame(1);
-        player.joinGame(observer);
+        player.joinMultiplayerGame(observer);
 
     }
 

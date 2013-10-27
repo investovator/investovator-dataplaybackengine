@@ -19,32 +19,37 @@
 
 package org.investovator.dataplaybackengine;
 
-import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
+import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class OHLCDataPLayerTest {
+public class DailySummaryDataPLayerSinglePlayer {
 
     DailySummaryDataPLayer player;
+    boolean notStarted;
 
+    private static String APPL="APPL";
+    private static String GOOG="GOOG";
 
     @Before
     public void setUp() throws Exception {
 
+        notStarted=true;
+
         String[] stocks=new String[2];
-        stocks[0]="GOOG";
-        stocks[1]="APPL";
+        stocks[0]=GOOG;
+        stocks[1]=APPL;
         String startDate="2011-12-13-15-55-32";
 
         //define the attributes needed
@@ -54,80 +59,49 @@ public class OHLCDataPLayerTest {
         attributes.add(TradingDataAttribute.DAY);
         attributes.add(TradingDataAttribute.PRICE);
 
+        //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false);
 
         //set the date
-        player.setStartDate(startDate,DateUtils.DATE_FORMAT_1);
+        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
 
+        //set the data api
+        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
+        player.joinSingleplayerGame();
     }
 
     @Test
-    public void testStartGame() throws Exception {
+    public void testGamePlay() throws Exception {
+        boolean gameRunning=false;
+        StockUpdateEvent[] events=null;
+        int googCounter=0;
+        int applCounter=0;
 
-    }
-
-    @Test
-    public void testSetStartDate() throws Exception {
-
-        StockUpdateEvent[] events=player.startGame();
-
-        for(int i=0;i<5;i++){
-
+        if(notStarted){
+              events=player.startGame();
+            gameRunning=true;
+        }
+        while (gameRunning){
             for(StockUpdateEvent event:events){
-                assert(player.getToday().equals(event.getTime()));
-                System.out.println(player.getToday()+" --> "+event.getStockId()+" : ");
-                for(TradingDataAttribute attr:event.getData().keySet()){
-                    System.out.println(event.getData().get(attr));
+                if(event.getStockId().equalsIgnoreCase(APPL)){
+                    assert(event.getData().get(TradingDataAttribute.DAY)==applCounter++);
+                    assert(event.getData().get(TradingDataAttribute.PRICE)==applCounter++);
+
                 }
+                else if(event.getStockId().equalsIgnoreCase(GOOG)){
+                    assert(event.getData().get(TradingDataAttribute.DAY)==googCounter++);
+                    assert(event.getData().get(TradingDataAttribute.PRICE)==googCounter++);
+                }
+            }
+            try {
 
-                Thread.sleep(100);
-
-
-
+                events=player.playNextDay();
+            } catch (GameFinishedException ex){
+                gameRunning=false;
             }
         }
 
-
-
-    }
-
-    @Test
-    public void testPlayNextDay() throws Exception {
-
-    }
-
-    @Test
-    public void testGetStocksList() throws Exception {
-
-    }
-
-    @Test
-    public void testGetCommonStartingAndEndDates() throws Exception{
-
-        String[] stocks=new String[2];
-        stocks[0]="GOOG";
-        stocks[1]="APPL";
-
-        Date[] dates=player.getCommonStartingAndEndDates(stocks, CompanyStockTransactionsData.DataType.OHLC);
-
-
-        System.out.println(dates[0]+"--->"+dates[1]);
-
-
-    }
-
-    @Test
-    public void testGetStartingAndEndDates() throws Exception{
-
-
-        String[] stocks=new String[2];
-        stocks[0]="GOOG";
-        stocks[1]="APPL";
-
-        Date[] dates=player.getStartingAndEndDates(stocks, CompanyStockTransactionsData.DataType.OHLC);
-
-        System.out.println(dates[0]+"--->"+dates[1]);
 
     }
 }
