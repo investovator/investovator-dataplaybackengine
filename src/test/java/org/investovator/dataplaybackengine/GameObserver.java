@@ -19,9 +19,45 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.dataplaybackengine.events.PlaybackEvent;
+import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
+import org.investovator.dataplaybackengine.events.StockUpdateEvent;
+
+import java.util.ArrayList;
+
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class GameObserver {
+public class GameObserver implements PlaybackEventListener {
+
+    private static boolean gameFinished;
+    private static ArrayList<PlaybackEvent> events;
+
+    public GameObserver() {
+        gameFinished=false;
+        events=new ArrayList<PlaybackEvent>();
+    }
+
+    @Override
+    public void eventOccurred(PlaybackEvent event) {
+        System.out.println("Event received....");
+        if(event instanceof PlaybackFinishedEvent){
+            gameFinished=true;
+            events.add((PlaybackEvent)event);
+        }
+        else if (event instanceof StockUpdateEvent){
+            events.add((StockUpdateEvent)event);
+        }
+    }
+
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
+    public ArrayList<PlaybackEvent> getEvents() {
+        return events;
+    }
 }
