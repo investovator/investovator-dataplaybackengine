@@ -41,7 +41,7 @@ import java.util.*;
  * @author: ishan
  * @version: ${Revision}
  */
-public class OHLCDataPLayer extends DataPlayer {
+public class DailySummaryDataPLayer extends DataPlayer {
 
     //amount of money a person get at the begining
     private static int initialCredit=10000;
@@ -73,8 +73,8 @@ public class OHLCDataPLayer extends DataPlayer {
     //to cache the stock trading data items
     HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
-    public OHLCDataPLayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
-                          TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
+    public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
+                                  TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
 
         this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
@@ -113,7 +113,7 @@ public class OHLCDataPLayer extends DataPlayer {
 
                 try {
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today,null, OHLCDataPLayer.CACHE_SIZE,attributes);
+                            stock, today,null, DailySummaryDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null) {
@@ -213,7 +213,7 @@ public class OHLCDataPLayer extends DataPlayer {
                 try {
 
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today, null, OHLCDataPLayer.CACHE_SIZE,attributes);
+                            stock, today, null, DailySummaryDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null) {
@@ -297,7 +297,7 @@ public class OHLCDataPLayer extends DataPlayer {
 
         //check whether the user has already joined the game
         if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName,OHLCDataPLayer.initialCredit,
+            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,
                     new HashMap<String, HashMap<String, Float>>()));
             joined=true;
         }
@@ -316,8 +316,8 @@ public class OHLCDataPLayer extends DataPlayer {
         String userName="test";
 
         //order validity checks
-        if(quantity>OHLCDataPLayer.maxOrderSize){
-            throw new InvalidOrderException("Cannot place more than "+OHLCDataPLayer.maxOrderSize+" orders.");
+        if(quantity> DailySummaryDataPLayer.maxOrderSize){
+            throw new InvalidOrderException("Cannot place more than "+ DailySummaryDataPLayer.maxOrderSize+" orders.");
         }
         if(!ohlcDataCache.containsKey(stockId)){
             throw new InvalidOrderException("Invalid stock ID : "+stockId);

@@ -25,7 +25,7 @@ import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
-import org.investovator.dataplaybackengine.player.OHLCDataPLayer;
+import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 
 import java.util.TimerTask;
 
@@ -36,9 +36,9 @@ import java.util.TimerTask;
 public class DailySummaryEventTask extends TimerTask {
 
     private EventManager eventManager;
-    private OHLCDataPLayer player;
+    private DailySummaryDataPLayer player;
 
-    public DailySummaryEventTask(OHLCDataPLayer player) {
+    public DailySummaryEventTask(DailySummaryDataPLayer player) {
         eventManager = new EventManager();
         this.player = player;
 

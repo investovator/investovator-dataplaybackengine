@@ -22,7 +22,7 @@ package org.investovator.dataplaybackengine;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
-import org.investovator.dataplaybackengine.player.OHLCDataPLayer;
+import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ import java.util.Date;
  */
 public class OHLCDataPLayerTest {
 
-    OHLCDataPLayer player;
+    DailySummaryDataPLayer player;
 
 
     @Before
@@ -54,7 +54,7 @@ public class OHLCDataPLayerTest {
         attributes.add(TradingDataAttribute.DAY);
         attributes.add(TradingDataAttribute.PRICE);
 
-        player=new OHLCDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false);
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false);
 
         //set the date
         player.setStartDate(startDate,DateUtils.DATE_FORMAT_1);

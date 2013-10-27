@@ -21,11 +21,10 @@ package org.investovator.dataplaybackengine;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.exceptions.player.PlayerStateException;
-import org.investovator.dataplaybackengine.player.OHLCDataPLayer;
+import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.player.type.PlayerTypes;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,7 +35,7 @@ import java.util.Date;
 public class DataPlayerFacade {
     private static DataPlayerFacade facade;
 
-    private OHLCDataPLayer ohlcDataPLayer;
+    private DailySummaryDataPLayer dailySummaryDataPLayer;
     private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
 
@@ -57,8 +56,8 @@ public class DataPlayerFacade {
                                  TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
         //if a daily summary player is needed
         if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-            ohlcDataPLayer=new OHLCDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
-            this.ohlcDataPLayer.setStartDate(startDate);
+            dailySummaryDataPLayer =new DailySummaryDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
+            this.dailySummaryDataPLayer.setStartDate(startDate);
         }
         //if a real time data player is needed
         else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
@@ -66,9 +65,9 @@ public class DataPlayerFacade {
         }
     }
 
-    public OHLCDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
-        if(ohlcDataPLayer!=null){
-            return ohlcDataPLayer;
+    public DailySummaryDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
+        if(dailySummaryDataPLayer !=null){
+            return dailySummaryDataPLayer;
         }
         else{
             throw new PlayerStateException("Daily Summary player is not initialized yet.");
