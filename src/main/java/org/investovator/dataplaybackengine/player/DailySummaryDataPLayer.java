@@ -342,6 +342,11 @@ public class DailySummaryDataPLayer extends DataPlayer {
         //todo -get from Authenticator
         String userName="test";
 
+        //if a non admin user tries to connect to a single player game block him
+        //todo - implement
+        //
+
+
         boolean joined=false;
 
         //check whether the user has already joined the game
@@ -439,5 +444,13 @@ public class DailySummaryDataPLayer extends DataPlayer {
     public void setTransactionDataAPI(CompanyStockTransactionsData api){
         this.transactionDataAPI=api;
 
+    }
+
+    /**
+     * returns whether this is a multplayer game or not
+     * @return
+     */
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 }

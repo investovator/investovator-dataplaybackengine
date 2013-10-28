@@ -63,7 +63,8 @@ public class RealTimeDataPlayerTest {
         attributes.add(TradingDataAttribute.PRICE);
 
         //create a multiplayer game
-        player=new RealTimeDataPlayer(stocks,startDate,DateUtils.DATE_FORMAT_1,attributes,TradingDataAttribute.PRICE);
+        player=new RealTimeDataPlayer(stocks,startDate,DateUtils.DATE_FORMAT_1,attributes,TradingDataAttribute.PRICE,
+                true);
 
 
         //set the data api

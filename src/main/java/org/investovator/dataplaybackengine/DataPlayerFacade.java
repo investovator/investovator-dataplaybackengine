@@ -61,7 +61,7 @@ public class DataPlayerFacade {
         }
         //if a real time data player is needed
         else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-            realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch);
+            realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch,isMultiplayer);
         }
     }
 

@@ -56,10 +56,15 @@ public class RealTimeDataPlayer extends DataPlayer {
     HashMap<String,Portfolio> userPortfolios;
     TradingSystem tradingSystem;
 
-    private RealTimeDataPlayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,TradingDataAttribute attributeToMatch) {
+    private boolean isMultiplayer;
+
+    private RealTimeDataPlayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
+                               TradingDataAttribute attributeToMatch,
+                               boolean isMultiplayer) {
         this.timer = new Timer();
         userPortfolios=new HashMap<String, Portfolio>();
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
+        this.isMultiplayer=isMultiplayer;
         //for testing
         this.transactionDataAPI =new BogusHistoryDataGenerator();
         this.companyDataAPI=new BogusCompnayDataGenerator();
@@ -68,8 +73,9 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
     public RealTimeDataPlayer(String[] stocks,String startDate,
-                              String dateFormat,ArrayList<TradingDataAttribute> attributes,TradingDataAttribute attributeToMatch) {
-        this(stocks,attributes,attributeToMatch);
+                              String dateFormat,ArrayList<TradingDataAttribute> attributes,
+                              TradingDataAttribute attributeToMatch,boolean isMultiplayer) {
+        this(stocks,attributes,attributeToMatch,isMultiplayer);
 
         task = new RealTimeEventTask(stocks, startDate,dateFormat, transactionDataAPI,attributes);
 
@@ -78,8 +84,8 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
     public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
-                              TradingDataAttribute attributeToMatch) {
-        this(stocks,attributes,attributeToMatch);
+                              TradingDataAttribute attributeToMatch,boolean isMultiplayer) {
+        this(stocks,attributes,attributeToMatch,isMultiplayer);
 
         task = new RealTimeEventTask(stocks, startDate, transactionDataAPI,attributes);
 
@@ -132,9 +138,15 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
+    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException, UserJoinException {
         //todo -get from Authenticator
         String userName="test";
+
+        //if a non-admin user tries to connect to a single player game
+        //todo - implement using authenticator
+//        if(!isMultiplayer && user!=admin){
+//            throw new UserJoinException("You don't have sufficient privileges to enter this game");
+//        }
 
         boolean joined=false;
 
@@ -146,6 +158,8 @@ public class RealTimeDataPlayer extends DataPlayer {
         }
         else{
 //            throw new UserAlreadyJoinedException(userName);
+            //todo - remove the fpllowing line
+            setObserver(observer);
         }
 
 
@@ -204,5 +218,13 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
         task.setDataApi(api);
+    }
+
+    /**
+     * returns whether this is a multplayer game or not
+     * @return
+     */
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 }
