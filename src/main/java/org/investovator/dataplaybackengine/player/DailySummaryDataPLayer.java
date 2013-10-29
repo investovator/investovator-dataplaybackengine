@@ -312,9 +312,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinMultiplayerGame(PlaybackEventListener observer) throws UserAlreadyJoinedException {
-        //todo -get from Authenticator
-        String userName="test";
+    public boolean joinMultiplayerGame(PlaybackEventListener observer,String userName)
+            throws UserAlreadyJoinedException {
 
         boolean joined=false;
 
@@ -338,13 +337,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinSingleplayerGame() throws UserAlreadyJoinedException {
-        //todo -get from Authenticator
-        String userName="test";
-
-        //if a non admin user tries to connect to a single player game block him
-        //todo - implement
-        //
+    public boolean joinSingleplayerGame(String userName) throws UserAlreadyJoinedException {
 
 
         boolean joined=false;
@@ -364,10 +357,9 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
-    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException,
+    public boolean executeOrder(String stockId, int quantity, OrderType side,String userName)
+            throws InvalidOrderException,
             UserJoinException {
-        //todo -get from Authenticator
-        String userName="test";
 
         //order validity checks
         if(quantity> DailySummaryDataPLayer.maxOrderSize){
@@ -398,9 +390,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
-    public Portfolio getMyPortfolio() throws UserJoinException {
-        //todo -get from Authenticator
-        String userName="test";
+    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
         //if the user has not joined the game
         if(!userPortfolios.containsKey(userName)){

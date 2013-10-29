@@ -68,7 +68,7 @@ public class DailySummaryDataPLayerSinglePlayerTest {
         //set the data api
         player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
-        player.joinSingleplayerGame();
+        player.joinSingleplayerGame("test");
     }
 
     @Test

@@ -138,9 +138,8 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame(PlaybackEventListener observer) throws UserAlreadyJoinedException, UserJoinException {
-        //todo -get from Authenticator
-        String userName="test";
+    public boolean joinGame(PlaybackEventListener observer,String userName) throws UserAlreadyJoinedException,
+            UserJoinException {
 
         //if a non-admin user tries to connect to a single player game
         //todo - implement using authenticator
@@ -168,10 +167,8 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
 
-    public boolean executeOrder(String stockId, int quantity, OrderType side) throws InvalidOrderException,
+    public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws InvalidOrderException,
             UserJoinException {
-        //todo -get from Authenticator
-        String userName="test";
 
         //order validity checks
         if(quantity>RealTimeDataPlayer.maxOrderSize){
@@ -202,9 +199,7 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     }
 
-    public Portfolio getMyPortfolio() throws UserJoinException {
-        //todo -get from Authenticator
-        String userName="test";
+    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
         //if the user has not joined the game
         if(!userPortfolios.containsKey(userName)){
