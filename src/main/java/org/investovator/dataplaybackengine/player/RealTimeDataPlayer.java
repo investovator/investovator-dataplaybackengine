@@ -231,7 +231,7 @@ public class RealTimeDataPlayer extends DataPlayer {
         return task.getCurrentTime();
     }
 
-    public CompanyStockTransactionsData getTransactionDataAPI() {
+    public CompanyStockTransactionsData getTransactionsDataAPI() {
         return transactionDataAPI;
     }
 }

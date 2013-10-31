@@ -106,13 +106,13 @@ public class DataPlayerFacade {
             throws DataAccessException, DataNotFoundException {
         if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
 
-            return this.realTimeDataPlayer.getTransactionDataAPI().getTradingData(
+            return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.OHLC,
                     symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
 
         }
         else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-            return this.realTimeDataPlayer.getTransactionDataAPI().getTradingData(
+            return this.realTimeDataPlayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.TICKER,
                     symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
         }
