@@ -222,4 +222,16 @@ public class RealTimeDataPlayer extends DataPlayer {
     public boolean isMultiplayer() {
         return isMultiplayer;
     }
+
+    /**
+     * Returns the current time in the playback
+     * @return
+     */
+    public Date getCurrentTime(){
+        return task.getCurrentTime();
+    }
+
+    public CompanyStockTransactionsData getTransactionDataAPI() {
+        return transactionDataAPI;
+    }
 }

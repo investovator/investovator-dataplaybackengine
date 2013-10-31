@@ -169,4 +169,8 @@ public class RealTimeEventTask extends TimerTask {
     public void setDataApi(CompanyStockTransactionsData dataApi) {
         this.dataApi = dataApi;
     }
+
+    public Date getCurrentTime() {
+        return currentTime;
+    }
 }

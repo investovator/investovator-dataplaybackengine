@@ -443,4 +443,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
     public boolean isMultiplayer() {
         return isMultiplayer;
     }
+
+    public CompanyStockTransactionsData getTransactionsDataAPI(){
+        return this.transactionDataAPI;
+    }
+
+
 }

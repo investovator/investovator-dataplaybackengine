@@ -19,7 +19,11 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.exceptions.player.PlayerStateException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
@@ -38,6 +42,8 @@ public class DataPlayerFacade {
     private DailySummaryDataPLayer dailySummaryDataPLayer;
     private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
+
+    private int DATA_ITEMS_TO_QUERY=10000;
 
     private DataPlayerFacade() {
 
@@ -58,10 +64,13 @@ public class DataPlayerFacade {
         if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
             dailySummaryDataPLayer =new DailySummaryDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
             this.dailySummaryDataPLayer.setStartDate(startDate);
+            this.playerType=playerType;
         }
         //if a real time data player is needed
         else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
             realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch,isMultiplayer);
+            this.playerType=playerType;
+
         }
     }
 
@@ -81,6 +90,35 @@ public class DataPlayerFacade {
         else{
             throw new PlayerStateException("Real time data player is not initialized yet.");
         }
+    }
+
+    public PlayerTypes getCurrentPlayerType(){
+        return  this.playerType;
+    }
+
+    /**
+     * Returns data up to the present date of the currently running player
+     *
+     * @return
+     */
+    public StockTradingData getDataUpToToday(String symbol,Date startingDate,
+                                             ArrayList<TradingDataAttribute> attribute)
+            throws DataAccessException, DataNotFoundException {
+        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+
+            return this.realTimeDataPlayer.getTransactionDataAPI().getTradingData(
+                    CompanyStockTransactionsData.DataType.OHLC,
+                    symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+
+        }
+        else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
+            return this.realTimeDataPlayer.getTransactionDataAPI().getTradingData(
+                    CompanyStockTransactionsData.DataType.TICKER,
+                    symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+        }
+
+        return null;
+
     }
 
 
