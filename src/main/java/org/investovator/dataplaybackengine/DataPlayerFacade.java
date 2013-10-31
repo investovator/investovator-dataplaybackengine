@@ -43,7 +43,7 @@ public class DataPlayerFacade {
     private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
 
-    private int DATA_ITEMS_TO_QUERY=10000;
+    private int DATA_ITEMS_TO_QUERY=1000;
 
     private DataPlayerFacade() {
 
@@ -108,7 +108,7 @@ public class DataPlayerFacade {
 
             return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.OHLC,
-                    symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+                    symbol,startingDate,dailySummaryDataPLayer.getToday(),DATA_ITEMS_TO_QUERY,attribute);
 
         }
         else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
