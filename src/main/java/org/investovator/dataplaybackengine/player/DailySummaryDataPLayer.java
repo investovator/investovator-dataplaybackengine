@@ -448,5 +448,14 @@ public class DailySummaryDataPLayer extends DataPlayer {
         return this.transactionDataAPI;
     }
 
+    /**
+     * Informs whether the given user has already joined the current game
+     * @param name
+     * @return
+     */
+    public boolean hasUserJoined(String name){
+        return userPortfolios.containsKey(name);
+    }
+
 
 }
