@@ -121,7 +121,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
                 try {
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today,null, DailySummaryDataPLayer.CACHE_SIZE,attributes);
+                            stock, today,new Date(), DailySummaryDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null) {

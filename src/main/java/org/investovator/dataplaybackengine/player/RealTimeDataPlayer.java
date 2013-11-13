@@ -22,7 +22,9 @@ package org.investovator.dataplaybackengine.player;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyData;
+import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
@@ -66,8 +68,12 @@ public class RealTimeDataPlayer extends DataPlayer {
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
         this.isMultiplayer=isMultiplayer;
         //for testing
-        this.transactionDataAPI =new BogusHistoryDataGenerator();
-        this.companyDataAPI=new BogusCompnayDataGenerator();
+        this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
+        try {
+            this.companyDataAPI=new CompanyDataImpl();
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         //testing end
 
     }

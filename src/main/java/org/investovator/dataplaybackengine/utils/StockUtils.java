@@ -20,7 +20,9 @@
 package org.investovator.dataplaybackengine.utils;
 
 import org.investovator.core.data.api.CompanyData;
+import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
@@ -33,8 +35,8 @@ import java.util.*;
  */
 public class StockUtils {
 
-    private static CompanyStockTransactionsData transactionDataAPI= new BogusHistoryDataGenerator();
-    private static CompanyData companyDataAPI=new BogusCompnayDataGenerator();
+    private static CompanyStockTransactionsData transactionDataAPI= new CompanyStockTransactionsDataImpl();
+    //private static CompanyData companyDataAPI=new CompanyDataImpl();
 
     public StockUtils() {
 //        //for testing
@@ -136,6 +138,7 @@ public class StockUtils {
      */
     public static HashMap<String, String> getStocksList() throws DataAccessException {
 
+        CompanyData companyDataAPI=new CompanyDataImpl();
         return companyDataAPI.getCompanyIDsNames();
 
 

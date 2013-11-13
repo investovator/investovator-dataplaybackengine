@@ -20,7 +20,9 @@
 package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.data.api.CompanyData;
+import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
@@ -38,8 +40,12 @@ public class DataPlayer {
 
     public DataPlayer() {
         //for testing
-        this.transactionDataAPI = new BogusHistoryDataGenerator();
-        this.companyDataAPI = new BogusCompnayDataGenerator();
+        this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
+        try {
+            this.companyDataAPI=new CompanyDataImpl();
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         //testing end
 
 
