@@ -68,7 +68,7 @@ public class RealTimeDataPlayer extends DataPlayer {
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
         this.isMultiplayer=isMultiplayer;
         //for testing
-        this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
+        this.transactionDataAPI =new BogusHistoryDataGenerator();
         try {
             this.companyDataAPI=new CompanyDataImpl();
         } catch (DataAccessException e) {

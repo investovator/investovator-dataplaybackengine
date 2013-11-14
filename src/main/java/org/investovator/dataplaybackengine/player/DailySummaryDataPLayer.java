@@ -127,8 +127,12 @@ public class DailySummaryDataPLayer extends DataPlayer {
                     if (data != null) {
                         //get the relevant data
                         events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
+
                         //add the data to the Trading system as well
-                        tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+                        //only add if price information exists
+                        if(data.getTradingDataEntry(today)!=null){
+                            tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+                        }
                         //remove that entry from map
                         data.getTradingData().remove(today);
 
@@ -236,15 +240,18 @@ public class DailySummaryDataPLayer extends DataPlayer {
                 try {
 
                     StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today, null, DailySummaryDataPLayer.CACHE_SIZE,attributes);
+                            stock, today, new Date(), DailySummaryDataPLayer.CACHE_SIZE,attributes);
 
                     //if any data was returned
                     if (data != null && data.getTradingData()!=null) {
+                        HashMap<TradingDataAttribute,String> dataMap= data.getTradingDataEntry(today);
                         //get the relevant data
-                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
+                        events.add(new StockUpdateEvent(stock,dataMap , today));
 
                         //add the data to the Trading system as well
-                        tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+                        if(dataMap!=null){
+                            tradingSystem.updateStockPrice(stock,dataMap);
+                        }
 
                         //remove that entry from map
                         data.getTradingData().remove(today);
