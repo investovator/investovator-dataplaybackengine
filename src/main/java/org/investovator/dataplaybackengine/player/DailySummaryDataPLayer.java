@@ -36,6 +36,7 @@ import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author: ishan
@@ -73,12 +74,12 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
 
     //to cache the stock trading data items
-    HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
+    ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
     public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
                                   TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
 
-        this.ohlcDataCache = new HashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
+        this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
         userPortfolios=new HashMap<String, Portfolio>();
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
