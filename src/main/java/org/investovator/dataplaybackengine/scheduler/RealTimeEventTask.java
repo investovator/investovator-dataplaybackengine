@@ -108,14 +108,17 @@ public class RealTimeEventTask extends TimerTask {
             try {
                 //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
                 StockTradingData data = dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
-                        stock, currentTime, null, RealTimeEventTask.CACHE_SIZE, attributes);
+                        stock, currentTime, new Date(), RealTimeEventTask.CACHE_SIZE, attributes);
 
                 HashMap<Date, HashMap<TradingDataAttribute, String>> stockData = data.getTradingData();
 
                 //add each event to the cache
                 for (Date time : stockData.keySet()) {
                     StockUpdateEvent event = new StockUpdateEvent(stock, stockData.get(time), time);
-                    dataCache.add(event);
+                    //if the event is not already in the data cache
+                    if(!dataCache.contains(event)){
+                        dataCache.add(event);
+                    }
                 }
 
                 hasData = true;

@@ -81,4 +81,20 @@ public class StockUpdateEvent extends PlaybackEvent {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    //useful in duplicate event identification
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof StockUpdateEvent){
+            StockUpdateEvent otherEvent=(StockUpdateEvent)obj;
+            //for two events to be same the stock every attribute should match
+            if(this.time.equals(otherEvent.getTime()) &&
+                    this.data.equals(otherEvent.getData()) &&
+                    this.stockId.equalsIgnoreCase(otherEvent.getStockId())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
