@@ -386,13 +386,18 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance());
 
+        Portfolio portfolio=userPortfolios.get(userName);
         //update the cash balance
         if(side==OrderType.BUY){
-            userPortfolios.get(userName).boughtShares(stockId,quantity,executedPrice);
+            portfolio.boughtShares(stockId,quantity,executedPrice);
+            //cleat the blocked cash
+            portfolio.setCashBalance(portfolio.getCashBalance()+
+                    portfolio.getBlockedCash());
         }
         else if(side==OrderType.SELL){
-            userPortfolios.get(userName).soldShares(stockId,quantity,executedPrice);
+            portfolio.soldShares(stockId,quantity,executedPrice);
         }
+
         return true;
 
 
@@ -472,6 +477,13 @@ public class DailySummaryDataPLayer extends DataPlayer {
      */
     public int getMaxOrderSize(){
         return maxOrderSize;
+    }
+
+    /**
+     * returns the initial account balance
+     */
+    public int getInitialCredit(){
+        return initialCredit;
     }
 
 
