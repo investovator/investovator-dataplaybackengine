@@ -384,7 +384,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
         }
 
 
-        float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance());
+        float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance(),
+                side);
 
         Portfolio portfolio=userPortfolios.get(userName);
         //update the cash balance
@@ -473,7 +474,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
     }
 
     /**
-     * returns the maximum size (in money) of the order that can be placed
+     * returns the maximum size (in stocks) of the order that can be placed
      */
     public int getMaxOrderSize(){
         return maxOrderSize;
