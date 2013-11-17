@@ -467,5 +467,12 @@ public class DailySummaryDataPLayer extends DataPlayer {
         return userPortfolios.containsKey(name);
     }
 
+    /**
+     * returns the maximum size (in money) of the order that can be placed
+     */
+    public int getMaxOrderSize(){
+        return maxOrderSize;
+    }
+
 
 }

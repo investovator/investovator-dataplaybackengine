@@ -250,4 +250,11 @@ public class RealTimeDataPlayer extends DataPlayer {
     public boolean hasUserJoined(String name){
         return userPortfolios.containsKey(name);
     }
+
+    /**
+     * returns the maximum size (in money) of the order that can be placed
+     */
+    public int getMaxOrderSize(){
+        return maxOrderSize;
+    }
 }
