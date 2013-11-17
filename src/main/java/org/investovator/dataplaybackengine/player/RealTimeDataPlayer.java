@@ -194,13 +194,19 @@ public class RealTimeDataPlayer extends DataPlayer {
         float executedPrice= tradingSystem.executeOrder(stockId,
                 quantity,userPortfolios.get(userName).getCashBalance(),side);
 
+        Portfolio portfolio=userPortfolios.get(userName);
         //update the cash balance
         if(side==OrderType.BUY){
-            userPortfolios.get(userName).boughtShares(stockId,quantity,executedPrice);
+            portfolio.boughtShares(stockId,quantity,executedPrice);
+            //clean the blocked cash
+            portfolio.setCashBalance(portfolio.getCashBalance()+
+                    portfolio.getBlockedCash());
+            portfolio.setBlockedCash(0);
         }
         else if(side==OrderType.SELL){
-            userPortfolios.get(userName).soldShares(stockId,quantity,executedPrice);
+            portfolio.soldShares(stockId,quantity,executedPrice);
         }
+
         return true;
 
 
@@ -257,5 +263,12 @@ public class RealTimeDataPlayer extends DataPlayer {
      */
     public int getMaxOrderSize(){
         return maxOrderSize;
+    }
+
+    /**
+     * returns the initial account balance
+     */
+    public int getInitialCredit(){
+        return initialCredit;
     }
 }

@@ -391,9 +391,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
         //update the cash balance
         if(side==OrderType.BUY){
             portfolio.boughtShares(stockId,quantity,executedPrice);
-            //cleat the blocked cash
+            //clean the blocked cash
             portfolio.setCashBalance(portfolio.getCashBalance()+
                     portfolio.getBlockedCash());
+            portfolio.setBlockedCash(0);
         }
         else if(side==OrderType.SELL){
             portfolio.soldShares(stockId,quantity,executedPrice);
@@ -453,7 +454,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
     }
 
     /**
-     * returns whether this is a multplayer game or not
+     * returns whether this is a multiplayer game or not
      * @return
      */
     public boolean isMultiplayer() {
