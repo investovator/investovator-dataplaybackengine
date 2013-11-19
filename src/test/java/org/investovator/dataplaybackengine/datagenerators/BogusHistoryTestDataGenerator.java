@@ -242,4 +242,9 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public boolean isDataAvailable(DataType type, String stockId) throws DataAccessException {
+        return true;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }
