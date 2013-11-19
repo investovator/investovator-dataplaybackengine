@@ -116,7 +116,8 @@ public class DataPlayerFacade {
         else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
             return this.realTimeDataPlayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.TICKER,
-                    symbol,startingDate,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+                    symbol,DateUtils.decrementTimeByDays(10,startingDate)
+                    ,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
         }
 
         return null;
