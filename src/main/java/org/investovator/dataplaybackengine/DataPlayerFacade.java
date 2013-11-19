@@ -28,6 +28,7 @@ import org.investovator.dataplaybackengine.exceptions.player.PlayerStateExceptio
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.player.type.PlayerTypes;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -108,7 +109,8 @@ public class DataPlayerFacade {
 
             return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.OHLC,
-                    symbol,startingDate,dailySummaryDataPLayer.getToday(),DATA_ITEMS_TO_QUERY,attribute);
+                    symbol, DateUtils.decrementTimeByDays(365,startingDate),
+                    dailySummaryDataPLayer.getToday(),DATA_ITEMS_TO_QUERY,attribute);
 
         }
         else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
