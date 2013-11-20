@@ -26,6 +26,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.exceptions.player.PlayerStateException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
+import org.investovator.dataplaybackengine.player.DataPlayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.player.type.PlayerTypes;
 import org.investovator.dataplaybackengine.utils.DateUtils;
@@ -95,6 +96,22 @@ public class DataPlayerFacade {
 
     public PlayerTypes getCurrentPlayerType(){
         return  this.playerType;
+    }
+
+    /**
+     * Returns the current player
+     * @return
+     */
+    public DataPlayer getCurrentPlayer(){
+        DataPlayer player=null;
+        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+            player= dailySummaryDataPLayer;
+        }
+        else if ((this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER)){
+            player=this.realTimeDataPlayer;
+        }
+
+        return player;
     }
 
     /**

@@ -143,4 +143,5 @@ public class TradingSystem implements PlaybackEventListener {
     public int getTotalTrades() {
         return totalTrades;
     }
+
 }

@@ -24,6 +24,7 @@ import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
+import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
@@ -261,8 +262,29 @@ public abstract class DataPlayer {
         return tradingSystem.getTotalTrades();
     }
 
-    public Date getGameRuntime(){
-        return new Date(System.currentTimeMillis()-this.startTime);
+    /**
+     * Returns the run time of the game
+     * @return
+     */
+    public long getGameRuntime(){
+        return (System.currentTimeMillis()-this.startTime);
+    }
+
+    /**
+     * returns portfolios of all the users
+     * @return
+     */
+    public HashMap<String,Portfolio> getAllPortfolios(){
+        return userPortfolios;
+    }
+
+    /**
+     *returns the current price of the requested stock
+     * @param stock ID of the stock
+     * @return
+     */
+    public float getStockPrice(String stock){
+        return tradingSystem.getStockPrice(stock);
     }
 }
 
