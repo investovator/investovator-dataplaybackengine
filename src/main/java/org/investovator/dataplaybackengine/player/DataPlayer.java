@@ -56,17 +56,19 @@ public abstract class DataPlayer {
     //max amount of stocks that a person can buy/sell
     protected static int maxOrderSize=5000;
 
+    //set the game start time
+    long startTime;
 
     public DataPlayer() {
-        //for testing
         this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
         try {
             this.companyDataAPI=new CompanyDataImpl();
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-        //testing end
 
+        //set the game start time
+        this.startTime=System.currentTimeMillis();
 
     }
 
@@ -234,4 +236,33 @@ public abstract class DataPlayer {
 
 
     }
+
+    /**
+     * Returns a name for the player
+     *
+     * @return
+     */
+    abstract public String getName();
+
+    /**
+     * returns the total market turnover
+     * @return
+     */
+    public float getMarketTurnover(){
+        return tradingSystem.getMarketTurnover();
+    }
+
+    /**
+     *
+     * Returns the total number of trades done
+     * @return
+     */
+    public int getTotalTrades(){
+        return tradingSystem.getTotalTrades();
+    }
+
+    public Date getGameRuntime(){
+        return new Date(System.currentTimeMillis()-this.startTime);
+    }
 }
+

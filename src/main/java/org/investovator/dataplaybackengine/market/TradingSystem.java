@@ -42,10 +42,18 @@ public class TradingSystem implements PlaybackEventListener {
     //attribute used for matching stocks
     TradingDataAttribute attributeToMatch;
 
+    //keeps track of the number of trades
+    private int totalTrades;
+
+    //total market turnover
+    private float marketTurnover;
+
     public TradingSystem(ArrayList<TradingDataAttribute> attributes, TradingDataAttribute attributeToMatch) {
         this.priceList = new HashMap<String, HashMap<TradingDataAttribute, Float>>();
         this.attributes = attributes;
         this.attributeToMatch = attributeToMatch;
+        this.marketTurnover=0;
+        this.totalTrades=0;
     }
 
     /**
@@ -71,6 +79,11 @@ public class TradingSystem implements PlaybackEventListener {
             throw new InvalidOrderException("Not enough money. Need "+neededMoney);
         }
 
+        //add to turnover
+        this.marketTurnover+=neededMoney;
+        //increase the total number of trades
+        this.totalTrades=+1;
+
         return price;
     }
 
@@ -81,6 +94,14 @@ public class TradingSystem implements PlaybackEventListener {
      */
     public float getStockPrice(String stockId){
         return priceList.get(stockId).get(attributeToMatch);
+    }
+
+    /**
+     * Returns the total market turnover
+     * @return
+     */
+    public float getMarketTurnover() {
+        return marketTurnover;
     }
 
     public void updateStockPrice(String stockId, HashMap<TradingDataAttribute, String> prices){
@@ -112,5 +133,14 @@ public class TradingSystem implements PlaybackEventListener {
 
 
         }
+    }
+
+    /**
+     *
+     * Returns the total number of trades done
+     * @return
+     */
+    public int getTotalTrades() {
+        return totalTrades;
     }
 }

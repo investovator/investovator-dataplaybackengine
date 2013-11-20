@@ -252,4 +252,9 @@ public class RealTimeDataPlayer extends DataPlayer {
     public int getInitialCredit(){
         return initialCredit;
     }
+
+    @Override
+    public String getName() {
+        return "Real Time Data Player";
+    }
 }

@@ -315,6 +315,11 @@ public class DailySummaryDataPLayer extends DataPlayer {
         return DateUtils.decrementTimeByDays(1,today);
     }
 
+    @Override
+    public String getName() {
+        return "Daily Summary Data Player";
+    }
+
     /**
      * Allows a user to join the running game
      *
