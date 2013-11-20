@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.player;
 
+import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
@@ -26,6 +27,11 @@ import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
+import org.investovator.dataplaybackengine.exceptions.UserJoinException;
+import org.investovator.dataplaybackengine.market.OrderType;
+import org.investovator.dataplaybackengine.market.TradingSystem;
 
 import java.util.*;
 
@@ -33,10 +39,23 @@ import java.util.*;
  * @author: ishan
  * @version: ${Revision}
  */
-public class DataPlayer {
+public abstract class DataPlayer {
 
     protected CompanyStockTransactionsData transactionDataAPI;
     protected CompanyData companyDataAPI;
+
+    protected     HashMap<String,Portfolio> userPortfolios;
+
+    protected TradingSystem tradingSystem;
+
+    protected boolean isMultiplayer;
+
+    //amount of money a person get at the begining
+    protected static int initialCredit=10000;
+
+    //max amount of stocks that a person can buy/sell
+    protected static int maxOrderSize=5000;
+
 
     public DataPlayer() {
         //for testing
@@ -50,6 +69,73 @@ public class DataPlayer {
 
 
     }
+
+    /**
+     * To set observers
+     *
+     * @param observer
+     */
+    abstract public void setObserver(PlaybackEventListener observer);
+
+
+    /**
+     * Stop the data playback
+     */
+    abstract public void stopPlayback();
+
+    abstract public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws InvalidOrderException,
+            UserJoinException;
+
+    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
+
+        //if the user has not joined the game
+        if(!userPortfolios.containsKey(userName)){
+            throw new UserJoinException("User "+userName+ " has not joined the game");
+
+        }
+
+        return userPortfolios.get(userName);
+    }
+
+    /**
+     * Returns the current time in the playback
+     * @return
+     */
+    abstract public Date getCurrentTime();
+
+
+    /**
+     * returns whether this is a multplayer game or not
+     * @return
+     */
+    public boolean isMultiplayer() {
+        return isMultiplayer;
+    }
+
+
+    /**
+     * Informs whether the given user has already joined the current game
+     * @param name
+     * @return
+     */
+    public boolean hasUserJoined(String name){
+        return userPortfolios.containsKey(name);
+    }
+
+    /**
+     * returns the maximum size (in money) of the order that can be placed
+     */
+    public int getMaxOrderSize(){
+        return maxOrderSize;
+    }
+
+    /**
+     * returns the initial account balance
+     */
+    public int getInitialCredit(){
+        return initialCredit;
+    }
+
 
     /**
      * Returns the starting date/time and the ending date/time which has data for all the given set of stocks

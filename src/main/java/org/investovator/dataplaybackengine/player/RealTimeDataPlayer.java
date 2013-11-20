@@ -45,20 +45,16 @@ import java.util.*;
  */
 public class RealTimeDataPlayer extends DataPlayer {
 
-    //amount of money a person get at the begining
-    private static int initialCredit=10000;
 
-    //max amount of stocks that a person can buy/sell
-    private static int maxOrderSize=5000;
 
     Timer timer;
     RealTimeEventTask task;
-    CompanyStockTransactionsData transactionDataAPI;
-    CompanyData companyDataAPI;
-    HashMap<String,Portfolio> userPortfolios;
-    TradingSystem tradingSystem;
+//    CompanyStockTransactionsData transactionDataAPI;
+//    CompanyData companyDataAPI;
+//    HashMap<String,Portfolio> userPortfolios;
+//    TradingSystem tradingSystem;
 
-    private boolean isMultiplayer;
+//    private boolean isMultiplayer;
 
     private RealTimeDataPlayer(String[] stocks,ArrayList<TradingDataAttribute> attributes,
                                TradingDataAttribute attributeToMatch,
@@ -105,7 +101,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @param observer
      */
-    private void setObserver(PlaybackEventListener observer){
+    public void setObserver(PlaybackEventListener observer){
         task.setObserver(observer);
     }
 
@@ -127,17 +123,17 @@ public class RealTimeDataPlayer extends DataPlayer {
         timer.cancel();
     }
 
-    /**
-     *
-     * @return Company StockId and Name pairs
-     * @throws org.investovator.core.data.exeptions.DataAccessException
-     */
-    public HashMap<String,String> getStocksList() throws DataAccessException {
-
-        return companyDataAPI.getCompanyIDsNames();
-
-
-    }
+//    /**
+//     *
+//     * @return Company StockId and Name pairs
+//     * @throws org.investovator.core.data.exeptions.DataAccessException
+//     */
+//    public HashMap<String,String> getStocksList() throws DataAccessException {
+//
+//        return companyDataAPI.getCompanyIDsNames();
+//
+//
+//    }
 
     /**
      * Allows a user to join the running game
@@ -212,29 +208,14 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     }
 
-    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
-        //if the user has not joined the game
-        if(!userPortfolios.containsKey(userName)){
-            throw new UserJoinException("User "+userName+ " has not joined the game");
-
-        }
-
-        return userPortfolios.get(userName);
-    }
 
 
     public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
         task.setDataApi(api);
     }
 
-    /**
-     * returns whether this is a multplayer game or not
-     * @return
-     */
-    public boolean isMultiplayer() {
-        return isMultiplayer;
-    }
+
 
     /**
      * Returns the current time in the playback

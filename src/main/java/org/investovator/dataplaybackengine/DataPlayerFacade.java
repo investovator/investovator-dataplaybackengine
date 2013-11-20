@@ -110,7 +110,7 @@ public class DataPlayerFacade {
             return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
                     CompanyStockTransactionsData.DataType.OHLC,
                     symbol, DateUtils.decrementTimeByDays(365,startingDate),
-                    dailySummaryDataPLayer.getToday(),DATA_ITEMS_TO_QUERY,attribute);
+                    dailySummaryDataPLayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
 
         }
         else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){

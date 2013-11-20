@@ -44,14 +44,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DailySummaryDataPLayer extends DataPlayer {
 
-    //amount of money a person get at the begining
-    private static int initialCredit=10000;
-
-    //max amount of stocks that a person can buy/sell
-    private static int maxOrderSize=5000;
+//    //amount of money a person get at the begining
+//    private static int initialCredit=10000;
+//
+//    //max amount of stocks that a person can buy/sell
+//    private static int maxOrderSize=5000;
 
     //used to determine the cache size
-    public static int CACHE_SIZE=100;
+    private static int CACHE_SIZE=100;
 
     //to keep track of the date
     Date today;
@@ -60,7 +60,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
     //to keep track of the attributes needed
     ArrayList<TradingDataAttribute> attributes;
 
-    HashMap<String,Portfolio> userPortfolios;
+//    HashMap<String,Portfolio> userPortfolios;
 
     TradingSystem tradingSystem;
 
@@ -311,7 +311,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return current day in the game
      */
-    public Date getToday(){
+    public Date getCurrentTime(){
         return DateUtils.decrementTimeByDays(1,today);
     }
 
@@ -405,23 +405,23 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
-    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
-
-        //if the user has not joined the game
-        if(!userPortfolios.containsKey(userName)){
-            throw new UserJoinException("User "+userName+ " has not joined the game");
-
-        }
-
-        return userPortfolios.get(userName);
-    }
+//    public Portfolio getMyPortfolio(String userName) throws UserJoinException {
+//
+//        //if the user has not joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            throw new UserJoinException("User "+userName+ " has not joined the game");
+//
+//        }
+//
+//        return userPortfolios.get(userName);
+//    }
 
     /**
      * To set observers
      *
      * @param observer
      */
-    private void setObserver(PlaybackEventListener observer){
+    public void setObserver(PlaybackEventListener observer){
         task.setObserver(observer);
     }
 
@@ -453,40 +453,40 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
-    /**
-     * returns whether this is a multiplayer game or not
-     * @return
-     */
-    public boolean isMultiplayer() {
-        return isMultiplayer;
-    }
+//    /**
+//     * returns whether this is a multiplayer game or not
+//     * @return
+//     */
+//    public boolean isMultiplayer() {
+//        return isMultiplayer;
+//    }
 
     public CompanyStockTransactionsData getTransactionsDataAPI(){
         return this.transactionDataAPI;
     }
 
-    /**
-     * Informs whether the given user has already joined the current game
-     * @param name
-     * @return
-     */
-    public boolean hasUserJoined(String name){
-        return userPortfolios.containsKey(name);
-    }
+//    /**
+//     * Informs whether the given user has already joined the current game
+//     * @param name
+//     * @return
+//     */
+//    public boolean hasUserJoined(String name){
+//        return userPortfolios.containsKey(name);
+//    }
 
-    /**
-     * returns the maximum size (in stocks) of the order that can be placed
-     */
-    public int getMaxOrderSize(){
-        return maxOrderSize;
-    }
-
-    /**
-     * returns the initial account balance
-     */
-    public int getInitialCredit(){
-        return initialCredit;
-    }
+//    /**
+//     * returns the maximum size (in stocks) of the order that can be placed
+//     */
+//    public int getMaxOrderSize(){
+//        return maxOrderSize;
+//    }
+//
+//    /**
+//     * returns the initial account balance
+//     */
+//    public int getInitialCredit(){
+//        return initialCredit;
+//    }
 
 
 }
