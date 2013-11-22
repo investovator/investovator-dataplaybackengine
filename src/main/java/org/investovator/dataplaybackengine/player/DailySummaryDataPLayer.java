@@ -62,9 +62,9 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
 //    HashMap<String,Portfolio> userPortfolios;
 
-    TradingSystem tradingSystem;
+//    TradingSystem tradingSystem;
 
-    private boolean isMultiplayer;
+//    private boolean isMultiplayer;
 
     private DailySummaryEventTask task;
     private Timer timer;
@@ -81,8 +81,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
-        userPortfolios=new HashMap<String, Portfolio>();
-        tradingSystem=new TradingSystem(attributes,attributeToMatch);
+        this.userPortfolios=new HashMap<String, Portfolio>();
+        this.tradingSystem=new TradingSystem(attributes,attributeToMatch);
 
         this.isMultiplayer=isMultiplayer;
 

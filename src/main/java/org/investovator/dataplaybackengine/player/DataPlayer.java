@@ -112,7 +112,7 @@ public abstract class DataPlayer {
      * @return
      */
     public boolean isMultiplayer() {
-        return isMultiplayer;
+        return this.isMultiplayer;
     }
 
 
@@ -250,7 +250,7 @@ public abstract class DataPlayer {
      * @return
      */
     public float getMarketTurnover(){
-        return tradingSystem.getMarketTurnover();
+        return this.tradingSystem.getMarketTurnover();
     }
 
     /**
