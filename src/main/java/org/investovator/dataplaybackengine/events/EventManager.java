@@ -18,8 +18,15 @@ public class EventManager {
         this.listeners = new ArrayList<PlaybackEventListener>();
     }
 
-    public void addObserver(PlaybackEventListener observer){
-        listeners.add(observer);
+    public boolean addObserver(PlaybackEventListener observer){
+        //add only the listeners who are not already listening
+        if(!listeners.contains(observer)){
+            listeners.add(observer);
+            return true;
+
+        }
+        else return false;
+
     }
 
     public void notifyListeners(PlaybackEvent obj) {
