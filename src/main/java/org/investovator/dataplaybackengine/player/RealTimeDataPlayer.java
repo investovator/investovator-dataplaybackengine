@@ -60,7 +60,7 @@ public class RealTimeDataPlayer extends DataPlayer {
                                TradingDataAttribute attributeToMatch,
                                boolean isMultiplayer) {
         this.timer = new Timer();
-        userPortfolios=new HashMap<String, Portfolio>();
+//        userPortfolios=new HashMap<String, Portfolio>();
         tradingSystem=new TradingSystem(attributes,attributeToMatch);
         this.isMultiplayer=isMultiplayer;
         //for testing
@@ -140,8 +140,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinGame(PlaybackEventListener observer,String userName) throws UserAlreadyJoinedException,
-            UserJoinException {
+    public boolean joinGame(PlaybackEventListener observer,String userName) throws UserAlreadyJoinedException {
 
         //if a non-admin user tries to connect to a single player game
         //todo - implement using authenticator
@@ -151,17 +150,27 @@ public class RealTimeDataPlayer extends DataPlayer {
 
         boolean joined=false;
 
-        //check whether the user has already joined the game
-        if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,0));
+//        //check whether the user has already joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,0));
+//            joined=true;
+//            setObserver(observer);
+//        }
+//        else{
+////            throw new UserAlreadyJoinedException(userName);
+//            //todo - remove the fpllowing line
+//            setObserver(observer);
+//        }
+
+        try {
+            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
             setObserver(observer);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return false;
         }
-        else{
-//            throw new UserAlreadyJoinedException(userName);
-            //todo - remove the fpllowing line
-            setObserver(observer);
-        }
+
 
 
         return joined;
@@ -180,27 +189,57 @@ public class RealTimeDataPlayer extends DataPlayer {
             throw new InvalidOrderException("Invalid stock ID : "+stockId);
         }
 
-        //if the user has not joined the game
-        if(!userPortfolios.containsKey(userName)){
-            throw new UserJoinException("User "+userName+ " has not joined the game");
+//        //if the user has not joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            throw new UserJoinException("User "+userName+ " has not joined the game");
+//
+//        }
+//
+//
+//        float executedPrice= tradingSystem.executeOrder(stockId,
+//                quantity,userPortfolios.get(userName).getCashBalance(),side);
+//
+//        Portfolio portfolio=userPortfolios.get(userName);
+//        //update the cash balance
+//        if(side==OrderType.BUY){
+//            portfolio.boughtShares(stockId,quantity,executedPrice);
+//            //clean the blocked cash
+//            portfolio.setCashBalance(portfolio.getCashBalance()+
+//                    portfolio.getBlockedCash());
+//            portfolio.setBlockedCash(0);
+//        }
+//        else if(side==OrderType.SELL){
+//            portfolio.soldShares(stockId,quantity,executedPrice);
+//        }
 
-        }
+        Portfolio portfolio= null;
+        try {
+            portfolio = userData.getUserPortfolio(userName);
 
+            float executedPrice= tradingSystem.executeOrder(stockId,quantity,portfolio.getCashBalance(),
+                    side);
 
-        float executedPrice= tradingSystem.executeOrder(stockId,
-                quantity,userPortfolios.get(userName).getCashBalance(),side);
+            //update the cash balance
+            if(side==OrderType.BUY){
+                portfolio.boughtShares(stockId,quantity,executedPrice);
+                //clean the blocked cash
+                portfolio.setCashBalance(portfolio.getCashBalance()+
+                        portfolio.getBlockedCash());
+                portfolio.setBlockedCash(0);
+            }
+            else if(side==OrderType.SELL){
+                portfolio.soldShares(stockId,quantity,executedPrice);
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
 
-        Portfolio portfolio=userPortfolios.get(userName);
-        //update the cash balance
-        if(side==OrderType.BUY){
-            portfolio.boughtShares(stockId,quantity,executedPrice);
-            //clean the blocked cash
-            portfolio.setCashBalance(portfolio.getCashBalance()+
-                    portfolio.getBlockedCash());
-            portfolio.setBlockedCash(0);
-        }
-        else if(side==OrderType.SELL){
-            portfolio.soldShares(stockId,quantity,executedPrice);
+            //if the user has not joined the game
+            if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+                throw new UserJoinException("User "+userName+ " has not joined the game");
+
+            }
+
+            return false;
         }
 
         return true;
@@ -230,14 +269,14 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
 
-    /**
-     * Informs whether the given user has already joined the current game
-     * @param name
-     * @return
-     */
-    public boolean hasUserJoined(String name){
-        return userPortfolios.containsKey(name);
-    }
+//    /**
+//     * Informs whether the given user has already joined the current game
+//     * @param name
+//     * @return
+//     */
+//    public boolean hasUserJoined(String name){
+//        return userPortfolios.containsKey(name);
+//    }
 
     /**
      * returns the maximum size (in money) of the order that can be placed

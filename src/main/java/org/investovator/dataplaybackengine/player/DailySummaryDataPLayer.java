@@ -22,6 +22,8 @@ package org.investovator.dataplaybackengine.player;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
+import org.investovator.core.data.api.UserData;
+import org.investovator.core.data.api.UserDataImpl;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
@@ -81,7 +83,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
-        this.userPortfolios=new HashMap<String, Portfolio>();
+//        this.userPortfolios=new HashMap<String, Portfolio>();
         this.tradingSystem=new TradingSystem(attributes,attributeToMatch);
 
         this.isMultiplayer=isMultiplayer;
@@ -326,19 +328,20 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @return
      */
     public boolean joinMultiplayerGame(PlaybackEventListener observer,String userName)
-            throws UserAlreadyJoinedException {
+            throws  DataAccessException {
 
         boolean joined=false;
 
-        //check whether the user has already joined the game
-        if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+//        //check whether the user has already joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
             setObserver(observer);
-        }
-        else{
-            throw new UserAlreadyJoinedException(userName);
-        }
+//        }
+//        else{
+//            throw new UserAlreadyJoinedException(userName);
+//        }
 
 
         return joined;
@@ -350,20 +353,24 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @return
      */
-    public boolean joinSingleplayerGame(String userName) throws UserAlreadyJoinedException {
+    public boolean joinSingleplayerGame(String userName) throws DataAccessException {
 
 
         boolean joined=false;
 
-        //check whether the user has already joined the game
-        if(!userPortfolios.containsKey(userName)){
-            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
-            joined=true;
+//        //check whether the user has already joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+//            joined=true;
+//
+//        }
+//        else{
+//            throw new UserAlreadyJoinedException(userName);
+//        }
 
-        }
-        else{
-            throw new UserAlreadyJoinedException(userName);
-        }
+        userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+        joined=true;
+//        setObserver(observer);
 
 
         return joined;
@@ -382,28 +389,38 @@ public class DailySummaryDataPLayer extends DataPlayer {
             throw new InvalidOrderException("Invalid stock ID : "+stockId);
         }
 
-        //if the user has not joined the game
-        if(!userPortfolios.containsKey(userName)){
-            throw new UserJoinException("User "+userName+ " has not joined the game");
 
+        Portfolio portfolio= null;
+        try {
+            portfolio = userData.getUserPortfolio(userName);
+
+            float executedPrice= tradingSystem.executeOrder(stockId,quantity,portfolio.getCashBalance(),
+                    side);
+
+            //update the cash balance
+            if(side==OrderType.BUY){
+                portfolio.boughtShares(stockId,quantity,executedPrice);
+                //clean the blocked cash
+                portfolio.setCashBalance(portfolio.getCashBalance()+
+                        portfolio.getBlockedCash());
+                portfolio.setBlockedCash(0);
+            }
+            else if(side==OrderType.SELL){
+                portfolio.soldShares(stockId,quantity,executedPrice);
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+
+            //if the user has not joined the game
+            if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+                throw new UserJoinException("User "+userName+ " has not joined the game");
+
+            }
+
+            return false;
         }
 
 
-        float executedPrice= tradingSystem.executeOrder(stockId,quantity,userPortfolios.get(userName).getCashBalance(),
-                side);
-
-        Portfolio portfolio=userPortfolios.get(userName);
-        //update the cash balance
-        if(side==OrderType.BUY){
-            portfolio.boughtShares(stockId,quantity,executedPrice);
-            //clean the blocked cash
-            portfolio.setCashBalance(portfolio.getCashBalance()+
-                    portfolio.getBlockedCash());
-            portfolio.setBlockedCash(0);
-        }
-        else if(side==OrderType.SELL){
-            portfolio.soldShares(stockId,quantity,executedPrice);
-        }
 
         return true;
 

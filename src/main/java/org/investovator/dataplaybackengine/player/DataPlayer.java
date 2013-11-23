@@ -20,10 +20,7 @@
 package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
-import org.investovator.core.data.api.CompanyData;
-import org.investovator.core.data.api.CompanyDataImpl;
-import org.investovator.core.data.api.CompanyStockTransactionsData;
-import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
+import org.investovator.core.data.api.*;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
@@ -45,11 +42,14 @@ public abstract class DataPlayer {
     protected CompanyStockTransactionsData transactionDataAPI;
     protected CompanyData companyDataAPI;
 
-    protected     HashMap<String,Portfolio> userPortfolios;
+//    protected     HashMap<String,Portfolio> userPortfolios;
 
     protected TradingSystem tradingSystem;
 
     protected boolean isMultiplayer;
+
+    protected UserData userData;
+
 
     //amount of money a person get at the begining
     protected static int initialCredit=10000;
@@ -64,6 +64,7 @@ public abstract class DataPlayer {
         this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
         try {
             this.companyDataAPI=new CompanyDataImpl();
+            this.userData=new UserDataImpl();
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -91,13 +92,27 @@ public abstract class DataPlayer {
 
     public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
-        //if the user has not joined the game
-        if(!userPortfolios.containsKey(userName)){
-            throw new UserJoinException("User "+userName+ " has not joined the game");
+        Portfolio portfolio=null;
+        try {
+             portfolio = userData.getUserPortfolio(userName);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            //if the user has not joined the game
+            if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+                throw new UserJoinException("User "+userName+ " has not joined the game");
 
+            }
         }
 
-        return userPortfolios.get(userName);
+
+//
+//        //if the user has not joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            throw new UserJoinException("User "+userName+ " has not joined the game");
+//
+//        }
+
+        return portfolio;
     }
 
     /**
@@ -122,7 +137,25 @@ public abstract class DataPlayer {
      * @return
      */
     public boolean hasUserJoined(String name){
-        return userPortfolios.containsKey(name);
+
+        try{
+
+            Portfolio portfolio = userData.getUserPortfolio(name);
+        }
+     catch (DataAccessException e) {
+        e.printStackTrace();
+
+        //if the user has not joined the game
+        if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+            return false;
+
+        }
+
+    }
+        return true;
+
+
+//        return userPortfolios.containsKey(name);
     }
 
     /**

@@ -42,12 +42,13 @@ public class GameObserver implements PlaybackEventListener {
 
     @Override
     public void eventOccurred(PlaybackEvent event) {
-        System.out.println("Event received....");
         if(event instanceof PlaybackFinishedEvent){
+            System.out.println("Game finished event received....");
             gameFinished=true;
             events.add((PlaybackEvent)event);
         }
         else if (event instanceof StockUpdateEvent){
+            System.out.println("Stock update event received....");
             events.add((StockUpdateEvent)event);
         }
     }
