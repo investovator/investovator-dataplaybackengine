@@ -72,8 +72,8 @@ public abstract class DataPlayer {
             this.userData=new UserDataImpl();
 
             //todo - testing code to clear DB manually -should be moved to controller
-            DataStorage storage = new DataStorageImpl();
-            storage.resetDataStorage();
+//            DataStorage storage = new DataStorageImpl();
+//            storage.resetDataStorage();
             //todo - end of testing
 
 

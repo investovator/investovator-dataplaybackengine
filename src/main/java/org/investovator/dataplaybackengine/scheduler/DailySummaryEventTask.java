@@ -47,37 +47,37 @@ public class DailySummaryEventTask extends TimerTask {
 
     @Override
     public void run() {
-        StockUpdateEvent[] events=null;
+//        StockUpdateEvent[] events=null;
 
         //if the game has not started yet
         if (!player.isGameStarted()) {
             try {
-                events = player.startGame();
+                player.startGame();
 
             } catch (GameAlreadyStartedException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
         } else {
-            try {
-                events = player.playNextDay();
+//            try {
+                player.playNextDay();
 
-            } catch (GameFinishedException e) {
-                //notify the player
-                eventManager.notifyListeners(new PlaybackFinishedEvent());
-                //stop the timer
-                this.cancel();
-            }
+//            } catch (GameFinishedException e) {
+//                //notify the player
+//                eventManager.notifyListeners(new PlaybackFinishedEvent());
+//                //stop the timer
+//                this.cancel();
+//            }
         }
-        if(events!=null){
-
-            for (StockUpdateEvent event : events) {
-                eventManager.notifyListeners(event);
-            }
-        }
+//        if(events!=null){
+//
+//            for (StockUpdateEvent event : events) {
+//                eventManager.notifyListeners(event);
+//            }
+//        }
     }
 
-    public void setObserver(PlaybackEventListener observer) {
-        eventManager.addObserver(observer);
-    }
+//    public void setObserver(PlaybackEventListener observer) {
+//        eventManager.addObserver(observer);
+//    }
 }

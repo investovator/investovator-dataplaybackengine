@@ -79,7 +79,7 @@ public class DailySummaryDataPLayerSinglePlayerTest {
         int applCounter=0;
 
         if(notStarted){
-              events=player.startGame();
+//              events=player.startGame();
             gameRunning=true;
         }
         while (gameRunning){
@@ -94,12 +94,12 @@ public class DailySummaryDataPLayerSinglePlayerTest {
                     assert(event.getData().get(TradingDataAttribute.PRICE)==googCounter++);
                 }
             }
-            try {
-
-                events=player.playNextDay();
-            } catch (GameFinishedException ex){
-                gameRunning=false;
-            }
+//            try {
+//
+//                events=player.playNextDay();
+//            } catch (GameFinishedException ex){
+//                gameRunning=false;
+//            }
         }
 
 

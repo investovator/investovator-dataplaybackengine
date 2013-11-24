@@ -28,7 +28,9 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
+import org.investovator.dataplaybackengine.events.EventManager;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.*;
 import org.investovator.dataplaybackengine.market.OrderType;
@@ -62,6 +64,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
     //to keep track of the attributes needed
     ArrayList<TradingDataAttribute> attributes;
 
+    private EventManager eventManager;
+
 //    HashMap<String,Portfolio> userPortfolios;
 
 //    TradingSystem tradingSystem;
@@ -87,6 +91,9 @@ public class DailySummaryDataPLayer extends DataPlayer {
         this.tradingSystem=new TradingSystem(attributes,attributeToMatch);
 
         this.isMultiplayer=isMultiplayer;
+
+        eventManager = new EventManager();
+
 
         if(isMultiplayer){
             task= new DailySummaryEventTask(this);
@@ -114,7 +121,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @return list of events needed to start the game
      * @throws GameAlreadyStartedException
      */
-    public StockUpdateEvent[] startGame() throws GameAlreadyStartedException {
+    public void startGame() throws GameAlreadyStartedException {
 
         ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
         //if the game has not started yet
@@ -129,7 +136,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
                     //if any data was returned
                     if (data != null) {
                         //get the relevant data
-                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
+//                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
+
+                        //fire the event
+                        eventManager.notifyListeners(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
 
                         //add the data to the Trading system as well
                         //only add if price information exists
@@ -160,7 +170,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
         }
 
         today=DateUtils.incrementTimeByDays(1,today);
-        return events.toArray(new StockUpdateEvent[events.size()]);
+//        return events.toArray(new StockUpdateEvent[events.size()]);
 
     }
 
@@ -194,8 +204,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @return An array of StockUpdateEvent's if the data is present for at least a single stock. If data is not present
      * for any stock, returns a null.
      */
-    public StockUpdateEvent[] playNextDay() throws GameFinishedException {
-        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
+    public void playNextDay() {
+//        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
 
         //to track data availability
         boolean dataExists=false;
@@ -207,7 +217,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
             //to check the data avalability ofr this stock
             boolean hasDAtaForStock=false;
             if (ohlcDataCache.get(stock).containsKey(today)) {
-                events.add(new StockUpdateEvent(stock,ohlcDataCache.get(stock).get(today),today));
+//                events.add(new StockUpdateEvent(stock,ohlcDataCache.get(stock).get(today),today));
+
+                //fire the event
+                eventManager.notifyListeners(new StockUpdateEvent(stock,ohlcDataCache.get(stock).get(today),today));
 
                 //add the data to the Trading system as well
                 tradingSystem.updateStockPrice(stock,ohlcDataCache.get(stock).get(today));
@@ -220,7 +233,11 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
             }
             else{
-                events.add(new StockUpdateEvent(stock,null,today));
+//                events.add(new StockUpdateEvent(stock,null,today));
+
+                //fire the event
+                eventManager.notifyListeners(new StockUpdateEvent(stock,null,today));
+
             }
 
             //if at least a single stock has data
@@ -232,7 +249,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         //if no data has been found in the cache
         if (!dataExists) {
-            events.clear();
+//            events.clear();
 
             //to track whether at least a single stock has data in the future
             boolean hasData=false;
@@ -249,7 +266,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
                     if (data != null && data.getTradingData()!=null) {
                         HashMap<TradingDataAttribute,String> dataMap= data.getTradingDataEntry(today);
                         //get the relevant data
-                        events.add(new StockUpdateEvent(stock,dataMap , today));
+//                        events.add(new StockUpdateEvent(stock,dataMap , today));
+
+                        //fire the event
+                        eventManager.notifyListeners(new StockUpdateEvent(stock,dataMap , today));
 
                         //add the data to the Trading system as well
                         if(dataMap!=null){
@@ -283,18 +303,23 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
             //if none of the stocks has future data
             if(!hasData){
-                throw new GameFinishedException("OHLC");
+                //notify the player
+                eventManager.notifyListeners(new PlaybackFinishedEvent());
+                if(isMultiplayer()){
+                    this.task.cancel();
+                    this.timer.cancel();
+                }
             }
 
         }
 
         //if no data has been found from the DB query too
-        if(events.size()==0){
-            return null;
-        }
+//        if(events.size()==0){
+//            return null;
+//        }
 
         today=DateUtils.incrementTimeByDays(1,today);
-        return events.toArray(new StockUpdateEvent[events.size()]);
+//        return events.toArray(new StockUpdateEvent[events.size()]);
 
     }
 
@@ -450,7 +475,13 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @param observer
      */
     public void setObserver(PlaybackEventListener observer){
-        task.setObserver(observer);
+//        if (isMultiplayer()){
+//
+//            task.setObserver(observer);
+//        }
+//        else{
+            eventManager.addObserver(observer);
+//        }
     }
 
     public boolean isGameStarted() {
