@@ -21,6 +21,7 @@ package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
+import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.UserData;
 import org.investovator.core.data.api.UserDataImpl;
@@ -110,6 +111,41 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
 
         gameStarted = false;
+
+    }
+
+    public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
+                                  TradingDataAttribute attributeToMatch, boolean isMultiplayer,
+                                  UserData userData, CompanyData companyDataAPI,
+                                  CompanyStockTransactionsData transactionDataAPI){
+        super(userData,companyDataAPI,transactionDataAPI);
+
+        this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
+        this.attributes = attributes;
+//        this.userPortfolios=new HashMap<String, Portfolio>();
+        this.tradingSystem=new TradingSystem(attributes,attributeToMatch);
+
+        this.isMultiplayer=isMultiplayer;
+
+        eventManager = new EventManager();
+
+
+        if(isMultiplayer){
+            task= new DailySummaryEventTask(this);
+            this.timer = new Timer();
+
+        }
+
+
+
+        //initialize the stocks
+        for (String stock : stocks) {
+            ohlcDataCache.put(stock, new HashMap<Date, HashMap<TradingDataAttribute, String>>());
+        }
+
+
+        gameStarted = false;
+
 
     }
 
@@ -347,64 +383,64 @@ public class DailySummaryDataPLayer extends DataPlayer {
         return "Daily Summary Data Player";
     }
 
-    /**
-     * Allows a user to join the running game
-     *
-     * @return
-     */
-    public boolean joinMultiplayerGame(PlaybackEventListener observer,String userName)
-            throws  DataAccessException {
-
-        boolean joined=false;
-
-//        //check whether the user has already joined the game
-//        if(!userPortfolios.containsKey(userName)){
-//            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
-            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
-            joined=true;
-            setObserver(observer);
-        usersList.add(userName);
-
-//        }
-//        else{
-//            throw new UserAlreadyJoinedException(userName);
-//        }
-
-
-        return joined;
-
-    }
-
-    /**
-     * Allows a user to join the running game
-     *
-     * @return
-     */
-    public boolean joinSingleplayerGame(String userName) throws DataAccessException {
-
-
-        boolean joined=false;
-
-//        //check whether the user has already joined the game
-//        if(!userPortfolios.containsKey(userName)){
-//            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
-//            joined=true;
+//    /**
+//     * Allows a user to join the running game
+//     *
+//     * @return
+//     */
+//    public boolean joinMultiplayerGame(PlaybackEventListener observer,String userName)
+//            throws  DataAccessException {
 //
-//        }
-//        else{
-//            throw new UserAlreadyJoinedException(userName);
-//        }
+//        boolean joined=false;
+//
+////        //check whether the user has already joined the game
+////        if(!userPortfolios.containsKey(userName)){
+////            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+//            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+//            joined=true;
+//            setObserver(observer);
+//        usersList.add(userName);
+//
+////        }
+////        else{
+////            throw new UserAlreadyJoinedException(userName);
+////        }
+//
+//
+//        return joined;
+//
+//    }
 
-        userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
-        joined=true;
-        usersList.add(userName);
-
-//        setObserver(observer);
-
-
-        return joined;
-
-    }
+//    /**
+//     * Allows a user to join the running game
+//     *
+//     * @return
+//     */
+//    public boolean joinSingleplayerGame(String userName) throws DataAccessException {
+//
+//
+//        boolean joined=false;
+//
+////        //check whether the user has already joined the game
+////        if(!userPortfolios.containsKey(userName)){
+////            userPortfolios.put(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+////            joined=true;
+////
+////        }
+////        else{
+////            throw new UserAlreadyJoinedException(userName);
+////        }
+//
+//        userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
+//        joined=true;
+//        usersList.add(userName);
+//
+////        setObserver(observer);
+//
+//
+//        return joined;
+//
+//    }
 
     public boolean executeOrder(String stockId, int quantity, OrderType side,String userName)
             throws InvalidOrderException,
@@ -507,10 +543,10 @@ public class DailySummaryDataPLayer extends DataPlayer {
         }
     }
 
-    public void setTransactionDataAPI(CompanyStockTransactionsData api){
-        this.transactionDataAPI=api;
-
-    }
+//    public void setTransactionDataAPI(CompanyStockTransactionsData api){
+//        this.transactionDataAPI=api;
+//
+//    }
 
 //    /**
 //     * returns whether this is a multiplayer game or not

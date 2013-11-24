@@ -91,6 +91,18 @@ public abstract class DataPlayer {
 
     }
 
+    protected DataPlayer(UserData userData, CompanyData companyDataAPI, CompanyStockTransactionsData transactionDataAPI) {
+        this.userData = userData;
+        this.companyDataAPI = companyDataAPI;
+        this.transactionDataAPI = transactionDataAPI;
+
+        //set the game start time
+        this.startTime=System.currentTimeMillis();
+
+        //initialize the users list
+        this.usersList=new ArrayList<>();
+    }
+
     /**
      * To set observers
      *
@@ -396,5 +408,13 @@ public abstract class DataPlayer {
         return joined;
 
     }
+
+//    /**
+//     * Used to set a custom user data implementation for testing purposes
+//     * @param userData
+//     */
+//    public void setUserData(UserData userData){
+//         this.userData=userData;
+//    }
 }
 

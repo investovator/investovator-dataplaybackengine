@@ -19,7 +19,12 @@
 
 package org.investovator.dataplaybackengine;
 
+import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
+import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
@@ -64,16 +69,20 @@ public class DailySummaryDataPLayerMultiplayerTest {
         attributes.add(TradingDataAttribute.PRICE);
 
         //create a multiplayer game
-        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,true);
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,true,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
 
         //set the date
         player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
 
         //set the data api
-        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
+//        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
+
+        //set user data
+//        player.setUserData(new UserDataCustomImpl());
 
         player.startMultiplayerGame(1);
-        player.joinMultiplayerGame(observer,"test");
+        player.joinGame(observer, "test");
 
     }
 
@@ -108,9 +117,9 @@ public class DailySummaryDataPLayerMultiplayerTest {
 
         }
 
-        //if the game has finished, there should be a Game end event
-        if(observer.getEvents().size()==1){
-            if(observer.getEvents().remove(0) instanceof PlaybackFinishedEvent){
+        //if the game has finished, there should be a Game end event and another StockUpdateEvent with no data
+        if(observer.getEvents().size()==2){
+            if(observer.getEvents().remove(1) instanceof PlaybackFinishedEvent){
                 assert(true);
             }
             else{
