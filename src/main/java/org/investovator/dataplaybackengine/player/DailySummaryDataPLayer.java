@@ -338,6 +338,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
             userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
             setObserver(observer);
+        usersList.add(userName);
+
 //        }
 //        else{
 //            throw new UserAlreadyJoinedException(userName);
@@ -370,6 +372,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
         joined=true;
+        usersList.add(userName);
+
 //        setObserver(observer);
 
 
@@ -408,6 +412,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
             else if(side==OrderType.SELL){
                 portfolio.soldShares(stockId,quantity,executedPrice);
             }
+            userData.updateUserPortfolio(userName,portfolio);
+
         } catch (DataAccessException e) {
             e.printStackTrace();
 

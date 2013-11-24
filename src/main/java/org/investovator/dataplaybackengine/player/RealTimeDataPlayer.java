@@ -166,6 +166,7 @@ public class RealTimeDataPlayer extends DataPlayer {
             userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DailySummaryDataPLayer.initialCredit,0));
             joined=true;
             setObserver(observer);
+            usersList.add(userName);
         } catch (DataAccessException e) {
             e.printStackTrace();
             return false;
@@ -230,6 +231,7 @@ public class RealTimeDataPlayer extends DataPlayer {
             else if(side==OrderType.SELL){
                 portfolio.soldShares(stockId,quantity,executedPrice);
             }
+            userData.updateUserPortfolio(userName,portfolio);
         } catch (DataAccessException e) {
             e.printStackTrace();
 

@@ -20,6 +20,7 @@
 package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
+import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.*;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
@@ -27,6 +28,7 @@ import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
+import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
@@ -43,6 +45,9 @@ public abstract class DataPlayer {
     protected CompanyData companyDataAPI;
 
 //    protected     HashMap<String,Portfolio> userPortfolios;
+
+    protected ArrayList<String> usersList;
+
 
     protected TradingSystem tradingSystem;
 
@@ -65,12 +70,24 @@ public abstract class DataPlayer {
         try {
             this.companyDataAPI=new CompanyDataImpl();
             this.userData=new UserDataImpl();
+
+            //todo - testing code to clear DB manually -should be moved to controller
+            DataStorage storage = new DataStorageImpl();
+            storage.resetDataStorage();
+            //todo - end of testing
+
+
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
 
         //set the game start time
         this.startTime=System.currentTimeMillis();
+
+        //initialize the users list
+        this.usersList=new ArrayList<>();
+
+
 
     }
 
@@ -92,16 +109,19 @@ public abstract class DataPlayer {
 
     public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
+        //check if the user has joined the game
+        if(!usersList.contains(userName)){
+            throw new UserJoinException("User "+userName+ " has not joined the game");
+        }
+
+
         Portfolio portfolio=null;
         try {
              portfolio = userData.getUserPortfolio(userName);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            //if the user has not joined the game
-            if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
-                throw new UserJoinException("User "+userName+ " has not joined the game");
+            throw new UserJoinException("User "+userName+ " has not joined the game");
 
-            }
         }
 
 
@@ -138,21 +158,27 @@ public abstract class DataPlayer {
      */
     public boolean hasUserJoined(String name){
 
-        try{
+//        try{
+//
+//            Portfolio portfolio = userData.getUserPortfolio(name);
+//        }
+//     catch (DataAccessException e) {
+//        e.printStackTrace();
+//
+//        //if the user has not joined the game
+//        if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+//            return false;
+//
+//        }
+//
+//    }
 
-            Portfolio portfolio = userData.getUserPortfolio(name);
+        if(usersList.contains(name)){
+            return true;
         }
-     catch (DataAccessException e) {
-        e.printStackTrace();
-
-        //if the user has not joined the game
-        if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
+        else{
             return false;
-
         }
-
-    }
-        return true;
 
 
 //        return userPortfolios.containsKey(name);
@@ -307,8 +333,16 @@ public abstract class DataPlayer {
      * returns portfolios of all the users
      * @return
      */
-    public HashMap<String,Portfolio> getAllPortfolios(){
-        return userPortfolios;
+    public synchronized ArrayList<Portfolio> getAllPortfolios(){
+        ArrayList<Portfolio> portfolios=new ArrayList<>();
+        for(String username:usersList){
+            try {
+                portfolios.add(userData.getUserPortfolio(username));
+            } catch (DataAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return portfolios;
     }
 
     /**
@@ -318,6 +352,49 @@ public abstract class DataPlayer {
      */
     public float getStockPrice(String stock){
         return tradingSystem.getStockPrice(stock);
+    }
+
+    /**
+     * Allows a user to join the running game
+     *
+     * @return
+     */
+    public boolean joinGame(PlaybackEventListener observer,String userName) throws UserAlreadyJoinedException {
+
+        //if a non-admin user tries to connect to a single player game
+        //todo - implement using authenticator
+//        if(!isMultiplayer && user!=admin){
+//            throw new UserJoinException("You don't have sufficient privileges to enter this game");
+//        }
+
+        boolean joined=false;
+
+//        //check whether the user has already joined the game
+//        if(!userPortfolios.containsKey(userName)){
+//            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,0));
+//            joined=true;
+//            setObserver(observer);
+//        }
+//        else{
+////            throw new UserAlreadyJoinedException(userName);
+//            //todo - remove the fpllowing line
+//            setObserver(observer);
+//        }
+
+        try {
+            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DataPlayer.initialCredit,0));
+            joined=true;
+            setObserver(observer);
+            usersList.add(userName);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+
+        return joined;
+
     }
 }
 
