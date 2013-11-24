@@ -41,23 +41,27 @@ import java.util.Date;
 public class DataPlayerFacade {
     private static DataPlayerFacade facade;
 
-    private DailySummaryDataPLayer dailySummaryDataPLayer;
-    private RealTimeDataPlayer realTimeDataPlayer;
+//    private DailySummaryDataPLayer dailySummaryDataPLayer;
+//    private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
 
     private int DATA_ITEMS_TO_QUERY=1000;
 
-    private DataPlayerFacade() {
+//    public DataPlayerFacade() {
+//
+//    }
 
-    }
+//    public static synchronized DataPlayerFacade getInstance(){
+//        if(facade==null){
+//            facade=new DataPlayerFacade();
+//        }
+//
+//        return facade;
+//    }
 
-    public static synchronized DataPlayerFacade getInstance(){
-        if(facade==null){
-            facade=new DataPlayerFacade();
-        }
 
-        return facade;
-    }
+    public
+
 
     public void createPlayer(PlayerTypes playerType,String[] stocks,Date startDate,
                                  ArrayList<TradingDataAttribute> attributes,
@@ -76,23 +80,23 @@ public class DataPlayerFacade {
         }
     }
 
-    public DailySummaryDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
-        if(dailySummaryDataPLayer !=null){
-            return dailySummaryDataPLayer;
-        }
-        else{
-            throw new PlayerStateException("Daily Summary player is not initialized yet.");
-        }
-    }
-
-    public RealTimeDataPlayer getRealTimeDataPlayer() throws PlayerStateException {
-        if (realTimeDataPlayer!=null){
-            return realTimeDataPlayer;
-        }
-        else{
-            throw new PlayerStateException("Real time data player is not initialized yet.");
-        }
-    }
+//    public DailySummaryDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
+//        if(dailySummaryDataPLayer !=null){
+//            return dailySummaryDataPLayer;
+//        }
+//        else{
+//            throw new PlayerStateException("Daily Summary player is not initialized yet.");
+//        }
+//    }
+//
+//    public RealTimeDataPlayer getRealTimeDataPlayer() throws PlayerStateException {
+//        if (realTimeDataPlayer!=null){
+//            return realTimeDataPlayer;
+//        }
+//        else{
+//            throw new PlayerStateException("Real time data player is not initialized yet.");
+//        }
+//    }
 
     public PlayerTypes getCurrentPlayerType(){
         return  this.playerType;
