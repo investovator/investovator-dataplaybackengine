@@ -27,6 +27,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
@@ -62,6 +63,8 @@ public abstract class DataPlayer {
     //max amount of stocks that a person can buy/sell
     protected static int maxOrderSize=5000;
 
+    protected static int defaultGameSpeed=1;
+
     //set the game start time
     long startTime;
 
@@ -72,8 +75,8 @@ public abstract class DataPlayer {
             this.userData=new UserDataImpl();
 
             //todo - testing code to clear DB manually -should be moved to controller
-            DataStorage storage = new DataStorageImpl();
-            storage.resetDataStorage();
+//            DataStorage storage = new DataStorageImpl();
+//            storage.resetDataStorage();
             //todo - end of testing
 
 
@@ -91,6 +94,18 @@ public abstract class DataPlayer {
 
     }
 
+    protected DataPlayer(UserData userData, CompanyData companyDataAPI, CompanyStockTransactionsData transactionDataAPI) {
+        this.userData = userData;
+        this.companyDataAPI = companyDataAPI;
+        this.transactionDataAPI = transactionDataAPI;
+
+        //set the game start time
+        this.startTime=System.currentTimeMillis();
+
+        //initialize the users list
+        this.usersList=new ArrayList<>();
+    }
+
     /**
      * To set observers
      *
@@ -98,11 +113,26 @@ public abstract class DataPlayer {
      */
     abstract public void setObserver(PlaybackEventListener observer);
 
+    /**
+     * Starts the game. The default play speed of the player will be used
+     */
+    abstract public void startGame() throws GameAlreadyStartedException;
 
     /**
-     * Stop the data playback
+     * to stop the game
      */
-    abstract public void stopPlayback();
+    abstract public void stopGame();
+
+    /**
+     * Starts the game.
+     * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
+     */
+    abstract public void startGame(int speed) throws GameAlreadyStartedException;
+
+//    /**
+//     * Stop the data playback
+//     */
+//    abstract public void stopPlayback();
 
     abstract public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws InvalidOrderException,
             UserJoinException;
@@ -396,5 +426,13 @@ public abstract class DataPlayer {
         return joined;
 
     }
+
+//    /**
+//     * Used to set a custom user data implementation for testing purposes
+//     * @param userData
+//     */
+//    public void setUserData(UserData userData){
+//         this.userData=userData;
+//    }
 }
 

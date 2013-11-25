@@ -21,15 +21,13 @@ package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
-import org.investovator.core.data.api.CompanyData;
-import org.investovator.core.data.api.CompanyDataImpl;
-import org.investovator.core.data.api.CompanyStockTransactionsData;
-import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
+import org.investovator.core.data.api.*;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
@@ -95,6 +93,32 @@ public class RealTimeDataPlayer extends DataPlayer {
         task.setObserver(this.tradingSystem);
     }
 
+    /**
+     * Constructor used for testing purposes
+     */
+    public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
+                              TradingDataAttribute attributeToMatch,boolean isMultiplayer,
+                              UserData userData, CompanyData companyDataAPI,
+                              CompanyStockTransactionsData transactionDataAPI){
+
+        super(userData,companyDataAPI,transactionDataAPI);
+
+        this.timer = new Timer();
+//        userPortfolios=new HashMap<String, Portfolio>();
+        tradingSystem=new TradingSystem(attributes,attributeToMatch);
+        this.isMultiplayer=isMultiplayer;
+        //for testing
+        this.transactionDataAPI =transactionDataAPI;
+        this.companyDataAPI=companyDataAPI;
+        //testing end
+
+        task = new RealTimeEventTask(stocks, startDate, transactionDataAPI,attributes);
+
+        //set the trading system as an observer
+        task.setObserver(this.tradingSystem);
+
+    }
+
 
     /**
      * To set observers
@@ -109,16 +133,21 @@ public class RealTimeDataPlayer extends DataPlayer {
      * Start playing the data
      * @param resolution the time gaps between pushing events
      */
-    public void startPlayback(int resolution) {
+    public void startGame(int resolution) throws GameAlreadyStartedException {
 
         timer.schedule(task, 0, resolution * 1000);
         //TODO- change the RealTimeEventTask to check for the resolution when incrementing its time
     }
 
+    @Override
+    public void startGame() throws GameAlreadyStartedException {
+        this.startGame(defaultGameSpeed);
+    }
+
     /**
      * Stop the data playback
      */
-    public void stopPlayback() {
+    public void stopGame() {
         task.cancel();
         timer.cancel();
     }
@@ -252,9 +281,9 @@ public class RealTimeDataPlayer extends DataPlayer {
 
 
 
-    public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
-        task.setDataApi(api);
-    }
+//    public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
+//        task.setDataApi(api);
+//    }
 
 
 

@@ -17,13 +17,15 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.game;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.util.GameObserver;
+import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
-import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
@@ -63,15 +65,17 @@ public class RealTimeDataPlayerTest {
         attributes.add(TradingDataAttribute.PRICE);
 
         //create a multiplayer game
-        player=new RealTimeDataPlayer(stocks,startDate,DateUtils.DATE_FORMAT_1,attributes,TradingDataAttribute.PRICE,
-                true);
+        player=new RealTimeDataPlayer(stocks,DateUtils.dateStringToDateObject(startDate,DateUtils.DATE_FORMAT_1),
+                attributes,TradingDataAttribute.PRICE,
+                true,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
 
 
         //set the data api
-        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
+//        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
         player.joinGame(observer,"test");
-        player.startPlayback(1);
+        player.startGame(1);
 
     }
 
@@ -116,6 +120,9 @@ public class RealTimeDataPlayerTest {
         else{
             assert(false);
         }
+
+        //finally stop the game
+        player.stopGame();
 
     }
 }

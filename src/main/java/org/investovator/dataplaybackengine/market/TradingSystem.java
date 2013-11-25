@@ -82,7 +82,7 @@ public class TradingSystem implements PlaybackEventListener {
         //add to turnover
         this.marketTurnover+=neededMoney;
         //increase the total number of trades
-        this.totalTrades=+1;
+        this.totalTrades+=1;
 
         return price;
     }
