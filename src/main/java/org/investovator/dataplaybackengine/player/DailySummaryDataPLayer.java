@@ -528,7 +528,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * Start playing the data
      * @param resolution the time gaps between pushing events
      */
-    public void startMultiplayerGame(int resolution) {
+    public void startGame(int resolution) throws GameAlreadyStartedException {
 
         timer.schedule(task, 0, resolution * 1000);
     }

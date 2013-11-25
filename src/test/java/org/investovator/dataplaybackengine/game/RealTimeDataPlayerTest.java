@@ -75,7 +75,7 @@ public class RealTimeDataPlayerTest {
 //        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
         player.joinGame(observer,"test");
-        player.startPlayback(1);
+        player.startGame(1);
 
     }
 

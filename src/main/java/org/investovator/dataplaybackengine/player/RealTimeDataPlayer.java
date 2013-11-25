@@ -27,6 +27,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
@@ -132,10 +133,15 @@ public class RealTimeDataPlayer extends DataPlayer {
      * Start playing the data
      * @param resolution the time gaps between pushing events
      */
-    public void startPlayback(int resolution) {
+    public void startGame(int resolution) throws GameAlreadyStartedException {
 
         timer.schedule(task, 0, resolution * 1000);
         //TODO- change the RealTimeEventTask to check for the resolution when incrementing its time
+    }
+
+    @Override
+    public void startGame() throws GameAlreadyStartedException {
+        this.startGame(defaultGameSpeed);
     }
 
     /**

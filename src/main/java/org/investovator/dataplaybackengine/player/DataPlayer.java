@@ -27,6 +27,7 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 import org.investovator.dataplaybackengine.exceptions.UserAlreadyJoinedException;
 import org.investovator.dataplaybackengine.exceptions.UserJoinException;
@@ -61,6 +62,8 @@ public abstract class DataPlayer {
 
     //max amount of stocks that a person can buy/sell
     protected static int maxOrderSize=5000;
+
+    protected static int defaultGameSpeed=1;
 
     //set the game start time
     long startTime;
@@ -110,6 +113,16 @@ public abstract class DataPlayer {
      */
     abstract public void setObserver(PlaybackEventListener observer);
 
+    /**
+     * Starts the game. The default play speed of the player will be used
+     */
+    abstract public void startGame() throws GameAlreadyStartedException;
+
+    /**
+     * Starts the game.
+     * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
+     */
+    abstract public void startGame(int speed) throws GameAlreadyStartedException;
 
     /**
      * Stop the data playback
