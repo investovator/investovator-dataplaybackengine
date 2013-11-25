@@ -541,15 +541,15 @@ public class DailySummaryDataPLayer extends DataPlayer {
         timer.schedule(task, 0, resolution * 1000);
     }
 
-    /**
-     * Stop the data playback
-     */
-    public void stopPlayback() {
-        if (isMultiplayer()){
-            task.cancel();
-            timer.cancel();
-        }
-    }
+//    /**
+//     * Stop the data playback
+//     */
+//    public void stopPlayback() {
+//        if (isMultiplayer()){
+//            task.cancel();
+//            timer.cancel();
+//        }
+//    }
 
 //    public void setTransactionDataAPI(CompanyStockTransactionsData api){
 //        this.transactionDataAPI=api;
