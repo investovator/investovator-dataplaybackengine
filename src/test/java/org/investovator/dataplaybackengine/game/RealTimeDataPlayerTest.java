@@ -17,9 +17,10 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.game;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.GameObserver;
 import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
 import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;

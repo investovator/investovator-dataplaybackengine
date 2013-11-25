@@ -17,17 +17,16 @@
  */
 
 
-package org.investovator.dataplaybackengine;
+package org.investovator.dataplaybackengine.game;
 
-import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
-import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.GameObserver;
 import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
 import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
+import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Before;
@@ -36,19 +35,19 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 /**
+ * Tests the DailySummaryDataPLayer in a Single player environment
  * @author: ishan
  * @version: ${Revision}
  */
-public class DailySummaryDataPLayerMultiplayerTest {
+public class DailySummaryDataPLayerSinglePlayerTest {
 
-    DailySummaryDataPLayer player;
-    GameObserver observer;
 
-    //to keep track of which item this is
-    int counter=0;
 
-    public DailySummaryDataPLayerMultiplayerTest() {
-        observer=new GameObserver();
+    private static String APPL="APPL";
+    private static String GOOG="GOOG";
+
+    public DailySummaryDataPLayerSinglePlayerTest() {
+
     }
 
     @Before
@@ -56,6 +55,27 @@ public class DailySummaryDataPLayerMultiplayerTest {
 
 
 
+    }
+
+    @Test
+    public void testGamePlay() throws Exception {
+        boolean gameRunning=false;
+//        StockUpdateEvent[] events=null;
+//        int googCounter=0;
+//        int applCounter=0;
+
+
+        DailySummaryDataPLayer player;
+        boolean notStarted;
+        GameObserver observer;
+
+        //to keep track of which item this is
+        int counter=0;
+
+
+        notStarted=true;
+
+        observer=new GameObserver();
         String[] stocks=new String[1];
         stocks[0]="GOOG";
         //stocks[1]="APPL";
@@ -69,7 +89,7 @@ public class DailySummaryDataPLayerMultiplayerTest {
         attributes.add(TradingDataAttribute.PRICE);
 
         //create a multiplayer game
-        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,true,new UserDataCustomImpl(),
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
                 new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
 
         //set the date
@@ -81,38 +101,58 @@ public class DailySummaryDataPLayerMultiplayerTest {
         //set user data
 //        player.setUserData(new UserDataCustomImpl());
 
-        player.startMultiplayerGame(1);
+//        player.startMultiplayerGame(1);
         player.joinGame(observer, "test");
 
-    }
 
 
+        if(notStarted){
+              player.startGame();
+            gameRunning=true;
+        }
+//        while (gameRunning){
+//            for(StockUpdateEvent event:events){
+//                if(event.getStockId().equalsIgnoreCase(APPL)){
+//                    assert(event.getData().get(TradingDataAttribute.DAY)==applCounter++);
+//                    assert(event.getData().get(TradingDataAttribute.PRICE)==applCounter++);
+//
+//                }
+//                else if(event.getStockId().equalsIgnoreCase(GOOG)){
+//                    assert(event.getData().get(TradingDataAttribute.DAY)==googCounter++);
+//                    assert(event.getData().get(TradingDataAttribute.PRICE)==googCounter++);
+//                }
+//            }
+////            try {
+////
+////                events=player.playNextDay();
+////            } catch (GameFinishedException ex){
+////                gameRunning=false;
+////            }
+//        }
 
-    @Test
-    public void testStockUpdateEvents() throws Exception {
         while (!observer.isGameFinished()){
             boolean matches=false;
 
             if(observer.getEvents().size()>0){
                 StockUpdateEvent event=(StockUpdateEvent)observer.getEvents().remove(0);
 
-                    if (event.getData().get(TradingDataAttribute.DAY)==counter){
+                if (event.getData().get(TradingDataAttribute.DAY)==counter){
+                    counter++;
+                    if(event.getData().get(TradingDataAttribute.PRICE)==counter) {
+                        matches=true;
                         counter++;
-                        if(event.getData().get(TradingDataAttribute.PRICE)==counter) {
-                            matches=true;
-                            counter++;
-
-                        }
-
 
                     }
+
+
+                }
 
 
                 assert(matches);
             }
 
             else{
-                Thread.sleep(100);
+                player.playNextDay();
             }
 
         }
@@ -131,6 +171,8 @@ public class DailySummaryDataPLayerMultiplayerTest {
         else{
             assert(false);
         }
+
+
 
     }
 
