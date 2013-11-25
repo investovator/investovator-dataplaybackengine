@@ -19,25 +19,122 @@
 
 package org.investovator.dataplaybackengine.player;
 
+import org.investovator.core.commons.utils.Portfolio;
+import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
+import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
+import org.investovator.dataplaybackengine.events.StockUpdateEvent;
+import org.investovator.dataplaybackengine.market.OrderType;
+import org.investovator.dataplaybackengine.util.GameObserver;
+import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
+ * Tests the basic functions of a DailySummaryDataPLayer
+ *
  * @author: ishan
  * @version: ${Revision}
  */
 public class DailySummaryDataPLayerTest {
     @Test
     public void testSetStartDate() throws Exception {
+        DailySummaryDataPLayer player;
 
+        String[] stocks=new String[1];
+        stocks[0]="GOOG";
+        String startDate="2011-12-13-15-55-32";
+
+        //define the attributes needed
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
+
+        //just the closing price is enough for now
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
+
+        //create a multiplayer game
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+
+        //set the date
+        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
+
+        player.startGame();
+
+        assert(player.getCurrentTime().equals(DateUtils.dateStringToDateObject(startDate,DateUtils.DATE_FORMAT_1)));
     }
 
     @Test
     public void testExecuteOrder() throws Exception {
 
+        DailySummaryDataPLayer player;
+
+        String username="test";
+
+        String[] stocks=new String[1];
+        stocks[0]="GOOG";
+        String startDate="2011-12-13-15-55-32";
+
+        //define the attributes needed
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
+
+        //just the closing price is enough for now
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
+
+        //create a multiplayer game
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+
+        //set the date
+        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
+
+        GameObserver observer=new GameObserver();
+
+        //to keep track of which item this is
+        int counter=0;
+
+        player.joinGame(observer,username );
+
+        player.startGame();
+
+        StockUpdateEvent event=(StockUpdateEvent)observer.getEvents().get(0);
+
+        //buy a stock
+        player.executeOrder(stocks[0],100, OrderType.BUY,username);
+        //check the portfolio for that stock
+        Portfolio portfolio=player.getMyPortfolio(username);
+        assert(portfolio.getShares().size()>0);
+
     }
 
     @Test
     public void testIsGameStarted() throws Exception {
+        DailySummaryDataPLayer player;
+
+        String[] stocks=new String[1];
+        stocks[0]="GOOG";
+        String startDate="2011-12-13-15-55-32";
+
+        //define the attributes needed
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
+
+        //just the closing price is enough for now
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
+
+        //create a multiplayer game
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+
+        //set the date
+        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
+
+        player.startGame();
+
+        assert(player.isGameStarted());
 
     }
 }
