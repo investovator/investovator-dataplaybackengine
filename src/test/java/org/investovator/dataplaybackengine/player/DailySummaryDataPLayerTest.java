@@ -31,6 +31,7 @@ import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Tests the basic functions of a DailySummaryDataPLayer
@@ -40,7 +41,7 @@ import java.util.ArrayList;
  */
 public class DailySummaryDataPLayerTest {
     @Test
-    public void testSetStartDate() throws Exception {
+    public void testSetStartDateByDateString() throws Exception {
         DailySummaryDataPLayer player;
 
         String[] stocks=new String[1];
@@ -64,6 +65,62 @@ public class DailySummaryDataPLayerTest {
         player.startGame();
 
         assert(player.getCurrentTime().equals(DateUtils.dateStringToDateObject(startDate,DateUtils.DATE_FORMAT_1)));
+    }
+    @Test
+    public void testSetStartDate() throws Exception {
+        DailySummaryDataPLayer player;
+
+        String[] stocks=new String[1];
+        stocks[0]="GOOG";
+//        String startDate="2011-12-13-15-55-32";
+
+        //define the attributes needed
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
+
+        //just the closing price is enough for now
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
+
+        //create a multiplayer game
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+
+        //set the date
+        Date date=new Date();
+        player.setStartDate(date);
+
+        player.startGame();
+
+        assert(player.getCurrentTime().equals(date));
+    }
+
+    @Test
+    public void testGetNextDay() throws Exception{
+        DailySummaryDataPLayer player;
+
+        String[] stocks=new String[1];
+        stocks[0]="GOOG";
+//        String startDate="2011-12-13-15-55-32";
+
+        //define the attributes needed
+        ArrayList<TradingDataAttribute> attributes=new ArrayList<TradingDataAttribute>();
+
+        //just the closing price is enough for now
+        attributes.add(TradingDataAttribute.DAY);
+        attributes.add(TradingDataAttribute.PRICE);
+
+        //create a multiplayer game
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+
+        //set the date
+        Date date=new Date();
+        player.setStartDate(date);
+
+        player.startGame();
+
+        assert(player.getNextDay().equals(DateUtils.incrementTimeByDays(1,date)));
+
     }
 
     @Test
