@@ -20,6 +20,8 @@
 package org.investovator.dataplaybackengine;
 
 import org.investovator.core.data.api.utils.TradingDataAttribute;
+import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
@@ -63,12 +65,14 @@ public class RealTimeDataPlayerTest {
         attributes.add(TradingDataAttribute.PRICE);
 
         //create a multiplayer game
-        player=new RealTimeDataPlayer(stocks,startDate,DateUtils.DATE_FORMAT_1,attributes,TradingDataAttribute.PRICE,
-                true);
+        player=new RealTimeDataPlayer(stocks,DateUtils.dateStringToDateObject(startDate,DateUtils.DATE_FORMAT_1),
+                attributes,TradingDataAttribute.PRICE,
+                true,new UserDataCustomImpl(),
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
 
 
         //set the data api
-        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
+//        player.setTransactionDataAPI(new BogusHistoryTestDataGenerator());
 
         player.joinGame(observer,"test");
         player.startPlayback(1);

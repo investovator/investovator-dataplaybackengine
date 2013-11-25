@@ -21,10 +21,7 @@ package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
-import org.investovator.core.data.api.CompanyData;
-import org.investovator.core.data.api.CompanyDataImpl;
-import org.investovator.core.data.api.CompanyStockTransactionsData;
-import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
+import org.investovator.core.data.api.*;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
@@ -93,6 +90,32 @@ public class RealTimeDataPlayer extends DataPlayer {
 
         //set the trading system as an observer
         task.setObserver(this.tradingSystem);
+    }
+
+    /**
+     * Constructor used for testing purposes
+     */
+    public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
+                              TradingDataAttribute attributeToMatch,boolean isMultiplayer,
+                              UserData userData, CompanyData companyDataAPI,
+                              CompanyStockTransactionsData transactionDataAPI){
+
+        super(userData,companyDataAPI,transactionDataAPI);
+
+        this.timer = new Timer();
+//        userPortfolios=new HashMap<String, Portfolio>();
+        tradingSystem=new TradingSystem(attributes,attributeToMatch);
+        this.isMultiplayer=isMultiplayer;
+        //for testing
+        this.transactionDataAPI =transactionDataAPI;
+        this.companyDataAPI=companyDataAPI;
+        //testing end
+
+        task = new RealTimeEventTask(stocks, startDate, transactionDataAPI,attributes);
+
+        //set the trading system as an observer
+        task.setObserver(this.tradingSystem);
+
     }
 
 
@@ -252,9 +275,9 @@ public class RealTimeDataPlayer extends DataPlayer {
 
 
 
-    public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
-        task.setDataApi(api);
-    }
+//    public void setTransactionDataAPI(CompanyStockTransactionsData api ) {
+//        task.setDataApi(api);
+//    }
 
 
 
