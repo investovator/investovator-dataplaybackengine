@@ -210,6 +210,14 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
+    @Override
+    public void stopGame() {
+        if(isMultiplayer()){
+            timer.cancel();
+            task.cancel();
+        }
+    }
+
     /**
      * Used to set the game starting date at the start of the game.
      *

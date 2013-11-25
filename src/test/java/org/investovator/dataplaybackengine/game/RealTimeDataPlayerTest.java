@@ -121,5 +121,8 @@ public class RealTimeDataPlayerTest {
             assert(false);
         }
 
+        //finally stop the game
+        player.stopGame();
+
     }
 }

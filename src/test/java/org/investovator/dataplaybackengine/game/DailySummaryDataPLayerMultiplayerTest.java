@@ -131,6 +131,9 @@ public class DailySummaryDataPLayerMultiplayerTest {
             assert(false);
         }
 
+        //finally stop the game
+        player.stopGame();
+
     }
 
 

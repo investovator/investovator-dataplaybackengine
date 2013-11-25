@@ -119,15 +119,20 @@ public abstract class DataPlayer {
     abstract public void startGame() throws GameAlreadyStartedException;
 
     /**
+     * to stop the game
+     */
+    abstract public void stopGame();
+
+    /**
      * Starts the game.
      * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
      */
     abstract public void startGame(int speed) throws GameAlreadyStartedException;
 
-    /**
-     * Stop the data playback
-     */
-    abstract public void stopPlayback();
+//    /**
+//     * Stop the data playback
+//     */
+//    abstract public void stopPlayback();
 
     abstract public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws InvalidOrderException,
             UserJoinException;

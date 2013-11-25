@@ -147,7 +147,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     /**
      * Stop the data playback
      */
-    public void stopPlayback() {
+    public void stopGame() {
         task.cancel();
         timer.cancel();
     }

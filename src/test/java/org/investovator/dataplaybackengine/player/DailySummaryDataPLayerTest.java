@@ -151,13 +151,13 @@ public class DailySummaryDataPLayerTest {
         GameObserver observer=new GameObserver();
 
         //to keep track of which item this is
-        int counter=0;
+//        int counter=0;
 
         player.joinGame(observer,username );
 
         player.startGame();
 
-        StockUpdateEvent event=(StockUpdateEvent)observer.getEvents().get(0);
+//        StockUpdateEvent event=(StockUpdateEvent)observer.getEvents().get(0);
 
         //buy a stock
         player.executeOrder(stocks[0],100, OrderType.BUY,username);
