@@ -85,10 +85,10 @@ public class DailySummaryDataPLayerSinglePlayerTest {
 
         //just the closing price is enough for now
         attributes.add(TradingDataAttribute.DAY);
-        attributes.add(TradingDataAttribute.PRICE);
+        attributes.add(TradingDataAttribute.CLOSING_PRICE);
 
         //create a multiplayer game
-        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.PRICE,false,new UserDataCustomImpl(),
+        player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
                 new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
 
         //set the date
@@ -137,7 +137,7 @@ public class DailySummaryDataPLayerSinglePlayerTest {
 
                 if (event.getData().get(TradingDataAttribute.DAY)==counter){
                     counter++;
-                    if(event.getData().get(TradingDataAttribute.PRICE)==counter) {
+                    if(event.getData().get(TradingDataAttribute.CLOSING_PRICE)==counter) {
                         matches=true;
                         counter++;
 
