@@ -24,12 +24,15 @@ import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
+import org.investovator.dataplaybackengine.configuration.GameConfiguration;
+import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.player.PlayerStateException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.DataPlayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
 import org.investovator.dataplaybackengine.player.type.PlayerTypes;
 import org.investovator.dataplaybackengine.utils.DateUtils;
+import org.investovator.dataplaybackengine.utils.StockUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,8 +47,10 @@ public class DataPlayerFacade {
 //    private DailySummaryDataPLayer dailySummaryDataPLayer;
 //    private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
+    private DataPlayer player;
 
     private int DATA_ITEMS_TO_QUERY=1000;
+    private int NUM_OF_DAYS_TO_QUERY=1000;
 
 //    public DataPlayerFacade() {
 //
@@ -60,25 +65,37 @@ public class DataPlayerFacade {
 //    }
 
 
-    public
-
-
-    public void createPlayer(PlayerTypes playerType,String[] stocks,Date startDate,
-                                 ArrayList<TradingDataAttribute> attributes,
-                                 TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
+    public DataPlayer createPlayer(GameConfiguration config){
         //if a daily summary player is needed
-        if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-            dailySummaryDataPLayer =new DailySummaryDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
-            this.dailySummaryDataPLayer.setStartDate(startDate);
-            this.playerType=playerType;
+        if(PlayerTypes.DAILY_SUMMARY_PLAYER==config.getPlayerType()){
+            this.player=new DailySummaryDataPLayer(config);
+            this.playerType=PlayerTypes.DAILY_SUMMARY_PLAYER;
         }
-        //if a real time data player is needed
-        else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-            realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch,isMultiplayer);
-            this.playerType=playerType;
+        else if(PlayerTypes.REAL_TIME_DATA_PLAYER==config.getPlayerType()){
+            this.player=new RealTimeDataPlayer(config);
+            this.playerType=PlayerTypes.REAL_TIME_DATA_PLAYER;
+        }
 
-        }
+        return player;
     }
+
+
+//    public void createPlayer(PlayerTypes playerType,String[] stocks,Date startDate,
+//                                 ArrayList<TradingDataAttribute> attributes,
+//                                 TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
+//        //if a daily summary player is needed
+//        if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+//            dailySummaryDataPLayer =new DailySummaryDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
+//            this.dailySummaryDataPLayer.setStartDate(startDate);
+//            this.playerType=playerType;
+//        }
+//        //if a real time data player is needed
+//        else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
+//            realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch,isMultiplayer);
+//            this.playerType=playerType;
+//
+//        }
+//    }
 
 //    public DailySummaryDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
 //        if(dailySummaryDataPLayer !=null){
@@ -107,15 +124,15 @@ public class DataPlayerFacade {
      * @return
      */
     public DataPlayer getCurrentPlayer(){
-        DataPlayer player=null;
-        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-            player= dailySummaryDataPLayer;
-        }
-        else if ((this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER)){
-            player=this.realTimeDataPlayer;
-        }
+//        DataPlayer player=null;
+//        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+//            player= dailySummaryDataPLayer;
+//        }
+//        else if ((this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER)){
+//            player=this.realTimeDataPlayer;
+//        }
 
-        return player;
+        return this.player;
     }
 
     /**
@@ -124,26 +141,62 @@ public class DataPlayerFacade {
      * @return
      */
     public StockTradingData getDataUpToToday(String symbol,Date startingDate,
-                                             ArrayList<TradingDataAttribute> attribute)
+                                             ArrayList<TradingDataAttribute> attributes)
             throws DataAccessException, DataNotFoundException {
-        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
 
-            return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
-                    CompanyStockTransactionsData.DataType.OHLC,
-                    symbol, DateUtils.decrementTimeByDays(365,startingDate),
-                    dailySummaryDataPLayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+                 if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+                     Date startDate=DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY,startingDate);
+                     return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.OHLC,
+                             symbol,startDate,this.player.getCurrentTime(),DATA_ITEMS_TO_QUERY,attributes);
+                 }
+        if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
+            Date startDate=DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY,startingDate);
+            return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.TICKER,
+                    symbol,startDate,this.player.getCurrentTime(),DATA_ITEMS_TO_QUERY,attributes);
+        }
 
-        }
-        else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-            return this.realTimeDataPlayer.getTransactionsDataAPI().getTradingData(
-                    CompanyStockTransactionsData.DataType.TICKER,
-                    symbol,DateUtils.decrementTimeByDays(10,startingDate)
-                    ,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
-        }
+
+//        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
+//
+//            return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
+//                    CompanyStockTransactionsData.DataType.OHLC,
+//                    symbol, DateUtils.decrementTimeByDays(365,startingDate),
+//                    dailySummaryDataPLayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+//
+//        }
+//        else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
+//            return this.realTimeDataPlayer.getTransactionsDataAPI().getTradingData(
+//                    CompanyStockTransactionsData.DataType.TICKER,
+//                    symbol,DateUtils.decrementTimeByDays(10,startingDate)
+//                    ,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
+//        }
 
         return null;
 
     }
+
+    /**
+     * Starts the game
+     *
+     * @return whether the game was started or not
+     */
+    public boolean startGame(){
+        try {
+            this.player.startGame();
+        } catch (GameAlreadyStartedException e) {
+            e.printStackTrace();
+            return false;
+        }
+    return true;
+    }
+
+    /**
+     * Stops the game
+     */
+    public void stopGame(){
+        this.player.stopGame();
+    }
+
 
 
 }

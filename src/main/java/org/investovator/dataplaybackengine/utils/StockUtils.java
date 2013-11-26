@@ -23,7 +23,10 @@ import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyDataImpl;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.CompanyStockTransactionsDataImpl;
+import org.investovator.core.data.api.utils.StockTradingData;
+import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
+import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
 import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 
@@ -36,7 +39,7 @@ import java.util.*;
 public class StockUtils {
 
     private static CompanyStockTransactionsData transactionDataAPI= new CompanyStockTransactionsDataImpl();
-    //private static CompanyData companyDataAPI=new CompanyDataImpl();
+//    private static CompanyData companyDataAPI=new CompanyDataImpl();
 
     public StockUtils() {
 //        //for testing
@@ -141,6 +144,16 @@ public class StockUtils {
         CompanyData companyDataAPI=new CompanyDataImpl();
         return companyDataAPI.getCompanyIDsNames();
 
+
+    }
+
+    public static StockTradingData getDataBetweenDates(CompanyStockTransactionsData.DataType dataType,
+                                                String symbol,
+                                                Date startTime, Date endTime, int itemsToQuery,
+                                                ArrayList<TradingDataAttribute> attributes)
+            throws DataAccessException, DataNotFoundException {
+
+        return transactionDataAPI.getTradingData(dataType,symbol,startTime,endTime,itemsToQuery,attributes);
 
     }
 }

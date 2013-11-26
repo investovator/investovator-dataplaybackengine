@@ -38,6 +38,7 @@ public class GameConfigurationImpl implements GameConfiguration {
     public PlayerTypes playerType;
     public TradingDataAttribute attributeToMatch;
     public String description;
+    public int gameSpeed;
 
 
     public GameConfigurationImpl(Date gameStartTime, String[] playingSymbols, boolean multiplayer,
@@ -49,6 +50,7 @@ public class GameConfigurationImpl implements GameConfiguration {
         this.playerType = gameConf.getPlayerType();
         this.attributeToMatch = gameConf.getAttributeToMatch();
         this.description = gameConf.getDescription() +"with "+gameConf.getInterestedAttributes().toString();
+        this.gameSpeed=gameConf.getPlayerSpeed();
     }
 
     @Override
@@ -74,6 +76,11 @@ public class GameConfigurationImpl implements GameConfiguration {
     @Override
     public PlayerTypes getPlayerType() {
         return playerType;
+    }
+
+    @Override
+    public int getPlayerSpeed() {
+        return gameSpeed;
     }
 
     @Override

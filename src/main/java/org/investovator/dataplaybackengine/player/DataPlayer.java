@@ -63,7 +63,7 @@ public abstract class DataPlayer {
     //max amount of stocks that a person can buy/sell
     protected static int maxOrderSize=5000;
 
-    protected static int defaultGameSpeed=1;
+    protected int gameSpeed =1;
 
     //set the game start time
     long startTime;
@@ -123,11 +123,11 @@ public abstract class DataPlayer {
      */
     abstract public void stopGame();
 
-    /**
-     * Starts the game.
-     * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
-     */
-    abstract public void startGame(int speed) throws GameAlreadyStartedException;
+//    /**
+//     * Starts the game.
+//     * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
+//     */
+//    abstract private void startGame(int speed) throws GameAlreadyStartedException;
 
 //    /**
 //     * Stop the data playback

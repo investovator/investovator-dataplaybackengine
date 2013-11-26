@@ -24,8 +24,7 @@ import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.*;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
-import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
+import org.investovator.dataplaybackengine.configuration.GameConfiguration;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
@@ -93,8 +92,22 @@ public class RealTimeDataPlayer extends DataPlayer {
         task.setObserver(this.tradingSystem);
     }
 
+    public RealTimeDataPlayer(GameConfiguration config){
+        this(config.getPlayingSymbols(),config.getGameStartTime(),config.getInterestedAttributes(),
+                config.getAttributeToMatch(),config.isMultiplayer());
+        gameSpeed =config.getPlayerSpeed();
+    }
+
     /**
-     * Constructor used for testing purposes
+     * constructor for testing the player with custom implementations of userData, companyDataAPI, transactionDataAPI
+     * @param stocks
+     * @param startDate
+     * @param attributes
+     * @param attributeToMatch
+     * @param isMultiplayer
+     * @param userData
+     * @param companyDataAPI
+     * @param transactionDataAPI
      */
     public RealTimeDataPlayer(String[] stocks,Date startDate,ArrayList<TradingDataAttribute> attributes,
                               TradingDataAttribute attributeToMatch,boolean isMultiplayer,
@@ -133,7 +146,7 @@ public class RealTimeDataPlayer extends DataPlayer {
      * Start playing the data
      * @param resolution the time gaps between pushing events
      */
-    public void startGame(int resolution) throws GameAlreadyStartedException {
+    private void startGame(int resolution) throws GameAlreadyStartedException {
 
         timer.schedule(task, 0, resolution * 1000);
         //TODO- change the RealTimeEventTask to check for the resolution when incrementing its time
@@ -141,7 +154,7 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     @Override
     public void startGame() throws GameAlreadyStartedException {
-        this.startGame(defaultGameSpeed);
+        this.startGame(gameSpeed);
     }
 
     /**

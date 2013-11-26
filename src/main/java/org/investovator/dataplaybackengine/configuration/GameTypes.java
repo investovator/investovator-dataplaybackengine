@@ -45,6 +45,12 @@ public interface GameTypes {
     public PlayerTypes getPlayerType();
 
     /**
+     * returns the data players speed,if the player is incrementing automatically (usually in seconds)
+     * @return
+     */
+    public int getPlayerSpeed();
+
+    /**
      * returns the attribute on which the game should be run.
      * Ex - Closing price for a Daily Summary based game
      * @return

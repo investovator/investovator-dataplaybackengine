@@ -38,6 +38,7 @@ public class DailySummaryEventTask extends TimerTask {
 
     private EventManager eventManager;
     private DailySummaryDataPLayer player;
+    private boolean running;
 
     public DailySummaryEventTask(DailySummaryDataPLayer player) {
         eventManager = new EventManager();
@@ -48,6 +49,7 @@ public class DailySummaryEventTask extends TimerTask {
     @Override
     public void run() {
 //        StockUpdateEvent[] events=null;
+        running=true;
 
         //if the game has not started yet
         if (!player.isGameStarted()) {
@@ -80,4 +82,9 @@ public class DailySummaryEventTask extends TimerTask {
 //    public void setObserver(PlaybackEventListener observer) {
 //        eventManager.addObserver(observer);
 //    }
+
+
+    public boolean isRunning() {
+        return running;
+    }
 }

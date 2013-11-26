@@ -26,6 +26,11 @@ public enum GameTypesImpl implements GameTypes {
             return PlayerTypes.DAILY_SUMMARY_PLAYER;        }
 
         @Override
+        public int getPlayerSpeed() {
+            return 3;
+        }
+
+        @Override
         public TradingDataAttribute getAttributeToMatch() {
             return TradingDataAttribute.CLOSING_PRICE;
         }
@@ -49,6 +54,11 @@ public enum GameTypesImpl implements GameTypes {
         @Override
         public PlayerTypes getPlayerType() {
             return PlayerTypes.DAILY_SUMMARY_PLAYER;        }
+
+        @Override
+        public int getPlayerSpeed() {
+            return 3;
+        }
 
         @Override
         public TradingDataAttribute getAttributeToMatch() {
@@ -77,6 +87,10 @@ public enum GameTypesImpl implements GameTypes {
             return PlayerTypes.REAL_TIME_DATA_PLAYER;
         }
 
+        @Override
+        public int getPlayerSpeed() {
+            return 3;
+        }
 
 
         @Override

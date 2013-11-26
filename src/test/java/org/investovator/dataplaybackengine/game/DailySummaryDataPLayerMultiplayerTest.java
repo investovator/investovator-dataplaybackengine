@@ -80,7 +80,7 @@ public class DailySummaryDataPLayerMultiplayerTest {
         //set user data
 //        player.setUserData(new UserDataCustomImpl());
 
-        player.startGame(1);
+        player.startGame();
         player.joinGame(observer, "test");
 
     }

@@ -20,15 +20,14 @@
 package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
-import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
 import org.investovator.core.data.api.UserData;
-import org.investovator.core.data.api.UserDataImpl;
 import org.investovator.core.data.api.utils.StockTradingData;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
+import org.investovator.dataplaybackengine.configuration.GameConfiguration;
 import org.investovator.dataplaybackengine.events.EventManager;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
@@ -114,6 +113,23 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     }
 
+
+    public DailySummaryDataPLayer(GameConfiguration config){
+         this(config.getPlayingSymbols(),config.getInterestedAttributes(),config.getAttributeToMatch(),
+                 config.isMultiplayer());
+        gameSpeed =config.getPlayerSpeed();
+    }
+
+    /**
+     * constructor for testing the player with custom implementations of userData, companyDataAPI, transactionDataAPI
+     * @param stocks
+     * @param attributes
+     * @param attributeToMatch
+     * @param isMultiplayer
+     * @param userData
+     * @param companyDataAPI
+     * @param transactionDataAPI
+     */
     public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
                                   TradingDataAttribute attributeToMatch, boolean isMultiplayer,
                                   UserData userData, CompanyData companyDataAPI,
@@ -159,53 +175,60 @@ public class DailySummaryDataPLayer extends DataPlayer {
      */
     public void startGame() throws GameAlreadyStartedException {
 
-        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
-        //if the game has not started yet
-        if (!gameStarted) {
-            //search all the stocks
-            for (String stock : ohlcDataCache.keySet()) {
+//        ArrayList<StockUpdateEvent> events = new ArrayList<StockUpdateEvent>();
 
-                try {
-                    StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
-                            stock, today,new Date(), DailySummaryDataPLayer.CACHE_SIZE,attributes);
+        if(isMultiplayer() && !task.isRunning()){
+            timer.schedule(task, 0, gameSpeed * 1000);
+        }
+        else{
+            //if the game has not started yet
+            if (!gameStarted) {
+                //search all the stocks
+                for (String stock : ohlcDataCache.keySet()) {
 
-                    //if any data was returned
-                    if (data != null) {
-                        //get the relevant data
+                    try {
+                        StockTradingData data = transactionDataAPI.getTradingData(CompanyStockTransactionsData.DataType.OHLC,
+                                stock, today,new Date(), DailySummaryDataPLayer.CACHE_SIZE,attributes);
+
+                        //if any data was returned
+                        if (data != null) {
+                            //get the relevant data
 //                        events.add(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
 
-                        //fire the event
-                        eventManager.notifyListeners(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
+                            //fire the event
+                            eventManager.notifyListeners(new StockUpdateEvent(stock, data.getTradingDataEntry(today), today));
 
-                        //add the data to the Trading system as well
-                        //only add if price information exists
-                        if(data.getTradingDataEntry(today)!=null){
-                            tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+                            //add the data to the Trading system as well
+                            //only add if price information exists
+                            if(data.getTradingDataEntry(today)!=null){
+                                tradingSystem.updateStockPrice(stock,data.getTradingDataEntry(today));
+                            }
+                            //remove that entry from map
+                            data.getTradingData().remove(today);
+
+                            //add the rest of the data to the cache
+                            ohlcDataCache.put(stock, data.getTradingData());
+
                         }
-                        //remove that entry from map
-                        data.getTradingData().remove(today);
 
-                        //add the rest of the data to the cache
-                        ohlcDataCache.put(stock, data.getTradingData());
-
+                    } catch (DataNotFoundException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    } catch (DataAccessException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     }
-
-                } catch (DataNotFoundException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (DataAccessException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+
+                //indicate that the game started
+                gameStarted=true;
+
+
+            } else {
+                throw new GameAlreadyStartedException(this);
             }
 
-            //indicate that the game started
-            gameStarted=true;
-
-
-        } else {
-            throw new GameAlreadyStartedException(this);
+            today=DateUtils.incrementTimeByDays(1,today);
         }
 
-        today=DateUtils.incrementTimeByDays(1,today);
 //        return events.toArray(new StockUpdateEvent[events.size()]);
 
     }
@@ -532,14 +555,14 @@ public class DailySummaryDataPLayer extends DataPlayer {
         return gameStarted;
     }
 
-    /**
-     * Start playing the data
-     * @param resolution the time gaps between pushing events
-     */
-    public void startGame(int resolution) throws GameAlreadyStartedException {
-
-        timer.schedule(task, 0, resolution * 1000);
-    }
+//    /**
+//     * Start playing the data
+//     * @param resolution the time gaps between pushing events
+//     */
+//    public void startGame(int resolution) throws GameAlreadyStartedException {
+//
+//        timer.schedule(task, 0, resolution * 1000);
+//    }
 
 //    /**
 //     * Stop the data playback
