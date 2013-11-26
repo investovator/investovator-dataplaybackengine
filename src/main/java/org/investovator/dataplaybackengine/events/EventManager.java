@@ -1,5 +1,7 @@
 package org.investovator.dataplaybackengine.events;
 
+import org.investovator.core.commons.events.GameEvent;
+
 import java.util.ArrayList;
 
 /**
@@ -29,7 +31,7 @@ public class EventManager {
 
     }
 
-    public void notifyListeners(PlaybackEvent obj) {
+    public void notifyListeners(GameEvent obj) {
         for(PlaybackEventListener listener:listeners){
             listener.eventOccurred(obj);
         }

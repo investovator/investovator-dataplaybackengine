@@ -19,9 +19,11 @@
 
 package org.investovator.dataplaybackengine.events;
 
+import org.investovator.core.commons.events.GameEvent;
+
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public class PlaybackFinishedEvent extends PlaybackEvent {
+public class PlaybackFinishedEvent extends GameEvent {
 }

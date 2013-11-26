@@ -19,7 +19,7 @@
 
 package org.investovator.dataplaybackengine.util;
 
-import org.investovator.dataplaybackengine.events.PlaybackEvent;
+import org.investovator.core.commons.events.GameEvent;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
@@ -33,19 +33,19 @@ import java.util.ArrayList;
 public class GameObserver implements PlaybackEventListener {
 
     private static boolean gameFinished;
-    private static ArrayList<PlaybackEvent> events;
+    private static ArrayList<GameEvent> events;
 
     public GameObserver() {
         gameFinished=false;
-        events=new ArrayList<PlaybackEvent>();
+        events=new ArrayList<GameEvent>();
     }
 
     @Override
-    public void eventOccurred(PlaybackEvent event) {
+    public void eventOccurred(GameEvent event) {
         if(event instanceof PlaybackFinishedEvent){
             System.out.println("Game finished event received....");
             gameFinished=true;
-            events.add((PlaybackEvent)event);
+            events.add((PlaybackFinishedEvent)event);
         }
         else if (event instanceof StockUpdateEvent){
             System.out.println("Stock update event received....");
@@ -58,7 +58,7 @@ public class GameObserver implements PlaybackEventListener {
         return gameFinished;
     }
 
-    public ArrayList<PlaybackEvent> getEvents() {
+    public ArrayList<GameEvent> getEvents() {
         return events;
     }
 }

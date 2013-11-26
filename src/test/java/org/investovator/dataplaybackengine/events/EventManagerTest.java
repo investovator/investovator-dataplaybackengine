@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.events;
 
+import org.investovator.core.commons.events.GameEvent;
 import org.investovator.dataplaybackengine.util.GameObserver;
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class EventManagerTest {
         Thread.sleep(1000);
         //check for the reply
         assert(gameObserver.getEvents().size()>0);
-        PlaybackEvent event=gameObserver.getEvents().get(0);
+        GameEvent event=gameObserver.getEvents().get(0);
         assert(event instanceof PlaybackFinishedEvent);
 
     }

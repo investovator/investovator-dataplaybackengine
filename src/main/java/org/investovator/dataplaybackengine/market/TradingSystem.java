@@ -19,8 +19,8 @@
 
 package org.investovator.dataplaybackengine.market;
 
+import org.investovator.core.commons.events.GameEvent;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.events.PlaybackEvent;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
@@ -117,7 +117,7 @@ public class TradingSystem implements PlaybackEventListener {
 
     //used to listen to events by the RealTimeEventTask
     @Override
-    public void eventOccurred(PlaybackEvent arg) {
+    public void eventOccurred(GameEvent arg) {
         //if this is a stock event
         if(arg instanceof StockUpdateEvent){
             StockUpdateEvent event=(StockUpdateEvent)arg;

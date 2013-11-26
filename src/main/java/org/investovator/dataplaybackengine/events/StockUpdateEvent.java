@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.events;
 
+import org.investovator.core.commons.events.GameEvent;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 
 import java.io.Serializable;
@@ -29,7 +30,7 @@ import java.util.HashMap;
  * @author: ishan
  * @version: ${Revision}
  */
-public class StockUpdateEvent extends PlaybackEvent {
+public class StockUpdateEvent extends GameEvent {
 
     private String stockId;
     private HashMap<TradingDataAttribute, Float> data;

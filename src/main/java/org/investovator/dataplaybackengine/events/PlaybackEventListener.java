@@ -19,10 +19,11 @@
 
 package org.investovator.dataplaybackengine.events;
 
+import org.investovator.core.commons.events.GameEventListener;
+
 /**
  * @author: ishan
  * @version: ${Revision}
  */
-public interface PlaybackEventListener {
-    void eventOccurred(PlaybackEvent event);
+public interface PlaybackEventListener extends GameEventListener {
 }
