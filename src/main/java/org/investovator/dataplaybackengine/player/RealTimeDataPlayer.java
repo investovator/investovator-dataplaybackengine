@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.player;
 
+import org.investovator.core.commons.events.GameEventListener;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.*;
@@ -138,8 +139,13 @@ public class RealTimeDataPlayer extends DataPlayer {
      *
      * @param observer
      */
-    public void setObserver(PlaybackEventListener observer){
-        task.setObserver(observer);
+    public void setObserver(GameEventListener observer){
+        task.setObserver((PlaybackEventListener)observer);
+    }
+
+    @Override
+    public void removeObserver(GameEventListener observer) {
+        task.removeObserver((PlaybackEventListener)observer);
     }
 
     /**

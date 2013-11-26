@@ -20,6 +20,12 @@ public class EventManager {
         this.listeners = new ArrayList<PlaybackEventListener>();
     }
 
+    /**
+     * Adds an observer
+     *
+     * @param observer
+     * @return
+     */
     public boolean addObserver(PlaybackEventListener observer){
         //add only the listeners who are not already listening
         if(!listeners.contains(observer)){
@@ -31,6 +37,20 @@ public class EventManager {
 
     }
 
+    /**
+     * Remove a game observer
+     * @param observer
+     */
+    public void removeObserver(PlaybackEventListener observer){
+        if(listeners.contains(observer)){
+            listeners.remove(observer);
+        }
+    }
+
+    /**
+     * notifies the listeners
+     * @param obj
+     */
     public void notifyListeners(GameEvent obj) {
         for(PlaybackEventListener listener:listeners){
             listener.eventOccurred(obj);

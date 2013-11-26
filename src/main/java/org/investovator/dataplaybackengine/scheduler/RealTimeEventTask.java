@@ -176,4 +176,8 @@ public class RealTimeEventTask extends TimerTask {
     public Date getCurrentTime() {
         return currentTime;
     }
+
+    public void removeObserver(PlaybackEventListener listener){
+        eventManager.removeObserver(listener);
+    }
 }

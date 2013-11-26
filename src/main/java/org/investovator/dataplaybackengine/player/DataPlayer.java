@@ -19,6 +19,8 @@
 
 package org.investovator.dataplaybackengine.player;
 
+import org.investovator.core.commons.events.GameEvent;
+import org.investovator.core.commons.events.GameEventListener;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.*;
@@ -111,7 +113,13 @@ public abstract class DataPlayer {
      *
      * @param observer
      */
-    abstract public void setObserver(PlaybackEventListener observer);
+    abstract public void setObserver(GameEventListener observer);
+
+    /**
+     * Removes the given game event listener
+     * @param observer
+     */
+    abstract public void removeObserver(GameEventListener observer);
 
     /**
      * Starts the game. The default play speed of the player will be used

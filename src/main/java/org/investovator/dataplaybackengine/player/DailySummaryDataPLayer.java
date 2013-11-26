@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.player;
 
+import org.investovator.core.commons.events.GameEventListener;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.data.api.CompanyData;
 import org.investovator.core.data.api.CompanyStockTransactionsData;
@@ -541,14 +542,20 @@ public class DailySummaryDataPLayer extends DataPlayer {
      *
      * @param observer
      */
-    public void setObserver(PlaybackEventListener observer){
+    public void setObserver(GameEventListener observer){
 //        if (isMultiplayer()){
 //
 //            task.setObserver(observer);
 //        }
 //        else{
-            eventManager.addObserver(observer);
+
+            eventManager.addObserver((PlaybackEventListener)observer);
 //        }
+    }
+
+    @Override
+    public void removeObserver(GameEventListener observer) {
+        eventManager.removeObserver((PlaybackEventListener)observer);
     }
 
     public boolean isGameStarted() {
