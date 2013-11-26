@@ -26,6 +26,6 @@ package org.investovator.dataplaybackengine.exceptions;
 public class GameFinishedException extends Exception {
 
     public GameFinishedException(String type) {
-        super(type+" Game already finished");
+        super(type + " Game already finished");
     }
 }

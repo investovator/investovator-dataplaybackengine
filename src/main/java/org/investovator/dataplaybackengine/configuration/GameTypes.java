@@ -24,6 +24,7 @@ import org.investovator.dataplaybackengine.player.type.PlayerTypes;
 import java.util.ArrayList;
 
 /**
+ * Can be used to define new game types
  * @author: ishan
  * @version: ${Revision}
  */
@@ -32,6 +33,7 @@ public interface GameTypes {
     /**
      * returns the attributes that the data player should include in
      * data playback events
+     *
      * @return
      */
     public ArrayList<TradingDataAttribute> getInterestedAttributes();
@@ -46,6 +48,7 @@ public interface GameTypes {
 
     /**
      * returns the data players speed,if the player is incrementing automatically (usually in seconds)
+     *
      * @return
      */
     public int getPlayerSpeed();
@@ -53,12 +56,14 @@ public interface GameTypes {
     /**
      * returns the attribute on which the game should be run.
      * Ex - Closing price for a Daily Summary based game
+     *
      * @return
      */
     public TradingDataAttribute getAttributeToMatch();
 
     /**
      * returns a description about the game
+     *
      * @return
      */
     public String getDescription();

@@ -25,6 +25,6 @@ package org.investovator.dataplaybackengine.exceptions;
  */
 public class UserAlreadyJoinedException extends Exception {
     public UserAlreadyJoinedException(String userName) {
-        super(userName+" has already joined the game");
+        super(userName + " has already joined the game");
     }
 }

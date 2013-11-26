@@ -49,8 +49,8 @@ public class GameConfigurationImpl implements GameConfiguration {
         this.interestedAttributes = gameConf.getInterestedAttributes();
         this.playerType = gameConf.getPlayerType();
         this.attributeToMatch = gameConf.getAttributeToMatch();
-        this.description = gameConf.getDescription() +"with "+gameConf.getInterestedAttributes().toString();
-        this.gameSpeed=gameConf.getPlayerSpeed();
+        this.description = gameConf.getDescription() + "with " + gameConf.getInterestedAttributes().toString();
+        this.gameSpeed = gameConf.getPlayerSpeed();
     }
 
     @Override

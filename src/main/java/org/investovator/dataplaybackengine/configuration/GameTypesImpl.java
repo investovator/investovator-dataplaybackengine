@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 public enum GameTypesImpl implements GameTypes {
 
-    DAILY_SUMMARY_CLOSING_PRICE_GAME{
+    DAILY_SUMMARY_CLOSING_PRICE_GAME {
         @Override
         public ArrayList<TradingDataAttribute> getInterestedAttributes() {
-            ArrayList<TradingDataAttribute> attrs=new ArrayList<>();
+            ArrayList<TradingDataAttribute> attrs = new ArrayList<>();
             attrs.add(TradingDataAttribute.DAY);
             attrs.add(TradingDataAttribute.SHARES);
             attrs.add(TradingDataAttribute.CLOSING_PRICE);
@@ -23,7 +23,8 @@ public enum GameTypesImpl implements GameTypes {
 
         @Override
         public PlayerTypes getPlayerType() {
-            return PlayerTypes.DAILY_SUMMARY_PLAYER;        }
+            return PlayerTypes.DAILY_SUMMARY_PLAYER;
+        }
 
         @Override
         public int getPlayerSpeed() {
@@ -41,10 +42,10 @@ public enum GameTypesImpl implements GameTypes {
         }
     },
 
-    DAILY_SUMMARY_HIGH_PRICE_GAME{
+    DAILY_SUMMARY_HIGH_PRICE_GAME {
         @Override
         public ArrayList<TradingDataAttribute> getInterestedAttributes() {
-            ArrayList<TradingDataAttribute> attrs=new ArrayList<>();
+            ArrayList<TradingDataAttribute> attrs = new ArrayList<>();
             attrs.add(TradingDataAttribute.DAY);
             attrs.add(TradingDataAttribute.SHARES);
             attrs.add(TradingDataAttribute.HIGH_PRICE);
@@ -53,7 +54,8 @@ public enum GameTypesImpl implements GameTypes {
 
         @Override
         public PlayerTypes getPlayerType() {
-            return PlayerTypes.DAILY_SUMMARY_PLAYER;        }
+            return PlayerTypes.DAILY_SUMMARY_PLAYER;
+        }
 
         @Override
         public int getPlayerSpeed() {
@@ -71,10 +73,10 @@ public enum GameTypesImpl implements GameTypes {
         }
     },
 
-    TICKER_DATA_GAME{
+    TICKER_DATA_GAME {
         @Override
         public ArrayList<TradingDataAttribute> getInterestedAttributes() {
-            ArrayList<TradingDataAttribute> attrs=new ArrayList<>();
+            ArrayList<TradingDataAttribute> attrs = new ArrayList<>();
             attrs.add(TradingDataAttribute.DAY);
             attrs.add(TradingDataAttribute.SHARES);
             attrs.add(TradingDataAttribute.PRICE);
@@ -102,9 +104,7 @@ public enum GameTypesImpl implements GameTypes {
         public String getDescription() {
             return "Ticker data based game traded prices of stocks";
         }
-    }
-
-    ;
+    };
 
 
 }

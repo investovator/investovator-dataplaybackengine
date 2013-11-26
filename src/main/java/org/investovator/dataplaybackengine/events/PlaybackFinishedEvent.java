@@ -22,6 +22,8 @@ package org.investovator.dataplaybackengine.events;
 import org.investovator.core.commons.events.GameEvent;
 
 /**
+ * Indicates that the game playback is finished.
+ *
  * @author: ishan
  * @version: ${Revision}
  */

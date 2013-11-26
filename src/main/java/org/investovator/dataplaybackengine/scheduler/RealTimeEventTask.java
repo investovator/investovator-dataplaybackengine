@@ -106,7 +106,6 @@ public class RealTimeEventTask extends TimerTask {
         for (String stock : stocks) {
 
             try {
-                //todo- Assumed that the maximum resolution of "time" for the data in the data base is 1 second
                 StockTradingData data = dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
                         stock, currentTime, new Date(), RealTimeEventTask.CACHE_SIZE, attributes);
 

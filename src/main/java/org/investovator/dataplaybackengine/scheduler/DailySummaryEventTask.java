@@ -19,13 +19,8 @@
 
 package org.investovator.dataplaybackengine.scheduler;
 
-import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.events.EventManager;
-import org.investovator.dataplaybackengine.events.PlaybackEventListener;
-import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;
-import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
-import org.investovator.dataplaybackengine.exceptions.GameFinishedException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 
 import java.util.TimerTask;
@@ -48,8 +43,7 @@ public class DailySummaryEventTask extends TimerTask {
 
     @Override
     public void run() {
-//        StockUpdateEvent[] events=null;
-        running=true;
+        running = true;
 
         //if the game has not started yet
         if (!player.isGameStarted()) {
@@ -61,29 +55,17 @@ public class DailySummaryEventTask extends TimerTask {
             }
 
         } else {
-//            try {
-                player.playNextDay();
+            player.playNextDay();
 
-//            } catch (GameFinishedException e) {
-//                //notify the player
-//                eventManager.notifyListeners(new PlaybackFinishedEvent());
-//                //stop the timer
-//                this.cancel();
-//            }
         }
-//        if(events!=null){
-//
-//            for (StockUpdateEvent event : events) {
-//                eventManager.notifyListeners(event);
-//            }
-//        }
     }
 
-//    public void setObserver(PlaybackEventListener observer) {
-//        eventManager.addObserver(observer);
-//    }
 
-
+    /**
+     * Returns whether the task is running
+     *
+     * @return
+     */
     public boolean isRunning() {
         return running;
     }

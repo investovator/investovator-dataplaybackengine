@@ -22,28 +22,31 @@ package org.investovator.dataplaybackengine.configuration;
 import java.util.Date;
 
 /**
- *
  * Used to pass game configurations
+ *
  * @author: ishan
  * @version: ${Revision}
  */
-public interface GameConfiguration extends GameTypes{
+public interface GameConfiguration extends GameTypes {
 
     /**
      * Returns the start time for the game
+     *
      * @return
      */
     public Date getGameStartTime();
 
     /**
      * Returns the array of symbols that the game is played on
+     *
      * @return
      */
     public String[] getPlayingSymbols();
 
 
     /**
-     *Whether this is a multiplayer game or not
+     * Whether this is a multiplayer game or not
+     *
      * @return
      */
     public boolean isMultiplayer();

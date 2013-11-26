@@ -27,17 +27,18 @@ import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
+ * Works as a simple matching engine. Had to use a custom implementation since the
+ * Data playback engine needs immediate order matching.
+ *
  * @author: ishan
  * @version: ${Revision}
  */
 public class TradingSystem implements PlaybackEventListener {
 
     //stock name-attribute - value
-    HashMap<String,HashMap<TradingDataAttribute,Float>> priceList;
+    HashMap<String, HashMap<TradingDataAttribute, Float>> priceList;
     ArrayList<TradingDataAttribute> attributes;
     //attribute used for matching stocks
     TradingDataAttribute attributeToMatch;
@@ -52,92 +53,98 @@ public class TradingSystem implements PlaybackEventListener {
         this.priceList = new HashMap<String, HashMap<TradingDataAttribute, Float>>();
         this.attributes = attributes;
         this.attributeToMatch = attributeToMatch;
-        this.marketTurnover=0;
-        this.totalTrades=0;
+        this.marketTurnover = 0;
+        this.totalTrades = 0;
     }
 
     /**
      * Executes an order on the given info
      *
-     * @param stockId Name of the stock
-     * @param quantity Quantity to be sold/bought
+     * @param stockId        Name of the stock
+     * @param quantity       Quantity to be sold/bought
      * @param accountBalance Available cash in the users account
-     * @return   the cost of a single stock
+     * @return the cost of a single stock
      * @throws InvalidOrderException
      */
     public float executeOrder(String stockId, int quantity, double accountBalance, OrderType type)
             throws InvalidOrderException {
-        if(!priceList.containsKey(stockId)){
-            throw new InvalidOrderException("No events have arrived for the stock "+stockId);
+        if (!priceList.containsKey(stockId)) {
+            throw new InvalidOrderException("No events have arrived for the stock " + stockId);
 
         }
 
-        float price=priceList.get(stockId).get(attributeToMatch);
-        float neededMoney=price*quantity;
+        float price = priceList.get(stockId).get(attributeToMatch);
+        float neededMoney = price * quantity;
         //if this is a buy order and if the user does not have enough money
-        if(type==OrderType.BUY && accountBalance<neededMoney){
-            throw new InvalidOrderException("Not enough money. Need "+neededMoney);
+        if (type == OrderType.BUY && accountBalance < neededMoney) {
+            throw new InvalidOrderException("Not enough money. Need " + neededMoney);
         }
 
         //add to turnover
-        this.marketTurnover+=neededMoney;
+        this.marketTurnover += neededMoney;
         //increase the total number of trades
-        this.totalTrades+=1;
+        this.totalTrades += 1;
 
         return price;
     }
 
     /**
      * Returns the current price of the stock
-     * @param stockId  name of the stock
+     *
+     * @param stockId name of the stock
      * @return
      */
-    public float getStockPrice(String stockId){
+    public float getStockPrice(String stockId) {
         return priceList.get(stockId).get(attributeToMatch);
     }
 
     /**
      * Returns the total market turnover
+     *
      * @return
      */
     public float getMarketTurnover() {
         return marketTurnover;
     }
 
-    public void updateStockPrice(String stockId, HashMap<TradingDataAttribute, String> prices){
-        HashMap<TradingDataAttribute, Float> details=new HashMap<TradingDataAttribute, Float>();
+    public void updateStockPrice(String stockId, HashMap<TradingDataAttribute, String> prices) {
+        HashMap<TradingDataAttribute, Float> details = new HashMap<TradingDataAttribute, Float>();
         //convert the details
-        for(TradingDataAttribute attr:prices.keySet()){
-            details.put(attr,Float.parseFloat(prices.get(attributeToMatch)));
+        for (TradingDataAttribute attr : prices.keySet()) {
+            details.put(attr, Float.parseFloat(prices.get(attributeToMatch)));
 
         }
-        priceList.put(stockId,details);
+        priceList.put(stockId, details);
 
-        }
+    }
 
-    //used to listen to events by the RealTimeEventTask
+    /**
+     * used to listen to events by the RealTimeEventTask
+     *
+     * @param arg
+     */
     @Override
     public void eventOccurred(GameEvent arg) {
         //if this is a stock event
-        if(arg instanceof StockUpdateEvent){
-            StockUpdateEvent event=(StockUpdateEvent)arg;
+        if (arg instanceof StockUpdateEvent) {
+            StockUpdateEvent event = (StockUpdateEvent) arg;
 
-            HashMap<TradingDataAttribute,Float> values=new HashMap<TradingDataAttribute, Float>();
+            HashMap<TradingDataAttribute, Float> values = new HashMap<TradingDataAttribute, Float>();
             //iterate all the attributes
-            for(TradingDataAttribute attr:event.getData().keySet()){
-                values.put(attr,event.getData().get(attr));
+            for (TradingDataAttribute attr : event.getData().keySet()) {
+                values.put(attr, event.getData().get(attr));
             }
 
             //update the price of the stock
-            priceList.put(event.getStockId(),values);
+            priceList.put(event.getStockId(), values);
 
 
         }
     }
 
     /**
-     *
      * Returns the total number of trades done
+     *
      * @return
      */
     public int getTotalTrades() {

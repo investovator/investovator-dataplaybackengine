@@ -39,6 +39,7 @@ import org.investovator.dataplaybackengine.market.TradingSystem;
 import java.util.*;
 
 /**
+ * This is the parent class of all the data players. Any data player should extend this.
  * @author: ishan
  * @version: ${Revision}
  */
@@ -47,10 +48,8 @@ public abstract class DataPlayer {
     protected CompanyStockTransactionsData transactionDataAPI;
     protected CompanyData companyDataAPI;
 
-//    protected     HashMap<String,Portfolio> userPortfolios;
-
+    //to store the game players
     protected ArrayList<String> usersList;
-
 
     protected TradingSystem tradingSystem;
 
@@ -65,6 +64,7 @@ public abstract class DataPlayer {
     //max amount of stocks that a person can buy/sell
     protected static int maxOrderSize=5000;
 
+    //the default speed of the game
     protected int gameSpeed =1;
 
     //set the game start time
@@ -75,12 +75,6 @@ public abstract class DataPlayer {
         try {
             this.companyDataAPI=new CompanyDataImpl();
             this.userData=new UserDataImpl();
-
-            //todo - testing code to clear DB manually -should be moved to controller
-//            DataStorage storage = new DataStorageImpl();
-//            storage.resetDataStorage();
-            //todo - end of testing
-
 
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -96,7 +90,8 @@ public abstract class DataPlayer {
 
     }
 
-    protected DataPlayer(UserData userData, CompanyData companyDataAPI, CompanyStockTransactionsData transactionDataAPI) {
+    protected DataPlayer(UserData userData, CompanyData companyDataAPI,
+                         CompanyStockTransactionsData transactionDataAPI) {
         this.userData = userData;
         this.companyDataAPI = companyDataAPI;
         this.transactionDataAPI = transactionDataAPI;
@@ -131,20 +126,28 @@ public abstract class DataPlayer {
      */
     abstract public void stopGame();
 
-//    /**
-//     * Starts the game.
-//     * @param speed Defines the speed of the game. Usually the minimum delay between checking for  new events
-//     */
-//    abstract private void startGame(int speed) throws GameAlreadyStartedException;
-
-//    /**
-//     * Stop the data playback
-//     */
-//    abstract public void stopPlayback();
-
-    abstract public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws InvalidOrderException,
+    /**
+     * Executes a given order
+     *
+     * @param stockId  Security ID
+     * @param quantity Number of stocks to trade
+     * @param side     Buy/Sell
+     * @param userName user who is placing the order
+     * @return whether the order or executed or not
+     * @throws InvalidOrderException
+     * @throws UserJoinException
+     */
+    abstract public boolean executeOrder(String stockId, int quantity, OrderType side,String userName) throws
+            InvalidOrderException,
             UserJoinException;
 
+    /**
+     * Returns the portfolio of the requested user
+     *
+     * @param userName
+     * @return
+     * @throws UserJoinException
+     */
     public Portfolio getMyPortfolio(String userName) throws UserJoinException {
 
         //check if the user has joined the game
@@ -161,14 +164,6 @@ public abstract class DataPlayer {
             throw new UserJoinException("User "+userName+ " has not joined the game");
 
         }
-
-
-//
-//        //if the user has not joined the game
-//        if(!userPortfolios.containsKey(userName)){
-//            throw new UserJoinException("User "+userName+ " has not joined the game");
-//
-//        }
 
         return portfolio;
     }
@@ -196,21 +191,6 @@ public abstract class DataPlayer {
      */
     public boolean hasUserJoined(String name){
 
-//        try{
-//
-//            Portfolio portfolio = userData.getUserPortfolio(name);
-//        }
-//     catch (DataAccessException e) {
-//        e.printStackTrace();
-//
-//        //if the user has not joined the game
-//        if(!e.getMessage().equalsIgnoreCase("Requested data not found")){
-//            return false;
-//
-//        }
-//
-//    }
-
         if(usersList.contains(name)){
             return true;
         }
@@ -218,8 +198,6 @@ public abstract class DataPlayer {
             return false;
         }
 
-
-//        return userPortfolios.containsKey(name);
     }
 
     /**
@@ -236,104 +214,6 @@ public abstract class DataPlayer {
         return initialCredit;
     }
 
-
-    /**
-     * Returns the starting date/time and the ending date/time which has data for all the given set of stocks
-     *
-     * @param stocks
-     * @return First element contains start date, second element contains the ending date,
-     * a null may be returned for any of the dates if no common date is found
-     */
-    public Date[] getCommonStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type) throws DataAccessException {
-        Date startDate=null;
-        Date endDate=null;
-
-        //Date(in order) - [stocks]
-        TreeMap<Date,ArrayList<String>> counter=new TreeMap<Date, ArrayList<String>>();
-
-        //iterate all the stocks
-        for(String stock:stocks){
-            //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(type,stock);
-
-            //add them to the map
-            for(Date date:dates){
-                //if the arraylist has not been initialized
-                if(!counter.containsKey(date)){
-                    counter.put(date,new ArrayList<String>());
-                }
-
-                ArrayList<String> stockList=counter.get(date);
-                stockList.add(stock);
-                counter.put(date,stockList);
-            }
-        }
-
-        //iterate the map in the ascending order and determine the largest date which has all the stocks
-        for(Date date:counter.keySet()){
-            if(counter.get(date).size()==stocks.length){
-                startDate=date;
-                break;
-            }
-        }
-
-        //reverse order the collection first
-        Comparator cmp = Collections.reverseOrder();
-        TreeMap<Date,ArrayList<String>> reverseOrderedMap=new TreeMap<Date,ArrayList<String>>(cmp);
-        reverseOrderedMap.putAll(counter);
-
-        //iterate the map in the descending order and determine the biggest date which has all the stocks
-        for(Date date:reverseOrderedMap.keySet()){
-            if(reverseOrderedMap.get(date).size()==stocks.length){
-                endDate=date;
-                break;
-            }
-        }
-
-        //return the array
-        return new Date[] {startDate,endDate};
-
-    }
-
-    /**
-     *Returns the starting date/time and the ending date/time for the given set of stocks. Those dates does
-     *not necessarily need to contain values for every stock
-     *
-     * @param stocks
-     * @return First element contains start date, second element contains the ending date
-     */
-    public Date[] getStartingAndEndDates(String[] stocks, CompanyStockTransactionsData.DataType type) throws DataAccessException {
-
-        //to store all the date
-        List<Date> datesList=new ArrayList<Date>();
-
-        //iterate all the stocks
-        for(String stock:stocks){
-            //get all the dates for that stock
-            Date[] dates=transactionDataAPI.getDataDaysRange(type,stock);
-
-            //add them to the map
-            datesList.addAll(Arrays.asList(dates));
-        }
-
-        //sort in the ascending order
-        Collections.sort(datesList);
-
-        return  new Date[] {datesList.get(0),datesList.get(datesList.size()-1)};
-
-
-    }
-
-    /**
-     * @return Company StockId and Name pairs
-     * @throws org.investovator.core.data.exeptions.DataAccessException
-     */
-    public HashMap<String, String> getStocksList() throws DataAccessException {
-
-        return companyDataAPI.getCompanyIDsNames();
-
-
-    }
 
     /**
      * Returns a name for the player
@@ -399,25 +279,7 @@ public abstract class DataPlayer {
      */
     public boolean joinGame(PlaybackEventListener observer,String userName) throws UserAlreadyJoinedException {
 
-        //if a non-admin user tries to connect to a single player game
-        //todo - implement using authenticator
-//        if(!isMultiplayer && user!=admin){
-//            throw new UserJoinException("You don't have sufficient privileges to enter this game");
-//        }
-
         boolean joined=false;
-
-//        //check whether the user has already joined the game
-//        if(!userPortfolios.containsKey(userName)){
-//            userPortfolios.put(userName,new PortfolioImpl(userName,RealTimeDataPlayer.initialCredit,0));
-//            joined=true;
-//            setObserver(observer);
-//        }
-//        else{
-////            throw new UserAlreadyJoinedException(userName);
-//            //todo - remove the fpllowing line
-//            setObserver(observer);
-//        }
 
         try {
             userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DataPlayer.initialCredit,0));
@@ -435,12 +297,5 @@ public abstract class DataPlayer {
 
     }
 
-//    /**
-//     * Used to set a custom user data implementation for testing purposes
-//     * @param userData
-//     */
-//    public void setUserData(UserData userData){
-//         this.userData=userData;
-//    }
 }
 

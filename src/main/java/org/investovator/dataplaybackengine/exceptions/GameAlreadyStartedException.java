@@ -26,6 +26,6 @@ package org.investovator.dataplaybackengine.exceptions;
 public class GameAlreadyStartedException extends Exception {
 
     public GameAlreadyStartedException(Object ob) {
-        super("Game has already started : "+ob.toString());
+        super("Game has already started : " + ob.toString());
     }
 }

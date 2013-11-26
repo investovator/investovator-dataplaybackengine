@@ -30,16 +30,16 @@ import java.util.Date;
  */
 public class DateUtils {
 
-    public static String DATE_FORMAT_1="yyyy-MM-dd-kk-mm-ss";
+    public static String DATE_FORMAT_1 = "yyyy-MM-dd-kk-mm-ss";
 
     /**
      * Increments a date by a given number of seconds and returns a new date
      *
-     * @param seconds  number of seconds to increment the time by
+     * @param seconds     number of seconds to increment the time by
      * @param currentTime the time value that needs to be incremented
      * @return incremented time
      */
-    public static Date incrementTimeBySeconds(int seconds, Date currentTime){
+    public static Date incrementTimeBySeconds(int seconds, Date currentTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         cal.add(Calendar.SECOND, seconds); //minus number would decrement the days
@@ -50,11 +50,11 @@ public class DateUtils {
     /**
      * Increments a date by a given number of days and returns a new date
      *
-     * @param days  number of days to increment the time by
+     * @param days        number of days to increment the time by
      * @param currentTime the time value that needs to be incremented
      * @return incremented time
      */
-    public static Date incrementTimeByDays(int days, Date currentTime){
+    public static Date incrementTimeByDays(int days, Date currentTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         cal.add(Calendar.DAY_OF_YEAR, days); //minus number would decrement the days
@@ -65,11 +65,11 @@ public class DateUtils {
     /**
      * Decrements a date by a given number of days and returns a new date
      *
-     * @param days  number of days to increment the time by
+     * @param days        number of days to increment the time by
      * @param currentTime the time value that needs to be incremented
      * @return incremented time
      */
-    public static Date decrementTimeByDays(int days, Date currentTime){
+    public static Date decrementTimeByDays(int days, Date currentTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         cal.add(Calendar.DAY_OF_YEAR, -(days)); //minus number would decrement the days
@@ -80,11 +80,11 @@ public class DateUtils {
     /**
      * Decrements a time by a given number of seconds and returns a new date
      *
-     * @param days  number of days to increment the time by
+     * @param seconds     number of days to decrement the time by
      * @param currentTime the time value that needs to be incremented
      * @return incremented time
      */
-    public static Date decrementTimeBySeconds(int seconds, Date currentTime){
+    public static Date decrementTimeBySeconds(int seconds, Date currentTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(currentTime);
         cal.add(Calendar.SECOND, -(seconds)); //minus number would decrement the seconds
@@ -92,13 +92,20 @@ public class DateUtils {
 
     }
 
-    public static Date dateStringToDateObject(String dateString,String dateFormat) throws ParseException {
+    /**
+     * Converts a given dateString to a date object using the given dateFormat
+     *
+     * @param dateString
+     * @param dateFormat
+     * @return
+     * @throws ParseException
+     */
+    public static Date dateStringToDateObject(String dateString, String dateFormat) throws ParseException {
         Date date;
 
-        //should be in format year-month-date-24hr-minute-second
         SimpleDateFormat format = new SimpleDateFormat(dateFormat);
 
-        date =format.parse(dateString);
+        date = format.parse(dateString);
 
 
         return date;

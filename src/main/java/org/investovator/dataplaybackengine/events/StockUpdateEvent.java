@@ -22,11 +22,12 @@ package org.investovator.dataplaybackengine.events;
 import org.investovator.core.commons.events.GameEvent;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
+ * Stock market update event. An update is a price change in a security
+ *
  * @author: ishan
  * @version: ${Revision}
  */
@@ -36,21 +37,16 @@ public class StockUpdateEvent extends GameEvent {
     private HashMap<TradingDataAttribute, Float> data;
     private Date time;
 
-//    public StockUpdateEvent(String stockId, HashMap<TradingDataAttribute, Float> data, Date time) {
-//        this.stockId = stockId;
-//        this.data = data;
-//        this.time = time;
-//    }
 
     public StockUpdateEvent(String stockId, HashMap<TradingDataAttribute, String> data, Date time) {
         this.stockId = stockId;
 
         //if data is avaialble for this day
-        if(data!=null){
+        if (data != null) {
 
-            this.data=new HashMap<TradingDataAttribute, Float>();
-            for(TradingDataAttribute attr:data.keySet()){
-                this.data.put(attr,Float.parseFloat(data.get(attr)));
+            this.data = new HashMap<TradingDataAttribute, Float>();
+            for (TradingDataAttribute attr : data.keySet()) {
+                this.data.put(attr, Float.parseFloat(data.get(attr)));
             }
         }
 
@@ -83,16 +79,20 @@ public class StockUpdateEvent extends GameEvent {
         this.time = time;
     }
 
-    //useful in duplicate event identification
-
+    /**
+     * useful in duplicate event identification
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof StockUpdateEvent){
-            StockUpdateEvent otherEvent=(StockUpdateEvent)obj;
+        if (obj instanceof StockUpdateEvent) {
+            StockUpdateEvent otherEvent = (StockUpdateEvent) obj;
             //for two events to be same the stock every attribute should match
-            if(this.time.equals(otherEvent.getTime()) &&
+            if (this.time.equals(otherEvent.getTime()) &&
                     this.data.equals(otherEvent.getData()) &&
-                    this.stockId.equalsIgnoreCase(otherEvent.getStockId())){
+                    this.stockId.equalsIgnoreCase(otherEvent.getStockId())) {
                 return true;
             }
         }

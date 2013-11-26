@@ -22,6 +22,9 @@ package org.investovator.dataplaybackengine.events;
 import org.investovator.core.commons.events.GameEventListener;
 
 /**
+ * Every listener who needs to listen to events from the Data Playback engine
+ * should implement this interface.
+ *
  * @author: ishan
  * @version: ${Revision}
  */

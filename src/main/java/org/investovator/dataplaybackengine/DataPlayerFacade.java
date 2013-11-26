@@ -26,7 +26,6 @@ import org.investovator.core.data.exeptions.DataAccessException;
 import org.investovator.core.data.exeptions.DataNotFoundException;
 import org.investovator.dataplaybackengine.configuration.GameConfiguration;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
-import org.investovator.dataplaybackengine.exceptions.player.PlayerStateException;
 import org.investovator.dataplaybackengine.player.DailySummaryDataPLayer;
 import org.investovator.dataplaybackengine.player.DataPlayer;
 import org.investovator.dataplaybackengine.player.RealTimeDataPlayer;
@@ -42,95 +41,47 @@ import java.util.Date;
  * @version: ${Revision}
  */
 public class DataPlayerFacade {
-    private static DataPlayerFacade facade;
 
-//    private DailySummaryDataPLayer dailySummaryDataPLayer;
-//    private RealTimeDataPlayer realTimeDataPlayer;
     private PlayerTypes playerType;
     private DataPlayer player;
 
-    private int DATA_ITEMS_TO_QUERY=1000;
-    private int NUM_OF_DAYS_TO_QUERY=1000;
+    private int DATA_ITEMS_TO_QUERY = 1000;
+    private int NUM_OF_DAYS_TO_QUERY = 1000;
 
-//    public DataPlayerFacade() {
-//
-//    }
-
-//    public static synchronized DataPlayerFacade getInstance(){
-//        if(facade==null){
-//            facade=new DataPlayerFacade();
-//        }
-//
-//        return facade;
-//    }
-
-
-    public DataPlayer createPlayer(GameConfiguration config){
+    /**
+     * Creates a data player up on the given configuration
+     *
+     * @param config
+     * @return
+     */
+    public DataPlayer createPlayer(GameConfiguration config) {
         //if a daily summary player is needed
-        if(PlayerTypes.DAILY_SUMMARY_PLAYER==config.getPlayerType()){
-            this.player=new DailySummaryDataPLayer(config);
-            this.playerType=PlayerTypes.DAILY_SUMMARY_PLAYER;
-        }
-        else if(PlayerTypes.REAL_TIME_DATA_PLAYER==config.getPlayerType()){
-            this.player=new RealTimeDataPlayer(config);
-            this.playerType=PlayerTypes.REAL_TIME_DATA_PLAYER;
+        if (PlayerTypes.DAILY_SUMMARY_PLAYER == config.getPlayerType()) {
+            this.player = new DailySummaryDataPLayer(config);
+            this.playerType = PlayerTypes.DAILY_SUMMARY_PLAYER;
+        } else if (PlayerTypes.REAL_TIME_DATA_PLAYER == config.getPlayerType()) {
+            this.player = new RealTimeDataPlayer(config);
+            this.playerType = PlayerTypes.REAL_TIME_DATA_PLAYER;
         }
 
         return player;
     }
 
-
-//    public void createPlayer(PlayerTypes playerType,String[] stocks,Date startDate,
-//                                 ArrayList<TradingDataAttribute> attributes,
-//                                 TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
-//        //if a daily summary player is needed
-//        if(playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-//            dailySummaryDataPLayer =new DailySummaryDataPLayer(stocks, attributes, attributeToMatch,isMultiplayer );
-//            this.dailySummaryDataPLayer.setStartDate(startDate);
-//            this.playerType=playerType;
-//        }
-//        //if a real time data player is needed
-//        else if(playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-//            realTimeDataPlayer=new RealTimeDataPlayer(stocks,startDate,attributes,attributeToMatch,isMultiplayer);
-//            this.playerType=playerType;
-//
-//        }
-//    }
-
-//    public DailySummaryDataPLayer getDailySummaryDataPLayer() throws PlayerStateException {
-//        if(dailySummaryDataPLayer !=null){
-//            return dailySummaryDataPLayer;
-//        }
-//        else{
-//            throw new PlayerStateException("Daily Summary player is not initialized yet.");
-//        }
-//    }
-//
-//    public RealTimeDataPlayer getRealTimeDataPlayer() throws PlayerStateException {
-//        if (realTimeDataPlayer!=null){
-//            return realTimeDataPlayer;
-//        }
-//        else{
-//            throw new PlayerStateException("Real time data player is not initialized yet.");
-//        }
-//    }
-
-    public PlayerTypes getCurrentPlayerType(){
-        return  this.playerType;
+    /**
+     * Returns the type of the player that is run
+     *
+     * @return
+     */
+    public PlayerTypes getCurrentPlayerType() {
+        return this.playerType;
     }
 
     /**
      * Returns the current player
+     *
      * @return
      */
-    public DataPlayer getCurrentPlayer(){
-//        DataPlayer player=null;
-//        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-//            player= dailySummaryDataPLayer;
-//        }
-//        else if ((this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER)){
-//            player=this.realTimeDataPlayer;
-//        }
+    public DataPlayer getCurrentPlayer() {
 
         return this.player;
     }
@@ -140,36 +91,20 @@ public class DataPlayerFacade {
      *
      * @return
      */
-    public StockTradingData getDataUpToToday(String symbol,Date startingDate,
+    public StockTradingData getDataUpToToday(String symbol, Date startingDate,
                                              ArrayList<TradingDataAttribute> attributes)
             throws DataAccessException, DataNotFoundException {
 
-                 if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-                     Date startDate=DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY,startingDate);
-                     return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.OHLC,
-                             symbol,startDate,this.player.getCurrentTime(),DATA_ITEMS_TO_QUERY,attributes);
-                 }
-        if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-            Date startDate=DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY,startingDate);
-            return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.TICKER,
-                    symbol,startDate,this.player.getCurrentTime(),DATA_ITEMS_TO_QUERY,attributes);
+        if (this.playerType == PlayerTypes.DAILY_SUMMARY_PLAYER) {
+            Date startDate = DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY, startingDate);
+            return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.OHLC,
+                    symbol, startDate, this.player.getCurrentTime(), DATA_ITEMS_TO_QUERY, attributes);
         }
-
-
-//        if(this.playerType==PlayerTypes.DAILY_SUMMARY_PLAYER){
-//
-//            return this.dailySummaryDataPLayer.getTransactionsDataAPI().getTradingData(
-//                    CompanyStockTransactionsData.DataType.OHLC,
-//                    symbol, DateUtils.decrementTimeByDays(365,startingDate),
-//                    dailySummaryDataPLayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
-//
-//        }
-//        else if(this.playerType==PlayerTypes.REAL_TIME_DATA_PLAYER){
-//            return this.realTimeDataPlayer.getTransactionsDataAPI().getTradingData(
-//                    CompanyStockTransactionsData.DataType.TICKER,
-//                    symbol,DateUtils.decrementTimeByDays(10,startingDate)
-//                    ,realTimeDataPlayer.getCurrentTime(),DATA_ITEMS_TO_QUERY,attribute);
-//        }
+        if (this.playerType == PlayerTypes.REAL_TIME_DATA_PLAYER) {
+            Date startDate = DateUtils.decrementTimeByDays(NUM_OF_DAYS_TO_QUERY, startingDate);
+            return StockUtils.getDataBetweenDates(CompanyStockTransactionsData.DataType.TICKER,
+                    symbol, startDate, this.player.getCurrentTime(), DATA_ITEMS_TO_QUERY, attributes);
+        }
 
         return null;
 
@@ -180,23 +115,22 @@ public class DataPlayerFacade {
      *
      * @return whether the game was started or not
      */
-    public boolean startGame(){
+    public boolean startGame() {
         try {
             this.player.startGame();
         } catch (GameAlreadyStartedException e) {
             e.printStackTrace();
             return false;
         }
-    return true;
+        return true;
     }
 
     /**
      * Stops the game
      */
-    public void stopGame(){
+    public void stopGame() {
         this.player.stopGame();
     }
-
 
 
 }
