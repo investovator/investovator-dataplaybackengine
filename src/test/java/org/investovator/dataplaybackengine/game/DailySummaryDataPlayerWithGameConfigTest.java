@@ -23,7 +23,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.dataplaybackengine.configuration.GameConfiguration;
 import org.investovator.dataplaybackengine.configuration.GameConfigurationImpl;
 import org.investovator.dataplaybackengine.configuration.GameTypesImpl;
-import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.UserDataCustomImpl;
 import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackFinishedEvent;

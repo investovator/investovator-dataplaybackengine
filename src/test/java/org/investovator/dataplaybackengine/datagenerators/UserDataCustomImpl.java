@@ -17,7 +17,7 @@
  */
 
 
-package org.investovator.dataplaybackengine.data;
+package org.investovator.dataplaybackengine.datagenerators;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.data.api.UserData;

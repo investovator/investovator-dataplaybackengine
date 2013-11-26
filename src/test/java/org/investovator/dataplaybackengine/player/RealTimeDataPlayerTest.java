@@ -21,13 +21,11 @@ package org.investovator.dataplaybackengine.player;
 
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.data.api.utils.TradingDataAttribute;
-import org.investovator.dataplaybackengine.data.UserDataCustomImpl;
+import org.investovator.dataplaybackengine.datagenerators.UserDataCustomImpl;
 import org.investovator.dataplaybackengine.datagenerators.BogusCompnayTestDataGenerator;
 import org.investovator.dataplaybackengine.datagenerators.BogusHistoryTestDataGenerator;
-import org.investovator.dataplaybackengine.events.StockUpdateEvent;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.util.GameObserver;
-import org.investovator.dataplaybackengine.utils.DateUtils;
 import org.junit.Test;
 
 import java.util.ArrayList;

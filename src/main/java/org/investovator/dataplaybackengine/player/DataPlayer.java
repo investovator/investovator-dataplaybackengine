@@ -19,15 +19,11 @@
 
 package org.investovator.dataplaybackengine.player;
 
-import org.investovator.core.commons.events.GameEvent;
 import org.investovator.core.commons.events.GameEventListener;
 import org.investovator.core.commons.utils.Portfolio;
 import org.investovator.core.commons.utils.PortfolioImpl;
 import org.investovator.core.data.api.*;
-import org.investovator.core.data.api.utils.TradingDataAttribute;
 import org.investovator.core.data.exeptions.DataAccessException;
-import org.investovator.dataplaybackengine.data.BogusCompnayDataGenerator;
-import org.investovator.dataplaybackengine.data.BogusHistoryDataGenerator;
 import org.investovator.dataplaybackengine.events.PlaybackEventListener;
 import org.investovator.dataplaybackengine.exceptions.GameAlreadyStartedException;
 import org.investovator.dataplaybackengine.exceptions.InvalidOrderException;
@@ -36,7 +32,8 @@ import org.investovator.dataplaybackengine.exceptions.UserJoinException;
 import org.investovator.dataplaybackengine.market.OrderType;
 import org.investovator.dataplaybackengine.market.TradingSystem;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * This is the parent class of all the data players. Any data player should extend this.
