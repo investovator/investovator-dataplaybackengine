@@ -57,7 +57,7 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
 
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
             time=DateUtils.incrementTimeByDays(1,time);
@@ -65,16 +65,7 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
             tradingData= new HashMap<TradingDataAttribute, String>();
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
-            i++;
-            marketData.put(time,tradingData);
-            time=DateUtils.incrementTimeByDays(1,time);
-
-
-            tradingData= new HashMap<TradingDataAttribute, String>();
-            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
-            i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
             time=DateUtils.incrementTimeByDays(1,time);
@@ -83,7 +74,16 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
             tradingData= new HashMap<TradingDataAttribute, String>();
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeByDays(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
 
@@ -100,7 +100,7 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
 
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
             time=DateUtils.incrementTimeByDays(1,time);
@@ -108,16 +108,7 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
             tradingData= new HashMap<TradingDataAttribute, String>();
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
-            i++;
-            marketData.put(time,tradingData);
-            time=DateUtils.incrementTimeByDays(1,time);
-
-
-            tradingData= new HashMap<TradingDataAttribute, String>();
-            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
-            i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
             time=DateUtils.incrementTimeByDays(1,time);
@@ -126,7 +117,16 @@ public class BogusHistoryTestDataGenerator implements CompanyStockTransactionsDa
             tradingData= new HashMap<TradingDataAttribute, String>();
             tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
             i++;
-            tradingData.put(TradingDataAttribute.PRICE,Integer.toString(i));
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
+            i++;
+            marketData.put(time,tradingData);
+            time=DateUtils.incrementTimeByDays(1,time);
+
+
+            tradingData= new HashMap<TradingDataAttribute, String>();
+            tradingData.put(TradingDataAttribute.DAY,Integer.toString(i));
+            i++;
+            tradingData.put(TradingDataAttribute.CLOSING_PRICE,Integer.toString(i));
             i++;
             marketData.put(time,tradingData);
 

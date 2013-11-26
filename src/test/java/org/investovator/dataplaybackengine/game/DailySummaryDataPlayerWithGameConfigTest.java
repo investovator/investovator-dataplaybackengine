@@ -103,7 +103,7 @@ public class DailySummaryDataPlayerWithGameConfigTest {
 
                 if (event.getData().get(TradingDataAttribute.DAY)==counter){
                     counter++;
-                    if(event.getData().get(TradingDataAttribute.PRICE)==counter) {
+                    if(event.getData().get(TradingDataAttribute.CLOSING_PRICE)==counter) {
                         matches=true;
                         counter++;
 
