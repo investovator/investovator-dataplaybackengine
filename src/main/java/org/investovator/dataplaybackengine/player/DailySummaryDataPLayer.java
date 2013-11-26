@@ -119,7 +119,53 @@ public class DailySummaryDataPLayer extends DataPlayer {
          this(config.getPlayingSymbols(),config.getInterestedAttributes(),config.getAttributeToMatch(),
                  config.isMultiplayer());
         gameSpeed =config.getPlayerSpeed();
+        today=config.getGameStartTime();
     }
+
+    /**
+     * constructor for testing the player configured with a GameConfiguration and
+     * with custom implementations of userData, companyDataAPI, transactionDataAPI
+     *
+     * @param configuration
+     * @param userData
+     * @param companyDataAPI
+     * @param transactionDataAPI
+     */
+public DailySummaryDataPLayer(GameConfiguration configuration, UserData userData, CompanyData companyDataAPI,
+                              CompanyStockTransactionsData transactionDataAPI){
+    super(userData,companyDataAPI,transactionDataAPI);
+
+
+    gameSpeed =configuration.getPlayerSpeed();
+    today=configuration.getGameStartTime();
+    this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
+    this.attributes = configuration.getInterestedAttributes();
+//        this.userPortfolios=new HashMap<String, Portfolio>();
+    this.tradingSystem=new TradingSystem(attributes,configuration.getAttributeToMatch());
+
+    this.isMultiplayer=configuration.isMultiplayer();
+
+    eventManager = new EventManager();
+
+
+    if(isMultiplayer){
+        task= new DailySummaryEventTask(this);
+        this.timer = new Timer();
+
+    }
+
+
+
+    //initialize the stocks
+    for (String stock : configuration.getPlayingSymbols()) {
+        ohlcDataCache.put(stock, new HashMap<Date, HashMap<TradingDataAttribute, String>>());
+    }
+
+
+    gameStarted = false;
+
+
+}
 
     /**
      * constructor for testing the player with custom implementations of userData, companyDataAPI, transactionDataAPI
@@ -246,7 +292,6 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * Used to set the game starting date at the start of the game.
      *
      * @param startDate
-     * @throws ParseException
      */
     public void setStartDate(Date startDate) {
         this.today = startDate;

@@ -42,7 +42,7 @@ public class GameConfigurationImpl implements GameConfiguration {
 
 
     public GameConfigurationImpl(Date gameStartTime, String[] playingSymbols, boolean multiplayer,
-                                 GameTypesImpl gameConf) {
+                                 GameTypes gameConf) {
         this.gameStartTime = gameStartTime;
         this.playingSymbols = playingSymbols;
         this.multiplayer = multiplayer;
