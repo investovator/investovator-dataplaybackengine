@@ -68,7 +68,7 @@ public class RealTimeDataPlayerTest {
         player=new RealTimeDataPlayer(stocks,DateUtils.dateStringToDateObject(startDate,DateUtils.DATE_FORMAT_1),
                 attributes,TradingDataAttribute.PRICE,
                 true,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
 
         //set the data api

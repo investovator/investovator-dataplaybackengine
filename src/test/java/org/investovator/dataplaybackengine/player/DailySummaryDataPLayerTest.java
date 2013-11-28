@@ -56,7 +56,7 @@ public class DailySummaryDataPLayerTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
         player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
@@ -82,7 +82,7 @@ public class DailySummaryDataPLayerTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
         Date date=new Date();
@@ -110,7 +110,7 @@ public class DailySummaryDataPLayerTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
         Date date=new Date();
@@ -142,7 +142,7 @@ public class DailySummaryDataPLayerTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
         player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);
@@ -183,7 +183,7 @@ public class DailySummaryDataPLayerTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(stocks,attributes,TradingDataAttribute.CLOSING_PRICE,false,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
         player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);

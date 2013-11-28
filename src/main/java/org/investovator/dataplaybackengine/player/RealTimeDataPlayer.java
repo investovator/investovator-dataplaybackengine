@@ -54,11 +54,11 @@ public class RealTimeDataPlayer extends DataPlayer {
         this.isMultiplayer = isMultiplayer;
         this.transactionDataAPI = new CompanyStockTransactionsDataImpl();
         this.gameInstance=instanceId;
-        try {
-            this.companyDataAPI = new CompanyDataImpl();
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            this.companyDataAPI = new CompanyDataImpl();
+//        } catch (DataAccessException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -92,7 +92,7 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
     /**
-     * constructor for testing the player with custom implementations of userData, companyDataAPI, transactionDataAPI
+     * constructor for testing the player with custom implementations of userData, transactionDataAPI
      *
      * @param stocks
      * @param startDate
@@ -100,22 +100,21 @@ public class RealTimeDataPlayer extends DataPlayer {
      * @param attributeToMatch
      * @param isMultiplayer
      * @param userData
-     * @param companyDataAPI
      * @param transactionDataAPI
      */
     public RealTimeDataPlayer(String[] stocks, Date startDate, ArrayList<TradingDataAttribute> attributes,
                               TradingDataAttribute attributeToMatch, boolean isMultiplayer,
-                              UserData userData, CompanyData companyDataAPI,
+                              UserData userData,
                               CompanyStockTransactionsData transactionDataAPI,
                               String instanceId) {
 
-        super(userData, companyDataAPI, transactionDataAPI);
+        super(userData, transactionDataAPI);
 
         this.timer = new Timer();
         tradingSystem = new TradingSystem(attributes, attributeToMatch);
         this.isMultiplayer = isMultiplayer;
         this.transactionDataAPI = transactionDataAPI;
-        this.companyDataAPI = companyDataAPI;
+//        this.companyDataAPI = companyDataAPI;
         this.gameInstance=instanceId;
 
         task = new RealTimeEventTask(stocks, startDate, transactionDataAPI, attributes);
@@ -188,8 +187,8 @@ public class RealTimeDataPlayer extends DataPlayer {
             UserJoinException {
 
         //order validity checks
-        if (quantity > RealTimeDataPlayer.maxOrderSize) {
-            throw new InvalidOrderException("Cannot place more than " + RealTimeDataPlayer.maxOrderSize + " orders.");
+        if (quantity > this.maxOrderSize) {
+            throw new InvalidOrderException("Cannot place more than " + this.maxOrderSize + " orders.");
         }
         if (!task.getStocks().contains(stockId)) {
             throw new InvalidOrderException("Invalid stock ID : " + stockId);

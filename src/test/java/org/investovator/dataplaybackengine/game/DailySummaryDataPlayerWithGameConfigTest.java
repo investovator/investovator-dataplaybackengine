@@ -75,7 +75,7 @@ public class DailySummaryDataPlayerWithGameConfigTest {
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(config,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
 //        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);

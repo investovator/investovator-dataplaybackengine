@@ -43,7 +43,7 @@ import java.util.Date;
 public abstract class DataPlayer {
 
     protected CompanyStockTransactionsData transactionDataAPI;
-    protected CompanyData companyDataAPI;
+//    protected CompanyData companyDataAPI;
 
     //to store the game players
     protected ArrayList<String> usersList;
@@ -58,10 +58,10 @@ public abstract class DataPlayer {
     protected String gameInstance;
 
     //amount of money a person get at the begining
-    protected static int initialCredit=10000;
+    protected int initialCredit=10000;
 
     //max amount of stocks that a person can buy/sell
-    protected static int maxOrderSize=5000;
+    protected int maxOrderSize=5000;
 
     //the default speed of the game
     protected int gameSpeed =1;
@@ -72,7 +72,7 @@ public abstract class DataPlayer {
     public DataPlayer() {
         this.transactionDataAPI =new CompanyStockTransactionsDataImpl();
         try {
-            this.companyDataAPI=new CompanyDataImpl();
+//            this.companyDataAPI=new CompanyDataImpl();
             this.userData=new UserDataImpl();
 
         } catch (DataAccessException e) {
@@ -89,10 +89,10 @@ public abstract class DataPlayer {
 
     }
 
-    protected DataPlayer(UserData userData, CompanyData companyDataAPI,
+    protected DataPlayer(UserData userData,
                          CompanyStockTransactionsData transactionDataAPI) {
         this.userData = userData;
-        this.companyDataAPI = companyDataAPI;
+//        this.companyDataAPI = companyDataAPI;
         this.transactionDataAPI = transactionDataAPI;
 
         //set the game start time
@@ -282,7 +282,7 @@ public abstract class DataPlayer {
 
         try {
             userData.addUserToGameInstance(this.gameInstance,userName);
-            userData.updateUserPortfolio(gameInstance,userName,new PortfolioImpl(userName, DataPlayer.initialCredit,0));
+            userData.updateUserPortfolio(gameInstance,userName,new PortfolioImpl(userName, this.initialCredit,0));
             joined=true;
             setObserver(observer);
             usersList.add(userName);

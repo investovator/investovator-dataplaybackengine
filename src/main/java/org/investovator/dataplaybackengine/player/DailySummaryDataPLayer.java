@@ -110,16 +110,15 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     /**
      * constructor for testing the player configured with a GameConfiguration and
-     * with custom implementations of userData, companyDataAPI, transactionDataAPI
+     * with custom implementations of userData, transactionDataAPI
      *
      * @param configuration
      * @param userData
-     * @param companyDataAPI
      * @param transactionDataAPI
      */
-    public DailySummaryDataPLayer(GameConfiguration configuration, UserData userData, CompanyData companyDataAPI,
+    public DailySummaryDataPLayer(GameConfiguration configuration, UserData userData,
                                   CompanyStockTransactionsData transactionDataAPI, String instanceId) {
-        super(userData, companyDataAPI, transactionDataAPI);
+        super(userData, transactionDataAPI);
 
 
         gameSpeed = configuration.getPlayerSpeed();
@@ -150,22 +149,21 @@ public class DailySummaryDataPLayer extends DataPlayer {
     }
 
     /**
-     * constructor for testing the player with custom implementations of userData, companyDataAPI, transactionDataAPI
+     * constructor for testing the player with custom implementations of userData, transactionDataAPI
      *
      * @param stocks
      * @param attributes
      * @param attributeToMatch
      * @param isMultiplayer
      * @param userData
-     * @param companyDataAPI
      * @param transactionDataAPI
      */
     public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
                                   TradingDataAttribute attributeToMatch, boolean isMultiplayer,
-                                  UserData userData, CompanyData companyDataAPI,
+                                  UserData userData,
                                   CompanyStockTransactionsData transactionDataAPI,
                                   String instanceId) {
-        super(userData, companyDataAPI, transactionDataAPI);
+        super(userData, transactionDataAPI);
 
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
@@ -268,7 +266,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @param startDate
      */
     public void setStartDate(Date startDate) {
-        this.today = startDate;
+        this.today = (Date)startDate.clone();
 
     }
 
@@ -402,7 +400,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @return next day in the game
      */
     public Date getNextDay() {
-        return today;
+        return (Date)today.clone();
     }
 
     /**
@@ -433,8 +431,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
             UserJoinException {
 
         //order validity checks
-        if (quantity > DailySummaryDataPLayer.maxOrderSize) {
-            throw new InvalidOrderException("Cannot place more than " + DailySummaryDataPLayer.maxOrderSize + " orders.");
+        if (quantity > this.maxOrderSize) {
+            throw new InvalidOrderException("Cannot place more than " + this.maxOrderSize + " orders.");
         }
         if (!ohlcDataCache.containsKey(stockId)) {
             throw new InvalidOrderException("Invalid stock ID : " + stockId);

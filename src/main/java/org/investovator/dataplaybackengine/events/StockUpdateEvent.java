@@ -24,6 +24,7 @@ import org.investovator.core.data.api.utils.TradingDataAttribute;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stock market update event. An update is a price change in a security
@@ -43,15 +44,14 @@ public class StockUpdateEvent extends GameEvent {
 
         //if data is avaialble for this day
         if (data != null) {
-
             this.data = new HashMap<TradingDataAttribute, Float>();
-            for (TradingDataAttribute attr : data.keySet()) {
-                this.data.put(attr, Float.parseFloat(data.get(attr)));
+            for (Map.Entry<TradingDataAttribute, String> entry : data.entrySet()) {
+                this.data.put(entry.getKey(), Float.parseFloat(entry.getValue()));
             }
         }
 
         //this.data = data;
-        this.time = time;
+        this.time = (Date)time.clone();
     }
 
 
@@ -72,11 +72,11 @@ public class StockUpdateEvent extends GameEvent {
     }
 
     public Date getTime() {
-        return time;
+        return (Date)time.clone();
     }
 
     public void setTime(Date time) {
-        this.time = time;
+        this.time = (Date)time.clone();
     }
 
     /**
@@ -97,5 +97,11 @@ public class StockUpdateEvent extends GameEvent {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        assert false : "hashCode not designed";
+        return 42;
     }
 }

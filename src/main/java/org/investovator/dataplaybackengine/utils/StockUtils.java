@@ -36,7 +36,6 @@ import java.util.*;
  */
 public class StockUtils {
 
-    CompanyStockTransactionsData transactionDataAPI = new CompanyStockTransactionsDataImpl();
 
     public StockUtils() {
     }
@@ -76,9 +75,9 @@ public class StockUtils {
         }
 
         //iterate the map in the ascending order and determine the largest date which has all the stocks
-        for (Date date : counter.keySet()) {
-            if (counter.get(date).size() == stocks.length) {
-                startDate = date;
+        for (Map.Entry<Date, ArrayList<String>> entry : counter.entrySet()) {
+            if (entry.getValue().size() == stocks.length) {
+                startDate = entry.getKey();
                 break;
             }
         }
@@ -89,9 +88,9 @@ public class StockUtils {
         reverseOrderedMap.putAll(counter);
 
         //iterate the map in the descending order and determine the biggest date which has all the stocks
-        for (Date date : reverseOrderedMap.keySet()) {
-            if (reverseOrderedMap.get(date).size() == stocks.length) {
-                endDate = date;
+        for (Map.Entry<Date, ArrayList<String>> entry : reverseOrderedMap.entrySet()) {
+            if (entry.getValue().size() == stocks.length) {
+                endDate = entry.getKey();
                 break;
             }
         }

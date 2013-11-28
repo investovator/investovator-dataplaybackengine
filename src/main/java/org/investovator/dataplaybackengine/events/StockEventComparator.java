@@ -19,6 +19,7 @@
 
 package org.investovator.dataplaybackengine.events;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -27,7 +28,7 @@ import java.util.Comparator;
  * @author: ishan
  * @version: ${Revision}
  */
-public class StockEventComparator implements Comparator {
+public class StockEventComparator implements Comparator,Serializable {
     @Override
     public int compare(Object o1, Object o2) {
         StockUpdateEvent event1 = (StockUpdateEvent) o1;

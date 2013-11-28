@@ -59,7 +59,7 @@ public class RealTimeDataPlayerTest {
 
         player=new RealTimeDataPlayer(stocks,new Date(),attributes,TradingDataAttribute.PRICE,false,
                 new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
+                new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
 //        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);

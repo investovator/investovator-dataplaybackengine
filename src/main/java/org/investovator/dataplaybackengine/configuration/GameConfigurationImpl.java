@@ -44,8 +44,8 @@ public class GameConfigurationImpl implements GameConfiguration {
 
     public GameConfigurationImpl(Date gameStartTime, String[] playingSymbols, boolean multiplayer,
                                  String gameId,GameTypes gameConf) {
-        this.gameStartTime = gameStartTime;
-        this.playingSymbols = playingSymbols;
+        this.gameStartTime = (Date)gameStartTime.clone();
+        this.playingSymbols = playingSymbols.clone();
         this.multiplayer = multiplayer;
         this.interestedAttributes = gameConf.getInterestedAttributes();
         this.playerType = gameConf.getPlayerType();
@@ -57,12 +57,12 @@ public class GameConfigurationImpl implements GameConfiguration {
 
     @Override
     public Date getGameStartTime() {
-        return gameStartTime;
+        return (Date)gameStartTime.clone();
     }
 
     @Override
     public String[] getPlayingSymbols() {
-        return playingSymbols;
+        return playingSymbols.clone();
     }
 
     @Override

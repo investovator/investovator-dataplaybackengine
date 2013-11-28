@@ -31,12 +31,10 @@ import java.util.TimerTask;
  */
 public class DailySummaryEventTask extends TimerTask {
 
-    private EventManager eventManager;
     private DailySummaryDataPLayer player;
     private boolean running;
 
     public DailySummaryEventTask(DailySummaryDataPLayer player) {
-        eventManager = new EventManager();
         this.player = player;
 
     }

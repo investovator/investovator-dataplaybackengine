@@ -39,7 +39,6 @@ public class TradingSystem implements PlaybackEventListener {
 
     //stock name-attribute - value
     HashMap<String, HashMap<TradingDataAttribute, Float>> priceList;
-    ArrayList<TradingDataAttribute> attributes;
     //attribute used for matching stocks
     TradingDataAttribute attributeToMatch;
 
@@ -51,7 +50,6 @@ public class TradingSystem implements PlaybackEventListener {
 
     public TradingSystem(ArrayList<TradingDataAttribute> attributes, TradingDataAttribute attributeToMatch) {
         this.priceList = new HashMap<String, HashMap<TradingDataAttribute, Float>>();
-        this.attributes = attributes;
         this.attributeToMatch = attributeToMatch;
         this.marketTurnover = 0;
         this.totalTrades = 0;

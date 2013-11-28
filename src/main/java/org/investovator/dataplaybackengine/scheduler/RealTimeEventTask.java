@@ -19,7 +19,7 @@ import java.util.*;
 public class RealTimeEventTask extends TimerTask {
 
     //used to determine the cache size
-    public static int CACHE_SIZE = 100;
+    public int CACHE_SIZE = 100;
 
     //start time
     private Date currentTime;
@@ -45,7 +45,7 @@ public class RealTimeEventTask extends TimerTask {
 
 
         Comparator<StockUpdateEvent> comparator = new StockEventComparator();
-        dataCache = new PriorityQueue<StockUpdateEvent>(RealTimeEventTask.CACHE_SIZE, comparator);
+        dataCache = new PriorityQueue<StockUpdateEvent>(this.CACHE_SIZE, comparator);
         stocks = new ArrayList<String>(Arrays.asList(stocksToWatch));
 
     }
@@ -66,7 +66,7 @@ public class RealTimeEventTask extends TimerTask {
                              ArrayList<TradingDataAttribute> attributes) {
         this(stocksToWatch, api, attributes);
 
-        currentTime = startT;
+        currentTime = (Date)startT.clone();
 
     }
 
@@ -107,13 +107,13 @@ public class RealTimeEventTask extends TimerTask {
 
             try {
                 StockTradingData data = dataApi.getTradingData(CompanyStockTransactionsData.DataType.TICKER,
-                        stock, currentTime, new Date(), RealTimeEventTask.CACHE_SIZE, attributes);
+                        stock, currentTime, new Date(), this.CACHE_SIZE, attributes);
 
                 HashMap<Date, HashMap<TradingDataAttribute, String>> stockData = data.getTradingData();
 
                 //add each event to the cache
-                for (Date time : stockData.keySet()) {
-                    StockUpdateEvent event = new StockUpdateEvent(stock, stockData.get(time), time);
+                for (Map.Entry<Date, HashMap<TradingDataAttribute,String>> entry : stockData.entrySet()) {
+                    StockUpdateEvent event = new StockUpdateEvent(stock, entry.getValue(), entry.getKey());
                     //if the event is not already in the data cache
                     if(!dataCache.contains(event)){
                         dataCache.add(event);
@@ -173,7 +173,7 @@ public class RealTimeEventTask extends TimerTask {
     }
 
     public Date getCurrentTime() {
-        return currentTime;
+        return (Date)currentTime.clone();
     }
 
     public void removeObserver(PlaybackEventListener listener){
