@@ -68,6 +68,15 @@ public class DataPlayerFacade {
     }
 
     /**
+     * Returns the game ID for the game
+     * @return
+     */
+    public String getGameId(){
+        return this.player.getGameInstance();
+    }
+
+
+    /**
      * Returns the type of the player that is run
      *
      * @return

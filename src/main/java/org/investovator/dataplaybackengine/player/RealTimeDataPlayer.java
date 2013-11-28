@@ -48,11 +48,12 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     private RealTimeDataPlayer(ArrayList<TradingDataAttribute> attributes,
                                TradingDataAttribute attributeToMatch,
-                               boolean isMultiplayer) {
+                               boolean isMultiplayer, String instanceId) {
         this.timer = new Timer();
         tradingSystem = new TradingSystem(attributes, attributeToMatch);
         this.isMultiplayer = isMultiplayer;
         this.transactionDataAPI = new CompanyStockTransactionsDataImpl();
+        this.gameInstance=instanceId;
         try {
             this.companyDataAPI = new CompanyDataImpl();
         } catch (DataAccessException e) {
@@ -63,8 +64,9 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     public RealTimeDataPlayer(String[] stocks, String startDate,
                               String dateFormat, ArrayList<TradingDataAttribute> attributes,
-                              TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
-        this(attributes, attributeToMatch, isMultiplayer);
+                              TradingDataAttribute attributeToMatch, boolean isMultiplayer,
+                              String instanceId) {
+        this(attributes, attributeToMatch, isMultiplayer,instanceId);
 
         task = new RealTimeEventTask(stocks, startDate, dateFormat, transactionDataAPI, attributes);
 
@@ -73,8 +75,9 @@ public class RealTimeDataPlayer extends DataPlayer {
     }
 
     public RealTimeDataPlayer(String[] stocks, Date startDate, ArrayList<TradingDataAttribute> attributes,
-                              TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
-        this(attributes, attributeToMatch, isMultiplayer);
+                              TradingDataAttribute attributeToMatch, boolean isMultiplayer,
+                              String instanceId) {
+        this(attributes, attributeToMatch, isMultiplayer,instanceId);
 
         task = new RealTimeEventTask(stocks, startDate, transactionDataAPI, attributes);
 
@@ -84,7 +87,7 @@ public class RealTimeDataPlayer extends DataPlayer {
 
     public RealTimeDataPlayer(GameConfiguration config) {
         this(config.getPlayingSymbols(), config.getGameStartTime(), config.getInterestedAttributes(),
-                config.getAttributeToMatch(), config.isMultiplayer());
+                config.getAttributeToMatch(), config.isMultiplayer(), config.getGameId());
         gameSpeed = config.getPlayerSpeed();
     }
 
@@ -103,7 +106,8 @@ public class RealTimeDataPlayer extends DataPlayer {
     public RealTimeDataPlayer(String[] stocks, Date startDate, ArrayList<TradingDataAttribute> attributes,
                               TradingDataAttribute attributeToMatch, boolean isMultiplayer,
                               UserData userData, CompanyData companyDataAPI,
-                              CompanyStockTransactionsData transactionDataAPI) {
+                              CompanyStockTransactionsData transactionDataAPI,
+                              String instanceId) {
 
         super(userData, companyDataAPI, transactionDataAPI);
 
@@ -112,6 +116,7 @@ public class RealTimeDataPlayer extends DataPlayer {
         this.isMultiplayer = isMultiplayer;
         this.transactionDataAPI = transactionDataAPI;
         this.companyDataAPI = companyDataAPI;
+        this.gameInstance=instanceId;
 
         task = new RealTimeEventTask(stocks, startDate, transactionDataAPI, attributes);
 
@@ -192,7 +197,7 @@ public class RealTimeDataPlayer extends DataPlayer {
 
         Portfolio portfolio = null;
         try {
-            portfolio = userData.getUserPortfolio(userName);
+            portfolio = userData.getUserPortfolio(gameInstance,userName);
 
             float executedPrice = tradingSystem.executeOrder(stockId, quantity, portfolio.getCashBalance(),
                     side);
@@ -207,7 +212,7 @@ public class RealTimeDataPlayer extends DataPlayer {
             } else if (side == OrderType.SELL) {
                 portfolio.soldShares(stockId, quantity, executedPrice);
             }
-            userData.updateUserPortfolio(userName, portfolio);
+            userData.updateUserPortfolio(gameInstance,userName, portfolio);
         } catch (DataAccessException e) {
             e.printStackTrace();
 

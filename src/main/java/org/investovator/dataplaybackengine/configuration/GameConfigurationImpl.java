@@ -34,15 +34,16 @@ public class GameConfigurationImpl implements GameConfiguration {
     private Date gameStartTime;
     private String[] playingSymbols;
     private boolean multiplayer;
-    public ArrayList<TradingDataAttribute> interestedAttributes;
-    public PlayerTypes playerType;
-    public TradingDataAttribute attributeToMatch;
-    public String description;
-    public int gameSpeed;
+    private ArrayList<TradingDataAttribute> interestedAttributes;
+    private PlayerTypes playerType;
+    private TradingDataAttribute attributeToMatch;
+    private String description;
+    private int gameSpeed;
+    private String gameId;
 
 
     public GameConfigurationImpl(Date gameStartTime, String[] playingSymbols, boolean multiplayer,
-                                 GameTypes gameConf) {
+                                 String gameId,GameTypes gameConf) {
         this.gameStartTime = gameStartTime;
         this.playingSymbols = playingSymbols;
         this.multiplayer = multiplayer;
@@ -51,6 +52,7 @@ public class GameConfigurationImpl implements GameConfiguration {
         this.attributeToMatch = gameConf.getAttributeToMatch();
         this.description = gameConf.getDescription() + "with " + gameConf.getInterestedAttributes().toString();
         this.gameSpeed = gameConf.getPlayerSpeed();
+        this.gameId=gameId;
     }
 
     @Override
@@ -66,6 +68,11 @@ public class GameConfigurationImpl implements GameConfiguration {
     @Override
     public boolean isMultiplayer() {
         return multiplayer;
+    }
+
+    @Override
+    public String getGameId() {
+        return gameId;
     }
 
     @Override

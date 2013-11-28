@@ -54,6 +54,8 @@ public abstract class DataPlayer {
 
     protected UserData userData;
 
+    //stores the game instance
+    protected String gameInstance;
 
     //amount of money a person get at the begining
     protected static int initialCredit=10000;
@@ -155,7 +157,7 @@ public abstract class DataPlayer {
 
         Portfolio portfolio=null;
         try {
-             portfolio = userData.getUserPortfolio(userName);
+             portfolio = userData.getUserPortfolio(gameInstance,userName);
         } catch (DataAccessException e) {
             e.printStackTrace();
             throw new UserJoinException("User "+userName+ " has not joined the game");
@@ -252,7 +254,7 @@ public abstract class DataPlayer {
         ArrayList<Portfolio> portfolios=new ArrayList<>();
         for(String username:usersList){
             try {
-                portfolios.add(userData.getUserPortfolio(username));
+                portfolios.add(userData.getUserPortfolio(gameInstance,username));
             } catch (DataAccessException e) {
                 e.printStackTrace();
             }
@@ -279,7 +281,8 @@ public abstract class DataPlayer {
         boolean joined=false;
 
         try {
-            userData.updateUserPortfolio(userName,new PortfolioImpl(userName, DataPlayer.initialCredit,0));
+            userData.addUserToGameInstance(this.gameInstance,userName);
+            userData.updateUserPortfolio(gameInstance,userName,new PortfolioImpl(userName, DataPlayer.initialCredit,0));
             joined=true;
             setObserver(observer);
             usersList.add(userName);
@@ -294,5 +297,12 @@ public abstract class DataPlayer {
 
     }
 
+    /**
+     * Returns the game ID for the game
+     * @return
+     */
+    public String getGameInstance() {
+        return gameInstance;
+    }
 }
 

@@ -70,12 +70,12 @@ public class DailySummaryDataPlayerWithGameConfigTest {
         attributes.add(TradingDataAttribute.DAY);
         attributes.add(TradingDataAttribute.CLOSING_PRICE);
 
-        GameConfiguration config=new GameConfigurationImpl(startDateObject,stocks,true,
+        GameConfiguration config=new GameConfigurationImpl(startDateObject,stocks,true,"instance",
                 GameTypesImpl.DAILY_SUMMARY_CLOSING_PRICE_GAME);
 
         //create a multiplayer game
         player=new DailySummaryDataPLayer(config,new UserDataCustomImpl(),
-                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator());
+                new BogusCompnayTestDataGenerator(),new BogusHistoryTestDataGenerator(),"instance");
 
         //set the date
 //        player.setStartDate(startDate, DateUtils.DATE_FORMAT_1);

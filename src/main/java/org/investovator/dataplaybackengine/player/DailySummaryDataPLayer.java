@@ -74,7 +74,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
     ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>> ohlcDataCache;
 
     public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
-                                  TradingDataAttribute attributeToMatch, boolean isMultiplayer) {
+                                  TradingDataAttribute attributeToMatch, boolean isMultiplayer, String instnaceId) {
 
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
@@ -83,7 +83,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
         this.isMultiplayer = isMultiplayer;
 
         eventManager = new EventManager();
-
+        this.gameInstance=instnaceId;
 
         if (isMultiplayer) {
             task = new DailySummaryEventTask(this);
@@ -103,7 +103,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
     public DailySummaryDataPLayer(GameConfiguration config) {
         this(config.getPlayingSymbols(), config.getInterestedAttributes(), config.getAttributeToMatch(),
-                config.isMultiplayer());
+                config.isMultiplayer(), config.getGameId());
         gameSpeed = config.getPlayerSpeed();
         today = config.getGameStartTime();
     }
@@ -118,7 +118,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
      * @param transactionDataAPI
      */
     public DailySummaryDataPLayer(GameConfiguration configuration, UserData userData, CompanyData companyDataAPI,
-                                  CompanyStockTransactionsData transactionDataAPI) {
+                                  CompanyStockTransactionsData transactionDataAPI, String instanceId) {
         super(userData, companyDataAPI, transactionDataAPI);
 
 
@@ -127,7 +127,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = configuration.getInterestedAttributes();
         this.tradingSystem = new TradingSystem(attributes, configuration.getAttributeToMatch());
-
+        this.gameInstance=instanceId;
         this.isMultiplayer = configuration.isMultiplayer();
 
         eventManager = new EventManager();
@@ -163,13 +163,14 @@ public class DailySummaryDataPLayer extends DataPlayer {
     public DailySummaryDataPLayer(String[] stocks, ArrayList<TradingDataAttribute> attributes,
                                   TradingDataAttribute attributeToMatch, boolean isMultiplayer,
                                   UserData userData, CompanyData companyDataAPI,
-                                  CompanyStockTransactionsData transactionDataAPI) {
+                                  CompanyStockTransactionsData transactionDataAPI,
+                                  String instanceId) {
         super(userData, companyDataAPI, transactionDataAPI);
 
         this.ohlcDataCache = new ConcurrentHashMap<String, HashMap<Date, HashMap<TradingDataAttribute, String>>>();
         this.attributes = attributes;
         this.tradingSystem = new TradingSystem(attributes, attributeToMatch);
-
+        this.gameInstance=instanceId;
         this.isMultiplayer = isMultiplayer;
 
         eventManager = new EventManager();
@@ -442,7 +443,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
 
         Portfolio portfolio = null;
         try {
-            portfolio = userData.getUserPortfolio(userName);
+            portfolio = userData.getUserPortfolio(gameInstance,userName);
 
             float executedPrice = tradingSystem.executeOrder(stockId, quantity, portfolio.getCashBalance(),
                     side);
@@ -457,7 +458,7 @@ public class DailySummaryDataPLayer extends DataPlayer {
             } else if (side == OrderType.SELL) {
                 portfolio.soldShares(stockId, quantity, executedPrice);
             }
-            userData.updateUserPortfolio(userName, portfolio);
+            userData.updateUserPortfolio(gameInstance,userName, portfolio);
 
         } catch (DataAccessException e) {
             e.printStackTrace();

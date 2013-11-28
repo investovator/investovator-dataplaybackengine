@@ -38,32 +38,57 @@ public class UserDataCustomImpl implements UserData {
     }
 
     @Override
-    public Portfolio getUserPortfolio(String username) throws DataAccessException {
+    public Portfolio getUserPortfolio(String instance,String username) throws DataAccessException {
         return users.get(username);
     }
 
     @Override
-    public void updateUserPortfolio(String username, Portfolio portfolio) throws DataAccessException {
+    public void updateUserPortfolio(String instance,String username, Portfolio portfolio)
+            throws DataAccessException {
         users.put(username,portfolio);
     }
 
     @Override
-    public ArrayList<String> getWatchList(String username) throws DataAccessException {
+    public ArrayList<String> getWatchList(String instance,String username)
+            throws DataAccessException {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void addToWatchList(String username, String symbol) throws DataAccessException {
+    public void addToWatchList(String instance,String username, String symbol)
+            throws DataAccessException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void deleteFromWatchList(String username, String symbol) throws DataAccessException {
+    public void deleteFromWatchList(String instance,String username, String symbol)
+            throws DataAccessException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void updateWatchList(String username, ArrayList<String> watchList) throws DataAccessException {
+    public void updateWatchList(String instance,String username, ArrayList<String> watchList)
+            throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void addUserToGameInstance(String s, String s2) throws DataAccessException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ArrayList<String> getUserJoinedGameInstances(String username) throws DataAccessException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ArrayList<String> getGameInstanceUsers(String gameInstanceName) throws DataAccessException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void clearUserDataOnGameInstance(String gameInstanceName) throws DataAccessException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }

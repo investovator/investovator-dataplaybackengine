@@ -51,4 +51,10 @@ public interface GameConfiguration extends GameTypes {
      */
     public boolean isMultiplayer();
 
+    /**
+     * Returns the game id of the game
+     * @return
+     */
+    public String getGameId();
+
 }
