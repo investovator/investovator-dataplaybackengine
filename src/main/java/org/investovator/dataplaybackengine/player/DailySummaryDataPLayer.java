@@ -258,6 +258,8 @@ public class DailySummaryDataPLayer extends DataPlayer {
             timer.cancel();
             task.cancel();
         }
+        //let everyon know that the game stopped
+        eventManager.notifyGameFinished();
     }
 
     /**

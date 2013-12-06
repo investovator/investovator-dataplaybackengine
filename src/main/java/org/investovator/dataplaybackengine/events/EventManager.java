@@ -59,4 +59,13 @@ public class EventManager {
             listener.eventOccurred(obj);
         }
     }
+
+    /**
+     * Used to let the others know when the admin stops the game
+     */
+    public void notifyGameFinished(){
+        for (PlaybackEventListener listener : listeners) {
+            listener.eventOccurred(new PlaybackFinishedEvent());
+        }
+    }
 }

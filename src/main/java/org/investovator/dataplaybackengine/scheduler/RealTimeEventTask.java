@@ -179,4 +179,9 @@ public class RealTimeEventTask extends TimerTask {
     public void removeObserver(PlaybackEventListener listener){
         eventManager.removeObserver(listener);
     }
+
+    public void announceGameFinish(){
+        //let everyone know that the game stopped
+        eventManager.notifyGameFinished();
+    }
 }
